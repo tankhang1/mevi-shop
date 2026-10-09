@@ -1,0 +1,59 @@
+# Ảnh sản phẩm
+
+Ảnh từ Wikimedia Commons, dùng theo giấy phép ghi bên dưới.
+
+- `p1-1.jpg`: [File:Roasted coffee beans.jpg](https://commons.wikimedia.org/wiki/File:Roasted_coffee_beans.jpg) — MarkSweep, Public domain
+- `p1-2.jpg`: [File:Coffea canephora at Aanakkulam.jpg](https://commons.wikimedia.org/wiki/File:Coffea_canephora_at_Aanakkulam.jpg) — Jeevan Jose, Kerala, India, CC BY-SA 4.0
+- `p1-3.jpg`: [File:Vietnam coffee beans VOA.jpg](https://commons.wikimedia.org/wiki/File:Vietnam_coffee_beans_VOA.jpg) — Daniel Schearf, Public domain
+- `p2-1.jpg`: [File:Black Peppercorns (4422070187).jpg](https://commons.wikimedia.org/wiki/File:Black_Peppercorns_(4422070187).jpg) — Ryan Snyder, CC BY 2.0
+- `p2-2.jpg`: [File:Cropped pepper seed.JPG](https://commons.wikimedia.org/wiki/File:Cropped_pepper_seed.JPG) — Tonbi ko, CC BY-SA 4.0
+- `p2-3.jpg`: [File:Pepper farm in vietnam.JPG](https://commons.wikimedia.org/wiki/File:Pepper_farm_in_vietnam.JPG) — Tonbi ko, CC BY-SA 4.0
+- `p3-1.jpg`: [File:Freeze-dried jackfruit.jpg](https://commons.wikimedia.org/wiki/File:Freeze-dried_jackfruit.jpg) — François Nguyen, CC BY 2.0
+- `p3-2.jpg`: [File:Jackfruit chips Kerala 02.jpg](https://commons.wikimedia.org/wiki/File:Jackfruit_chips_Kerala_02.jpg) — Vis M, CC BY-SA 4.0
+- `p3-3.jpg`: [File:Jackfruit Flesh.jpg](https://commons.wikimedia.org/wiki/File:Jackfruit_Flesh.jpg) — Mullookkaaran, CC BY-SA 3.0
+- `p4-1.jpg`: [File:JasmineRice.jpg](https://commons.wikimedia.org/wiki/File:JasmineRice.jpg) — Không rõ, CC BY-SA 2.5
+- `p4-2.jpg`: [File:White rice, Resto des Amis, Montparnasse, Paris 001.jpg](https://commons.wikimedia.org/wiki/File:White_rice,_Resto_des_Amis,_Montparnasse,_Paris_001.jpg) — Guilhem Vellut from Paris, France, CC BY 2.0
+- `p4-3.jpg`: [File:Bà con nông dân phường Phú Lợi – phường Sóc Trăng tập trung xuống giống, chăm sóc vụ lúa Hè–Thu 2025 1-2 screenshot.png](https://commons.wikimedia.org/wiki/File:B%C3%A0_con_n%C3%B4ng_d%C3%A2n_ph%C6%B0%E1%BB%9Dng_Ph%C3%BA_L%E1%BB%A3i_%E2%80%93_ph%C6%B0%E1%BB%9Dng_S%C3%B3c_Tr%C4%83ng_t%E1%BA%ADp_trung_xu%E1%BB%91ng_gi%E1%BB%91ng,_ch%C4%83m_s%C3%B3c_v%E1%BB%A5_l%C3%BAa_H%C3%A8%E2%80%93Thu_2025_1-2_screenshot.png) — Đài Truyền thanh TPST, CC BY 4.0
+- `p5-1.jpg`: [File:Milk bottle and two doughnuts.jpg](https://commons.wikimedia.org/wiki/File:Milk_bottle_and_two_doughnuts.jpg) — www.Pixel.la Free Stock Photos, CC0
+- `p6-1.jpg`: [File:Oolong tea leaves - character for tea in Chinese.jpg](https://commons.wikimedia.org/wiki/File:Oolong_tea_leaves_-_character_for_tea_in_Chinese.jpg) — Toby Oxborrow from Kowloon, Hong Kong, CC BY-SA 2.0
+- `p6-2.jpg`: [File:Wuyi oolong tea.jpg](https://commons.wikimedia.org/wiki/File:Wuyi_oolong_tea.jpg) — Nadav Spiegelman, CC BY-SA 4.0
+- `p6-3.jpg`: [File:Tea leaves steeping in a zhong čaj 05.jpg](https://commons.wikimedia.org/wiki/File:Tea_leaves_steeping_in_a_zhong_%C4%8Daj_05.jpg) — Wikimol, CC BY-SA 3.0
+- `p7-1.jpg`: [File:Dish of blueberries.jpg](https://commons.wikimedia.org/wiki/File:Dish_of_blueberries.jpg) — Petar Milošević, CC BY-SA 4.0
+- `p7-2.jpg`: [File:Blueberries-In-Pack.jpg](https://commons.wikimedia.org/wiki/File:Blueberries-In-Pack.jpg) — Evan-Amos, CC0
+- `p7-3.jpg`: [File:Vaccinium corymbosum Beeren.jpg](https://commons.wikimedia.org/wiki/File:Vaccinium_corymbosum_Beeren.jpg) — Darkone (talk · contribs), CC BY-SA 2.5
+- `p8-1.jpg`: [File:Cavendish banana from Maracaibo.jpg](https://commons.wikimedia.org/wiki/File:Cavendish_banana_from_Maracaibo.jpg) — Wilfredor, CC BY-SA 3.0
+- `p8-2.jpg`: [File:Banana bunch in a banana farm at Chinawal.jpg](https://commons.wikimedia.org/wiki/File:Banana_bunch_in_a_banana_farm_at_Chinawal.jpg) — abhiriksh, CC BY-SA 3.0
+- `p8-3.jpg`: [File:Banana stand Vietnam.jpg](https://commons.wikimedia.org/wiki/File:Banana_stand_Vietnam.jpg) — Dinkum, CC0
+- `p9-1.jpg`: [File:Pineapple fruit 2.jpg](https://commons.wikimedia.org/wiki/File:Pineapple_fruit_2.jpg) — Wilfredor, CC0
+- `p9-2.jpg`: [File:A basket of pineapple cut fruit.JPG](https://commons.wikimedia.org/wiki/File:A_basket_of_pineapple_cut_fruit.JPG) — Thamizhpparithi Maari, CC BY-SA 3.0
+- `p9-3.jpg`: [File:കൈതച്ചക്ക.jpg](https://commons.wikimedia.org/wiki/File:%E0%B4%95%E0%B5%88%E0%B4%A4%E0%B4%9A%E0%B5%8D%E0%B4%9A%E0%B4%95%E0%B5%8D%E0%B4%95.jpg) — Suniltg at Malayalam Wikipedia, CC BY 3.0
+- `p9-4.jpg`: [File:Pineapple Plantation- Maraca.jpg](https://commons.wikimedia.org/wiki/File:Pineapple_Plantation-_Maraca.jpg) — Daralnoble, CC BY-SA 4.0
+- `p10-1.jpg`: [File:Red grapes 2.jpg](https://commons.wikimedia.org/wiki/File:Red_grapes_2.jpg) — ProjectManhattan, CC BY-SA 3.0
+- `p10-2.jpg`: [File:Vườn Nho ở Phan Rang, Ninh Thuận.JPG](https://commons.wikimedia.org/wiki/File:V%C6%B0%E1%BB%9Dn_Nho_%E1%BB%9F_Phan_Rang,_Ninh_Thu%E1%BA%ADn.JPG) — Đông Sơn, CC BY-SA 3.0
+- `p10-3.jpg`: [File:(Red Grapes) A grape is a fruiting berry of the deciduous woody vines of the botanical genus Vitis.JPG](https://commons.wikimedia.org/wiki/File:(Red_Grapes)_A_grape_is_a_fruiting_berry_of_the_deciduous_woody_vines_of_the_botanical_genus_Vitis.JPG) — David Adam Kess, CC BY-SA 4.0
+- `p11-1.jpg`: [File:Liat Portal for Foodie Disorder - Avocado Halves.jpg](https://commons.wikimedia.org/wiki/File:Liat_Portal_for_Foodie_Disorder_-_Avocado_Halves.jpg) — HaJunkiyada, CC BY-SA 4.0
+- `p11-2.jpg`: [File:Persea americana fruit 2.JPG](https://commons.wikimedia.org/wiki/File:Persea_americana_fruit_2.JPG) — B.navez, CC BY-SA 3.0
+- `p11-3.jpg`: [File:Avocados in Seychelles.jpg](https://commons.wikimedia.org/wiki/File:Avocados_in_Seychelles.jpg) — flowcomm, CC BY 2.0
+- `p12-1.jpg`: [File:Green Oak Leaf lettuce J1.jpg](https://commons.wikimedia.org/wiki/File:Green_Oak_Leaf_lettuce_J1.jpg) — Jamain, CC BY-SA 3.0
+- `p12-2.jpg`: [File:Hydroponic lettuce @ Plaine des Cafres 03.jpg](https://commons.wikimedia.org/wiki/File:Hydroponic_lettuce_@_Plaine_des_Cafres_03.jpg) — Rémih, CC BY-SA 4.0
+- `p12-3.jpg`: [File:Hydroponic lettuce @ Plaine des Cafres 02.jpg](https://commons.wikimedia.org/wiki/File:Hydroponic_lettuce_@_Plaine_des_Cafres_02.jpg) — Rémih, CC BY-SA 4.0
+- `p13-1.jpg`: [File:Khoai tây từ Đà Lạt (nhiều khả năng là khoai tây của Trung Quốc).jpg](https://commons.wikimedia.org/wiki/File:Khoai_t%C3%A2y_t%E1%BB%AB_%C4%90%C3%A0_L%E1%BA%A1t_(nhi%E1%BB%81u_kh%E1%BA%A3_n%C4%83ng_l%C3%A0_khoai_t%C3%A2y_c%E1%BB%A7a_Trung_Qu%E1%BB%91c).jpg) — Phương Huy (thảo luận), Public domain
+- `p13-2.jpg`: [File:Khoai tây Đà Lạt (có thể là khoai tây Trung Quốc trà trộn vào).jpg](https://commons.wikimedia.org/wiki/File:Khoai_t%C3%A2y_%C4%90%C3%A0_L%E1%BA%A1t_(c%C3%B3_th%E1%BB%83_l%C3%A0_khoai_t%C3%A2y_Trung_Qu%E1%BB%91c_tr%C3%A0_tr%E1%BB%99n_v%C3%A0o).jpg) — Phương Huy (thảo luận), Public domain
+- `p13-3.jpg`: [File:Potato harvest at Kingsholme.jpg](https://commons.wikimedia.org/wiki/File:Potato_harvest_at_Kingsholme.jpg) — David Edwards, CC BY-SA 4.0
+- `p14-1.jpg`: [File:Brassica oleracea var. botrytis (Coliflor).jpg](https://commons.wikimedia.org/wiki/File:Brassica_oleracea_var._botrytis_(Coliflor).jpg) — Rjcastillo, CC BY-SA 4.0
+- `p14-2.jpg`: [File:Stack of cauliflower heads.jpg](https://commons.wikimedia.org/wiki/File:Stack_of_cauliflower_heads.jpg) — Jeffery Martin, CC0
+- `p14-3.jpg`: [File:Brassica oleracea var in pabna.jpg](https://commons.wikimedia.org/wiki/File:Brassica_oleracea_var_in_pabna.jpg) — DelwarHossain, CC BY-SA 4.0
+- `p15-1.jpg`: [File:Da-Lat-market.jpg](https://commons.wikimedia.org/wiki/File:Da-Lat-market.jpg) — Peter Beardsley from Kittery, ME, USA, CC BY 2.0
+- `p15-2.jpg`: [File:Basket with vegetables 2017 G1.jpg](https://commons.wikimedia.org/wiki/File:Basket_with_vegetables_2017_G1.jpg) — George Chernilevsky, Public domain
+- `p15-3.jpg`: [File:Cá rốt Đà Lạt 1.jpg](https://commons.wikimedia.org/wiki/File:C%C3%A1_r%E1%BB%91t_%C4%90%C3%A0_L%E1%BA%A1t_1.jpg) — Phương Huy (thảo luận), Public domain
+- `p15-4.jpg`: [File:Fresh Vegetables display in Iloilo Terminal Public Market 01.jpg](https://commons.wikimedia.org/wiki/File:Fresh_Vegetables_display_in_Iloilo_Terminal_Public_Market_01.jpg) — OnlyJanz, CC BY-SA 4.0
+- `p16-1.jpg`: [File:Bird's eye chili.jpg](https://commons.wikimedia.org/wiki/File:Bird%27s_eye_chili.jpg) — Jiafei Slay Queen, CC0
+- `p16-2.jpg`: [File:Capsicum frutescens, Burdwan, West Bengal, India 03 05 2013.jpg](https://commons.wikimedia.org/wiki/File:Capsicum_frutescens,_Burdwan,_West_Bengal,_India_03_05_2013.jpg) — Joydeep, CC BY-SA 3.0
+- `p16-3.jpg`: [File:Solanaceae Capsicum frutescens 1.jpg](https://commons.wikimedia.org/wiki/File:Solanaceae_Capsicum_frutescens_1.jpg) — NasserHalaweh, CC BY-SA 4.0
+- `p17-1.jpg`: [File:Matcha Scoop.jpg](https://commons.wikimedia.org/wiki/File:Matcha_Scoop.jpg) — Evanhoever, CC BY-SA 4.0
+- `p17-2.jpg`: [File:Matcha layout with leaf, tea, and powder.jpg](https://commons.wikimedia.org/wiki/File:Matcha_layout_with_leaf,_tea,_and_powder.jpg) — dungthuyvunguyen, CC0
+- `p17-3.jpg`: [File:Tea hill in Thai Nguyen.jpg](https://commons.wikimedia.org/wiki/File:Tea_hill_in_Thai_Nguyen.jpg) — Bacthai20, CC0
+- `p17-4.jpg`: [File:Clean weeds from tea garden - Flickr - Son Hoa Nguyen.jpg](https://commons.wikimedia.org/wiki/File:Clean_weeds_from_tea_garden_-_Flickr_-_Son_Hoa_Nguyen.jpg) — Oliver Nguyen from Viet Nam, CC0
+- `p18-1.jpg`: [File:Coriander Leaves.jpg](https://commons.wikimedia.org/wiki/File:Coriander_Leaves.jpg) — Rupeshm364, CC BY-SA 4.0
+- `p18-2.jpg`: [File:Bunch of cilantro.jpg](https://commons.wikimedia.org/wiki/File:Bunch_of_cilantro.jpg) — Redboston, CC BY-SA 4.0
+- `p18-3.jpg`: [File:Cilantro bunches in a stack.jpg](https://commons.wikimedia.org/wiki/File:Cilantro_bunches_in_a_stack.jpg) — Jeffery Martin, CC0

@@ -106,5 +106,5 @@ const categoryPhotos: Record<string, string[]> = {
 export function galleryOf(product: { imageUrls?: string[]; category: string }): string[] {
   const own = (product.imageUrls || []).filter(Boolean);
   const extras = (categoryPhotos[product.category] || [px(2255935, 1200)]).filter(u => !own.some(o => o.split('?')[0] === u.split('?')[0]));
-  return [...own, ...extras].slice(0, 5);
+  return (own.length > 1 ? own : [...own, ...extras]).slice(0, 5);
 }
