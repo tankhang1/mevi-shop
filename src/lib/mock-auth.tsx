@@ -11,19 +11,27 @@ export const demoUsers: Record<MockRole, MockUser> = {
 };
 
 const STORAGE_KEY = 'mevi-mock-user';
-type Ctx = { user: MockUser | null; signIn: (role: MockRole) => void; signOut: (opts?: { redirectUrl?: string }) => void };
+type Ctx = { user: MockUser | null; signIn: (role: MockRole, name?: string) => void; signOut: (opts?: { redirectUrl?: string }) => void };
 const authContext = createContext<Ctx | null>(null);
 
+// Stored as "role" or "role|display name" (a customer signing in with their own name).
+function toUser(stored: string | null): MockUser | null {
+  if (!stored) return null;
+  const [role, name] = stored.split('|') as [MockRole, string | undefined];
+  if (!demoUsers[role]) return null;
+  return name ? { ...demoUsers[role], fullName: name } : demoUsers[role];
+}
 function readUser(): MockUser | null {
-  try {
-    const role = localStorage.getItem(STORAGE_KEY) as MockRole | null;
-    return role && demoUsers[role] ? demoUsers[role] : null;
-  } catch { return null; }
+  try { return toUser(localStorage.getItem(STORAGE_KEY)); } catch { return null; }
 }
 
 export function MockAuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<MockUser | null>(readUser);
-  const signIn = useCallback((role: MockRole) => { localStorage.setItem(STORAGE_KEY, role); setUser(demoUsers[role]); }, []);
+  const signIn = useCallback((role: MockRole, name?: string) => {
+    const stored = name ? `${role}|${name}` : role;
+    try { localStorage.setItem(STORAGE_KEY, stored); } catch { /* storage unavailable */ }
+    setUser(toUser(stored));
+  }, []);
   const signOut = useCallback((opts?: { redirectUrl?: string }) => {
     localStorage.removeItem(STORAGE_KEY);
     setUser(null);
