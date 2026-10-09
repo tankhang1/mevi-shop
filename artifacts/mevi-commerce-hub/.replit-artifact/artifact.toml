@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Mevi Commerce Hub"
+description = "A Vietnamese agricultural marketplace for consumer and wholesale orders, with white-label agency shops, product approval, and manual order confirmation without online payments."
+version = "1.0.0"
+id = "artifacts/mevi-commerce-hub"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 19630
+
+[services.development]
+run = "pnpm --filter @workspace/mevi-commerce-hub run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/mevi-commerce-hub", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/mevi-commerce-hub/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "19630"
+BASE_PATH = "/"

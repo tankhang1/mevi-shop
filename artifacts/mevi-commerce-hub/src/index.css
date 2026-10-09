@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap');
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@plugin "@tailwindcss/typography";
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: hsl(var(--background)); --color-foreground: hsl(var(--foreground)); --color-border: hsl(var(--border)); --color-input: hsl(var(--input)); --color-ring: hsl(var(--ring));
+  --color-card: hsl(var(--card)); --color-card-foreground: hsl(var(--card-foreground)); --color-popover: hsl(var(--popover)); --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary)); --color-primary-foreground: hsl(var(--primary-foreground)); --color-secondary: hsl(var(--secondary)); --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted)); --color-muted-foreground: hsl(var(--muted-foreground)); --color-accent: hsl(var(--accent)); --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive)); --color-destructive-foreground: hsl(var(--destructive-foreground)); --color-sidebar: hsl(var(--sidebar)); --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+  --font-sans: var(--app-font-sans); --font-mono: var(--app-font-mono); --radius-lg: var(--radius);
+}
+:root {
+  --background: 43 42% 96%; --foreground: 159 26% 16%; --card: 45 45% 99%; --card-foreground: 159 26% 16%;
+  --popover: 45 45% 99%; --popover-foreground: 159 26% 16%; --primary: 151 38% 27%; --primary-foreground: 45 45% 98%;
+  --secondary: 43 32% 90%; --secondary-foreground: 159 24% 21%; --muted: 43 26% 92%; --muted-foreground: 154 9% 45%;
+  --accent: 22 68% 54%; --accent-foreground: 45 45% 99%; --destructive: 2 64% 47%; --destructive-foreground: 0 0% 100%;
+  --border: 42 22% 84%; --input: 42 22% 84%; --ring: 151 38% 27%; --sidebar: 151 35% 23%; --sidebar-foreground: 44 34% 95%;
+  --font-sans: 'Be Vietnam Pro', sans-serif; --app-font-sans: 'Be Vietnam Pro', sans-serif; --app-font-mono: 'DM Mono', monospace; --radius: .8rem;
+  --shadow-soft: 0 16px 48px rgba(40,70,50,.07); --agency-accent: #285e45;
+}
+.dark { --background: 158 24% 10%; --foreground: 43 35% 93%; --card: 158 21% 14%; --card-foreground: 43 35% 93%; --popover: 158 21% 14%; --popover-foreground: 43 35% 93%; --primary: 145 38% 48%; --primary-foreground: 158 24% 9%; --secondary: 158 16% 20%; --secondary-foreground: 43 35% 93%; --muted: 158 16% 20%; --muted-foreground: 43 14% 68%; --accent: 22 68% 56%; --accent-foreground: 0 0% 100%; --destructive: 2 58% 50%; --destructive-foreground: 0 0% 100%; --border: 158 12% 27%; --input: 158 12% 27%; --ring: 145 38% 48%; --sidebar: 158 25% 8%; --sidebar-foreground: 43 35% 93%; }
+@layer base { * { @apply border-border; } body { @apply bg-background text-foreground font-sans antialiased; } }
+@keyframes rise { from { opacity: 0; transform: translateY(12px) } to { opacity: 1; transform: translateY(0) } }
+.rise { animation: rise .48s cubic-bezier(.2,.75,.25,1) both; }
+.grain::after { content:""; position:fixed; inset:0; pointer-events:none; z-index:60; opacity:.028; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E"); }
+.shell { width:min(1180px, calc(100% - 44px)); margin-inline:auto; }
+@layer components {
+  .surface { @apply rounded-2xl border border-[#e7e4d9] bg-[#fffefa]; box-shadow: 0 3px 16px rgba(39,65,48,.025); }
+  .btn-primary { @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#285e45] px-5 py-2.5 text-sm font-bold text-[#fffdf7] transition hover:bg-[#1e4d38] disabled:cursor-not-allowed disabled:opacity-55; }
+  .btn-outline { @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[#cfd5c9] bg-[#faf9f4] px-5 py-2.5 text-sm font-bold text-[#315944] transition hover:bg-[#edf1e8] disabled:cursor-not-allowed disabled:opacity-55; }
+  .btn-danger { @apply inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-[#a7473d] px-4 py-2 text-xs font-bold text-white disabled:opacity-50; }
+  .field { @apply min-h-11 w-full rounded-xl border border-[#deddd2] bg-[#fffefa] px-3.5 py-2.5 text-sm font-normal text-[#24392e] outline-none transition placeholder:text-[#9a9e94] focus:border-[#78967d] focus:ring-2 focus:ring-[#285e45]/10; }
+  .eyebrow { @apply text-xs font-bold uppercase tracking-[.18em] text-[#bd6e46]; }
+}
+ .btn-primary { background-color: var(--agency-accent, #285e45); }
+ .btn-primary:hover { background-color: var(--agency-accent, #285e45); filter: brightness(.92); }
+input, select, textarea { font:inherit; }
+button, a { -webkit-tap-highlight-color:transparent; }
+@media(max-width:640px){ .shell{width:calc(100% - 28px)} }
