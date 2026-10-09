@@ -1,3 +1,4 @@
+import { MockHttpError, mockRequest } from "./mock-server";
 export type CustomFetchOptions = RequestInit & {
   responseType?: "json" | "text" | "blob" | "auto";
 };
@@ -322,6 +323,19 @@ async function parseSuccessBody(
   }
 }
 
+// No backend: every request is answered by the in-browser mock server.
+function mockFetch(method: string, url: string, body: BodyInit | null | undefined): Response {
+  try {
+    const parsed = typeof body === "string" && body ? JSON.parse(body) : undefined;
+    const result = mockRequest(method, url, parsed);
+    if (result == null) return new Response(null, { status: 204 });
+    return new Response(JSON.stringify(result), { status: 200, headers: { "content-type": "application/json" } });
+  } catch (error) {
+    const status = error instanceof MockHttpError ? error.status : 500;
+    return new Response(JSON.stringify({ error: (error as Error).message }), { status, headers: { "content-type": "application/json" } });
+  }
+}
+
 export async function customFetch<T = unknown>(
   input: RequestInfo | URL,
   options: CustomFetchOptions = {},
@@ -360,7 +374,7 @@ export async function customFetch<T = unknown>(
 
   const requestInfo = { method, url: resolveUrl(input) };
 
-  const response = await fetch(input, { ...init, method, headers });
+  const response = mockFetch(method, requestInfo.url, init.body);
 
   if (!response.ok) {
     const errorData = await parseErrorBody(response, method);

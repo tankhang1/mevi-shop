@@ -1,12 +1,9 @@
 import { createRoot } from 'react-dom/client';
 
 import App from './App';
-import { setBaseUrl } from '@/lib/api';
 import { ErrorBoundary } from '@/components/error-boundary';
 
 import './index.css';
-
-setBaseUrl(import.meta.env.VITE_API_URL ?? null);
 
 createRoot(document.getElementById('root')!, {
   // Keeps caught errors off reportError(), which would raise the dev overlay.

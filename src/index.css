@@ -30,7 +30,7 @@
 @layer components {
   .surface { @apply rounded-2xl border border-[#e7e4d9] bg-[#fffefa]; box-shadow: 0 3px 16px rgba(39,65,48,.025); }
   .btn-primary { @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#285e45] px-5 py-2.5 text-sm font-bold text-[#fffdf7] transition hover:bg-[#1e4d38] disabled:cursor-not-allowed disabled:opacity-55; }
-  .btn-outline { @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[#cfd5c9] bg-[#faf9f4] px-5 py-2.5 text-sm font-bold text-[#315944] transition hover:bg-[#edf1e8] disabled:cursor-not-allowed disabled:opacity-55; }
+  .btn-outline { @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[#cfd5c9] bg-[#faf9f4] px-5 py-2.5 text-sm font-bold text-[#315944] transition hover:bg-[#eef1e9] disabled:cursor-not-allowed disabled:opacity-55; }
   .btn-danger { @apply inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-[#a7473d] px-4 py-2 text-xs font-bold text-white disabled:opacity-50; }
   .field { @apply min-h-11 w-full rounded-xl border border-[#deddd2] bg-[#fffefa] px-3.5 py-2.5 text-sm font-normal text-[#24392e] outline-none transition placeholder:text-[#9a9e94] focus:border-[#78967d] focus:ring-2 focus:ring-[#285e45]/10; }
   .eyebrow { @apply text-xs font-bold uppercase tracking-[.18em] text-[#bd6e46]; }
