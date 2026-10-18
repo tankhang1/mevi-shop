@@ -27,3 +27,10 @@ export interface ListProductsParams {
   maxPrice?: number;
   sort?: ProductSort;
 }
+
+export type ProductInput = Omit<Product, 'id' | 'status' | 'rejectionReason' | 'createdAt'>;
+
+export interface ProductModeration {
+  status: 'approved' | 'rejected';
+  rejectionReason?: string | null;
+}

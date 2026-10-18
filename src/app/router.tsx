@@ -1,5 +1,12 @@
+import { AdminDashboard } from '@/features/admin/pages/admin-dashboard';
+import { AdminProducts } from '@/features/admin/pages/admin-products';
+import { AdminProductEditor } from '@/features/admin/pages/admin-product-editor';
+import { AdminApproval } from '@/features/admin/pages/admin-approval';
+import { AdminOrders } from '@/features/admin/pages/admin-orders';
+import { AdminAgencies } from '@/features/admin/pages/admin-agencies';
+import { AdminAgencyDetail } from '@/features/admin/pages/admin-agency-detail';
 import { useEffect } from 'react';
-import { Route, Switch, useLocation } from 'wouter';
+import { Route, Switch, useLocation, Redirect } from 'wouter';
 import { ErrorBoundary } from '@/components/error-boundary';
 import NotFound from '@/pages/not-found';
 import { AgencyDashboard } from '@/features/agency/pages/agency-dashboard';
@@ -27,6 +34,15 @@ export function Router() {
     <Route path="/" component={HomeRoute} /><Route path="/shop" component={CatalogPage} /><Route path="/product/:id" component={ProductPage} /><Route path="/shops" component={ShopsPage} /><Route path="/trace" component={TracePage} /><Route path="/wholesale" component={WholesalePage} /><Route path="/shops/:slug" component={ShopPage} />
     <Route path="/cart" component={CartPage} /><Route path="/checkout/confirm" component={CheckoutPage} /><Route path="/checkout/success" component={SuccessPage} />
     <Route path="/sign-in/*?" component={SignInPage} /><Route path="/sign-up/*?" component={SignUpPage} />
+    <Route path="/admin" component={() => <Redirect to="/admin/dashboard" />} />
+    <Route path="/admin/dashboard" component={() => <Gate role="admin"><AdminDashboard /></Gate>} />
+    <Route path="/admin/products" component={() => <Gate role="admin"><AdminProducts /></Gate>} />
+    <Route path="/admin/products/new" component={() => <Gate role="admin"><AdminProductEditor /></Gate>} />
+    <Route path="/admin/products/approval" component={() => <Gate role="admin"><AdminApproval /></Gate>} />
+    <Route path="/admin/products/:id/edit" component={() => <Gate role="admin"><AdminProductEditor /></Gate>} />
+    <Route path="/admin/orders" component={() => <Gate role="admin"><AdminOrders /></Gate>} />
+    <Route path="/admin/agencies" component={() => <Gate role="admin"><AdminAgencies /></Gate>} />
+    <Route path="/admin/agencies/:id" component={() => <Gate role="admin"><AdminAgencyDetail /></Gate>} />
     <Route path="/agency/dashboard" component={() => <Gate role="agency"><AgencyDashboard /></Gate>} />
     <Route path="/agency/settings" component={() => <Gate role="agency"><AgencySettings /></Gate>} />
     <Route component={NotFound} />

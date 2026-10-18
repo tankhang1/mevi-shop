@@ -7,11 +7,12 @@ import { Brand } from '@/shared/ui/brand';
 import { Field } from '@/shared/ui/field';
 
 export const demoRoles: { role: Role; label: string; detail: string; icon: ReactNode }[] = [
+  { role: 'admin', label: 'Quản trị', detail: 'Sản phẩm, đơn hàng, đại lý', icon: <ShieldCheck size={18} /> },
   { role: 'agency', label: 'Đại lý', detail: 'Đơn hàng & gian hàng', icon: <Store size={18} /> },
   { role: 'customer', label: 'Khách hàng', detail: 'Mua sắm nông sản', icon: <ShoppingBag size={18} /> },
 ];
 
-export const homeFor = (role?: string) => role === 'agency' ? '/agency/dashboard' : '/';
+export const homeFor = (role?: string) => role === 'admin' ? '/admin/dashboard' : role === 'agency' ? '/agency/dashboard' : '/';
 
 export function AuthPage({ mode }: { mode: 'sign-in' | 'sign-up' }) {
   const { user, signIn } = useAuthStore(); const [, setLocation] = useLocation();

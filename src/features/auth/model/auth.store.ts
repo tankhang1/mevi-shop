@@ -2,10 +2,11 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 // Local stand-in for a real auth provider: the signed-in demo user is persisted in localStorage.
-export type Role = 'agency' | 'customer';
+export type Role = 'admin' | 'agency' | 'customer';
 export interface AuthUser { id: string; fullName: string; role: Role }
 
 export const demoUsers: Record<Role, AuthUser> = {
+  admin: { id: 'user_admin', fullName: 'Quản trị Mevi', role: 'admin' },
   agency: { id: 'user_agency', fullName: 'Đại lý Đà Lạt Xanh', role: 'agency' },
   customer: { id: 'user_customer', fullName: 'Khách hàng', role: 'customer' },
 };
