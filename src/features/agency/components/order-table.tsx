@@ -1,0 +1,7 @@
+import type { Order } from '@/lib/api';
+import { fmt, dateFmt, statusLabel } from '@/shared/lib/format';
+import { Empty } from '@/shared/ui/feedback';
+
+export function OrderTable({ orders }: { orders: Order[] }) { return !orders.length ? <div className="px-5 pb-5"><Empty title="Chưa có đơn hàng" detail="Đơn đặt hàng mới sẽ xuất hiện tại đây." /></div> : <div className="overflow-x-auto"><table className="w-full min-w-[680px] text-left text-sm"><thead className="bg-[#f3f1e8] text-xs text-muted-foreground"><tr>{['Mã đơn','Khách hàng','Ngày đặt','Tổng tiền','Trạng thái'].map(t => <th key={t} className="px-5 py-3 font-semibold">{t}</th>)}</tr></thead><tbody className="divide-y divide-[#ece8de]">{orders.map(order => <tr key={order.id} data-testid={`row-order-${order.id}`}><td className="px-5 py-4 font-mono text-xs font-bold">{order.code}</td><td className="px-5 py-4"><p className="font-semibold">{order.customerName}</p><p className="text-xs text-muted-foreground">{order.phone}</p></td><td className="px-5 py-4 text-muted-foreground">{dateFmt(order.createdAt)}</td><td className="px-5 py-4 font-semibold">{fmt(order.total)}</td><td className="px-5 py-4"><StatusPill status={order.status} /></td></tr>)}</tbody></table></div>; }
+
+export function StatusPill({ status }: { status: string }) { return <span className="inline-flex rounded-full bg-[#eef1e9] px-2.5 py-1 text-[11px] font-bold text-[#315d43]" data-testid={`status-${status}`}>{statusLabel(status)}</span>; }

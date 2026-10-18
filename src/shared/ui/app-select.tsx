@@ -1,0 +1,5 @@
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+
+export function AppSelect<T extends string>({ value, onChange, options, className = '', disabled, testId }: { value: T; onChange: (v: T) => void; options: { value: T; label: string }[]; className?: string; disabled?: boolean; testId?: string }) {
+  return <Select value={value} onValueChange={v => onChange(v as T)} disabled={disabled}><SelectTrigger className={`h-11 rounded-xl border-[#deddd2] bg-[#fffefa] px-3.5 text-sm font-semibold text-[#24392e] shadow-none focus:ring-2 focus:ring-[#285e45]/15 ${className}`} data-testid={testId}><SelectValue /></SelectTrigger><SelectContent className="rounded-xl border-[#e7e4d9] bg-[#fffefa] p-1 shadow-[var(--shadow-soft)]">{options.map(o => <SelectItem key={o.value} value={o.value} className="cursor-pointer rounded-lg py-2 text-sm font-medium text-[#24392e] focus:bg-[#eef1e9] focus:text-[#285e45] data-[state=checked]:font-bold data-[state=checked]:text-[#285e45]">{o.label}</SelectItem>)}</SelectContent></Select>;
+}
