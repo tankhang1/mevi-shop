@@ -1,7 +1,7 @@
+import { galleryOf } from '@/features/products/model/gallery';
 import { Link } from 'wouter';
 import { ArrowRight, Banknote, Check, ClipboardList, PackageCheck, ShieldCheck, Store, Truck, UserRound, Pencil } from 'lucide-react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { galleryOf } from '@/lib/shops';
 import { priceOf, useAllProducts } from '@/features/products/product-utils';
 import { volumeTiers, faqs } from '@/features/wholesale/data';
 import { WholesaleForm } from '@/features/wholesale/wholesale-form';

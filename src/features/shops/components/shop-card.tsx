@@ -1,6 +1,7 @@
+import { reviewsOf, ratingSummary } from '@/features/reviews/model/reviews';
+import type { Shop } from '@/features/shops/model/shops';
 import { Link } from 'wouter';
 import { BadgeCheck, Star, Store } from 'lucide-react';
-import { ratingSummary, reviewsOf, shops, type Shop } from '@/lib/shops';
 import { useAllProducts } from '@/features/products/product-utils';
 import { compactNumber } from '@/shared/lib/format';
 

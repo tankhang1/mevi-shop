@@ -1,15 +1,16 @@
+import { useAuthStore } from '@/features/auth/model/auth.store';
+import { addUserReview, reviewTagOptions } from '@/features/reviews/model/reviews';
+import { galleryOf } from '@/features/products/model/gallery';
+import type { Product } from '@/shared/types';
 import { useState, type FormEvent } from 'react';
-import { useUser } from '@/lib/mock-auth';
-import type { Product } from '@/lib/api';
 import { Star, X, Upload, Pencil } from 'lucide-react';
-import { addUserReview, galleryOf, reviewTagOptions } from '@/lib/shops';
 import { imageFallback } from '@/shared/config';
 import { readAsDataUrl } from '@/shared/lib/file';
 
 export const ratingWords = ['', 'Rất tệ', 'Chưa hài lòng', 'Bình thường', 'Hài lòng', 'Tuyệt vời'];
 
 export function ReviewForm({ product, onSubmitted }: { product: Product; onSubmitted: () => void }) {
-  const { user } = useUser();
+  const user = useAuthStore(s => s.user);
   const [open, setOpen] = useState(false);
   const [rating, setRating] = useState(5);
   const [hover, setHover] = useState(0);

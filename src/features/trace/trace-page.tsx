@@ -1,7 +1,9 @@
+import { shopOfProduct } from '@/features/shops/model/shops';
+import { galleryOf } from '@/features/products/model/gallery';
+import { traceOf } from '@/features/trace/model/trace';
 import { useState, type ReactNode } from 'react';
 import { Link } from 'wouter';
 import { ArrowRight, BadgeCheck, Check, Leaf, Package, Search, ShieldCheck, Sprout, Store, Truck } from 'lucide-react';
-import { galleryOf, traceOf, shopOfProduct } from '@/lib/shops';
 import { useAllProducts } from '@/features/products/product-utils';
 import { ShopCard } from '@/features/shops/components/shop-card';
 import { imageFallback } from '@/shared/config';

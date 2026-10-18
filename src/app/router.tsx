@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { Route, Switch, useLocation } from 'wouter';
-import { shops } from '@/lib/shops';
 import { ErrorBoundary } from '@/components/error-boundary';
 import NotFound from '@/pages/not-found';
 import { AgencyDashboard } from '@/features/agency/pages/agency-dashboard';

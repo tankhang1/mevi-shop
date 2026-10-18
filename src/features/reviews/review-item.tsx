@@ -1,8 +1,8 @@
+import type { Product } from '@/shared/types';
+import type { Review } from '@/features/reviews/model/reviews';
 import { useState } from 'react';
 import { Link } from 'wouter';
-import type { Product } from '@/lib/api';
 import { BadgeCheck } from 'lucide-react';
-import { type Review } from '@/lib/shops';
 import { Lightbox } from '@/features/products/components/product-gallery';
 import { imageFallback } from '@/shared/config';
 import { dateFmt } from '@/shared/lib/format';

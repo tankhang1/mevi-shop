@@ -1,6 +1,6 @@
+import { shops } from '@/features/shops/model/shops';
 import { useState } from 'react';
 import { Search } from 'lucide-react';
-import { shops } from '@/lib/shops';
 import { ShopCard } from '@/features/shops/components/shop-card';
 import { Empty } from '@/shared/ui/feedback';
 import { PageFrame } from '@/shared/ui/layout';

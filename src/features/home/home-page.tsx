@@ -1,7 +1,7 @@
+import { shops } from '@/features/shops/model/shops';
+import { useProducts } from '@/features/products/api/products.queries';
 import { Link } from 'wouter';
-import { useListProducts, getListProductsQueryKey } from '@/lib/api';
 import { ArrowRight, Check, PackageCheck, ShieldCheck, Store, Truck } from 'lucide-react';
-import { shops } from '@/lib/shops';
 import { CategoryTiles } from '@/features/home/components/category-tiles';
 import { Feature } from '@/features/home/components/feature';
 import { FlashSale } from '@/features/home/components/flash-sale';
@@ -14,7 +14,7 @@ import { Loading, ErrorState, Empty } from '@/shared/ui/feedback';
 import { PageFrame } from '@/shared/ui/layout';
 
 export function HomePage() {
-  const { data, isLoading, isError, refetch } = useListProducts({ sort: 'featured' }, { query: { queryKey: getListProductsQueryKey({ sort: 'featured' }) } });
+  const { data, isLoading, isError, refetch } = useProducts({ sort: 'featured' });
   const products = data || [];
   const onSale = products.filter(p => p.salePrice != null);
   const bestSellers = [...products].sort((a, b) => soldOf(b) - soldOf(a)).slice(0, 8);

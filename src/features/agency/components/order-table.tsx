@@ -1,4 +1,4 @@
-import type { Order } from '@/lib/api';
+import type { Order } from '@/shared/types';
 import { fmt, dateFmt, statusLabel } from '@/shared/lib/format';
 import { Empty } from '@/shared/ui/feedback';
 

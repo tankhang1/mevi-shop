@@ -1,6 +1,6 @@
+import { useProducts } from '@/features/products/api/products.queries';
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'wouter';
-import { useListProducts, getListProductsQueryKey } from '@/lib/api';
 import { Search, Store, X } from 'lucide-react';
 import { shopRef } from '@/app/providers/agency-brand-provider';
 import { categoryTiles } from '@/features/home/data';
@@ -28,7 +28,7 @@ export function CatalogPage() {
     window.history.replaceState(null, '', `${window.location.pathname}${qs ? `?${qs}` : ''}`);
   }, [category]);
   const queryParams = useMemo(() => ({ q: search || undefined, category: category || undefined, sort }), [search, category, sort]);
-  const { data, isLoading, isError, refetch } = useListProducts(queryParams, { query: { queryKey: getListProductsQueryKey(queryParams) } });
+  const { data, isLoading, isError, refetch } = useProducts(queryParams);
   const active = categoryTiles.find(c => c.name === category);
   const ref = shopRef();
   return <PageFrame><main className="shell py-6 md:py-10">

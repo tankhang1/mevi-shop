@@ -1,9 +1,9 @@
 # Mevi Admin — Chức năng quản trị
 
-> Trang quản trị đã được gỡ khỏi web app khách hàng (`src/App.tsx`). Tài liệu này mô tả đầy đủ chức năng để dựng lại thành app admin riêng. API hooks vẫn còn trong `src/lib/api/generated/` và mock trong `src/lib/api/mock-server.ts`.
+> Trang quản trị đã được gỡ khỏi web app khách hàng (trước đây `src/App.tsx`). Tài liệu này mô tả đầy đủ chức năng để dựng lại thành app admin riêng. Hooks admin (orval) đã bị xoá khi chuyển sang API layer viết tay; khôi phục từ git `cc4da8b:src/lib/api/`.
 
 ## Phân quyền
-- Role `admin` (xem `src/lib/mock-auth.tsx`). Mọi route `/admin/*` bọc trong `<Gate role="admin">`.
+- Role `admin` (cần thêm lại vào `src/features/auth/model/auth.store.ts`). Mọi route `/admin/*` bọc trong `<Gate role="admin">`.
 - Sau đăng nhập, admin được chuyển tới `/admin/dashboard`.
 
 ## Layout (AdminShell)

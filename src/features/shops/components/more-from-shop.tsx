@@ -1,6 +1,6 @@
+import type { Shop } from '@/features/shops/model/shops';
 import { Link } from 'wouter';
 import { ArrowRight } from 'lucide-react';
-import { shops, type Shop } from '@/lib/shops';
 import { ProductCard } from '@/features/products/components/product-card';
 import { useAllProducts } from '@/features/products/product-utils';
 

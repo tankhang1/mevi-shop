@@ -1,8 +1,8 @@
+import { useCartStore } from '@/features/cart/model/cart.store';
+import type { Product } from '@/shared/types';
 import { useState } from 'react';
 import { Link } from 'wouter';
-import type { Product } from '@/lib/api';
 import { Check, Plus, Star } from 'lucide-react';
-import { cartStore } from '@/features/cart/use-cart';
 import { priceOf, ratingOf, soldOf } from '@/features/products/product-utils';
 import { imageFallback } from '@/shared/config';
 import { fmt } from '@/shared/lib/format';
@@ -10,7 +10,8 @@ import { fmt } from '@/shared/lib/format';
 export function ProductCard({ product, compact = false }: { product: Product; compact?: boolean }) {
   const [added, setAdded] = useState(false);
   const off = product.salePrice != null ? Math.round((1 - product.salePrice / product.price) * 100) : 0;
-  const quickAdd = (e: React.MouseEvent) => { e.preventDefault(); cartStore.add(product); setAdded(true); setTimeout(() => setAdded(false), 1200); };
+  const addToCart = useCartStore(s => s.add);
+  const quickAdd = (e: React.MouseEvent) => { e.preventDefault(); addToCart(product); setAdded(true); setTimeout(() => setAdded(false), 1200); };
   const sold = soldOf(product);
   return <article className={`group relative overflow-hidden border border-[#e7e4d9] bg-white transition duration-300 hover:-translate-y-1 hover:border-[#b2c3ad] hover:shadow-[var(--shadow-soft)] ${compact ? 'rounded-2xl' : 'rounded-3xl'}`} data-testid={`card-product-${product.id}`}><Link href={`/product/${product.id}`} className="block"><div className={`relative overflow-hidden bg-[#eef1e9] aspect-[4/3]`}><img src={product.imageUrls?.[0] || imageFallback} onError={e => { e.currentTarget.src = imageFallback; }} alt={product.name} className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.06]" />{off > 0 && <span className="absolute left-2.5 top-2.5 rounded-full bg-[#bd6e46] px-2.5 py-1 text-[11px] font-extrabold text-white shadow">-{off}%</span>}{!compact && <span className="absolute right-3 top-3 rounded-full bg-white/90 px-2.5 py-1 text-[10px] font-bold text-[#bd6e46] backdrop-blur">{product.category}</span>}<button onClick={quickAdd} className={`absolute grid place-items-center rounded-full text-white shadow-lg transition ${compact ? 'bottom-2 right-2 h-9 w-9' : 'bottom-3 right-3 h-11 w-11'} ${added ? 'bg-[#5f8f6e]' : 'bg-[#285e45] hover:scale-110'}`} aria-label={`Thêm ${product.name} vào giỏ`} data-testid={`button-quick-add-${product.id}`}>{added ? <Check size={compact ? 16 : 19} /> : <Plus size={compact ? 17 : 20} />}</button></div>{compact ? <div className="p-3"><h3 className="truncate text-sm font-bold text-[#214c3a]">{product.name}</h3><div className="mt-1 flex items-baseline gap-2"><p className="font-extrabold text-[#bd6e46]">{fmt(priceOf(product))}</p>{product.salePrice != null && <p className="text-[11px] text-[#8a938d] line-through">{fmt(product.price)}</p>}</div><div className="relative mt-2 h-4 overflow-hidden rounded-full bg-[#f6e6dc]"><div className="h-full rounded-full bg-gradient-to-r from-[#f3cfb4] to-[#e0a57c]" style={{ width: `${Math.min(92, 25 + sold % 70)}%` }} /><span className="absolute inset-0 grid place-items-center text-[10px] font-bold text-[#6b3a22]">Đã bán {sold}</span></div></div> : <div className="p-3.5"><p className="truncate text-xs text-[#758179]">{product.origin || 'Nông sản Việt'}</p><h3 className="mt-0.5 truncate font-bold text-[#214c3a]" title={product.name}>{product.name}</h3><div className="mt-1 flex items-center gap-2 text-[11px] text-[#758179]"><span className="inline-flex items-center gap-0.5 font-bold text-[#d4a24c]"><Star size={12} fill="currentColor" /> {ratingOf(product)}</span><span>·</span><span>Đã bán {sold}</span></div><div className="mt-2 flex items-end justify-between gap-3"><div><p className="text-lg font-extrabold text-[#285e45]">{fmt(priceOf(product))}</p>{product.salePrice != null && <p className="text-xs text-[#8a938d] line-through">{fmt(product.price)}</p>}</div><span className="pb-1 text-xs text-[#758179]">{product.packageSize}</span></div></div>}</Link></article>;
 }

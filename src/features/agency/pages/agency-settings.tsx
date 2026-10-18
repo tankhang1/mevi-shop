@@ -1,8 +1,6 @@
+import { useAgencySettings, useUpdateAgencySettings } from '@/features/agency/api/agency.queries';
 import { useEffect, useState, type FormEvent } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
-import { useGetAgencySettings, getGetAgencySettingsQueryKey, useUpdateMyAgency, getGetPublicAgencyQueryKey } from '@/lib/api';
 import { Check, Upload } from 'lucide-react';
-import { App } from '@/app/App';
 import { AgencyShell } from '@/features/agency/components/agency-shell';
 import { readAsDataUrl } from '@/shared/lib/file';
 import { Loading, ErrorState } from '@/shared/ui/feedback';
@@ -10,9 +8,8 @@ import { Field } from '@/shared/ui/field';
 import { SectionTitle } from '@/shared/ui/section-title';
 
 export function AgencySettings() {
-  const q = useGetAgencySettings({ query: { queryKey: getGetAgencySettingsQueryKey() } });
-  const update = useUpdateMyAgency();
-  const qc = useQueryClient();
+  const q = useAgencySettings();
+  const update = useUpdateAgencySettings();
   const [form, setForm] = useState({ slug: '', displayName: '', logoUrl: '', primaryColor: '#285e45', contactName: '', contactPhone: '', contactEmail: '' });
   const [init, setInit] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -46,11 +43,8 @@ export function AgencySettings() {
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
-    update.mutate({ data: { ...form, logoUrl: form.logoUrl || null } }, {
+    update.mutate({ ...form, logoUrl: form.logoUrl || null }, {
       onSuccess: () => {
-        qc.invalidateQueries({ queryKey: getGetAgencySettingsQueryKey() });
-        if (q.data?.slug) qc.invalidateQueries({ queryKey: getGetPublicAgencyQueryKey(q.data.slug) });
-        qc.invalidateQueries({ queryKey: getGetPublicAgencyQueryKey(form.slug) });
         setMessage('Thông tin gian hàng đã được lưu.');
       },
       onError: () => setMessage('Không thể lưu thay đổi. Vui lòng thử lại.'),
@@ -78,4 +72,3 @@ export function AgencySettings() {
   </AgencyShell>;
 }
 
-export default App;

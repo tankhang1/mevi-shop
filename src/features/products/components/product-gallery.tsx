@@ -1,7 +1,7 @@
+import { galleryOf } from '@/features/products/model/gallery';
+import type { Product } from '@/shared/types';
 import { useEffect, useState } from 'react';
-import type { Product } from '@/lib/api';
 import { ArrowLeft, ArrowRight, Search, X } from 'lucide-react';
-import { galleryOf } from '@/lib/shops';
 import { imageFallback } from '@/shared/config';
 
 export function Lightbox({ images, index, onIndex, onClose, alt }: { images: string[]; index: number; onIndex: (i: number) => void; onClose: () => void; alt: string }) {

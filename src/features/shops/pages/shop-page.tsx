@@ -1,9 +1,9 @@
+import { useProducts } from '@/features/products/api/products.queries';
+import { shops, shopBySlug } from '@/features/shops/model/shops';
 import { sortOptions } from '@/features/products/pages/catalog-page';
 import { useState } from 'react';
 import { Link, useRoute } from 'wouter';
-import { useListProducts, getListProductsQueryKey } from '@/lib/api';
 import { BadgeCheck, Check, Plus, Star } from 'lucide-react';
-import { shopBySlug, shops } from '@/lib/shops';
 import { ProductCard } from '@/features/products/components/product-card';
 import { SortKey } from '@/features/products/pages/catalog-page';
 import { ReviewsBlock } from '@/features/reviews/reviews-block';
@@ -21,7 +21,7 @@ export function ShopPage() {
   const [tab, setTab] = useState<'products' | 'reviews' | 'about'>('products');
   const [following, setFollowing] = useState(false);
   const [sort, setSort] = useState<SortKey>('featured');
-  const { data, isLoading, isError, refetch } = useListProducts({ sort }, { query: { queryKey: getListProductsQueryKey({ sort }) } });
+  const { data, isLoading, isError, refetch } = useProducts({ sort });
   const stats = useShopStats(shop ?? shops[0]);
   if (!shop) return <PageFrame><main className="shell py-12"><Empty title="Không tìm thấy gian hàng" detail="Gian hàng có thể đã ngừng hoạt động." action={<Link href="/shops" className="btn-outline">Xem các gian hàng</Link>} /></main></PageFrame>;
   const products = (data || []).filter(p => shop.productIds.includes(p.id));

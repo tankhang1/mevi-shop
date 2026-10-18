@@ -1,5 +1,5 @@
+import type { Product } from '@/shared/types';
 import { useEffect, useState } from 'react';
-import type { Product } from '@/lib/api';
 import { Zap } from 'lucide-react';
 import { ProductCard } from '@/features/products/components/product-card';
 

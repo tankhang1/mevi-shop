@@ -1,5 +1,5 @@
+import type { Order } from '@/shared/types';
 import { Link } from 'wouter';
-import type { Order } from '@/lib/api';
 import { Check } from 'lucide-react';
 import { fmt, statusLabel } from '@/shared/lib/format';
 import { PageFrame } from '@/shared/ui/layout';

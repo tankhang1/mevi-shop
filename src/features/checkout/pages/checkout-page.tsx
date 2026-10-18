@@ -1,9 +1,9 @@
+import { useCreateOrder } from '@/features/checkout/api/orders.queries';
+import { useCart } from '@/features/cart/model/cart.store';
 import { useState, type FormEvent } from 'react';
 import { Link, useLocation } from 'wouter';
-import { useCreateOrder } from '@/lib/api';
 import { ArrowLeft, Banknote } from 'lucide-react';
 import { shopRef } from '@/app/providers/agency-brand-provider';
-import { cartStore } from '@/features/cart/use-cart';
 import { priceOf } from '@/features/products/product-utils';
 import { fmt } from '@/shared/lib/format';
 import { Empty } from '@/shared/ui/feedback';
@@ -12,14 +12,14 @@ import { PageFrame } from '@/shared/ui/layout';
 import { SectionTitle } from '@/shared/ui/section-title';
 
 export function CheckoutPage() {
-  const cart = cartStore; const [, setLocation] = useLocation(); const createOrder = useCreateOrder();
+  const cart = useCart(); const [, setLocation] = useLocation(); const createOrder = useCreateOrder();
   const [values, setValues] = useState({ customerName: '', phone: '', province: '', district: '', address: '', note: '' });
   const [message, setMessage] = useState('');
   const set = (key: keyof typeof values, value: string) => setValues(old => ({ ...old, [key]: value }));
   const submit = (e: FormEvent) => {
     e.preventDefault(); setMessage('');
     if (!cart.items.length) { setMessage('Giỏ hàng đang trống.'); return; }
-    createOrder.mutate({ data: { ...values, note: values.note || null, agencySlug: shopRef() || null, items: cart.items.map(item => ({ productId: item.productId, quantity: item.quantity })) } }, {
+    createOrder.mutate({ ...values, note: values.note || null, agencySlug: shopRef() || null, items: cart.items.map(item => ({ productId: item.productId, quantity: item.quantity })) }, {
       onSuccess: order => { localStorage.setItem('mevi-last-order', JSON.stringify(order)); cart.clear(); setLocation('/checkout/success'); },
       onError: () => setMessage('Chưa thể ghi nhận đơn. Vui lòng kiểm tra thông tin và thử lại.'),
     });

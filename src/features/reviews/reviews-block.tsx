@@ -1,7 +1,8 @@
+import { ratingSummary } from '@/features/reviews/model/reviews';
+import type { Product } from '@/shared/types';
+import type { Review } from '@/features/reviews/model/reviews';
 import { useState } from 'react';
-import type { Product } from '@/lib/api';
 import { Star } from 'lucide-react';
-import { ratingSummary, type Review } from '@/lib/shops';
 import { ReviewItem } from '@/features/reviews/review-item';
 import { Empty } from '@/shared/ui/feedback';
 import { Stars } from '@/shared/ui/stars';
