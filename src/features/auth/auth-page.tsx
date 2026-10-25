@@ -3,7 +3,8 @@ import { ArrowLeft, ArrowRight, LogIn, ShieldCheck, Sprout, Truck } from 'lucide
 import { useAuthStore } from '@/features/auth/model/auth.store';
 import { Brand } from '@/shared/ui/brand';
 
-export const homeFor = (role?: string) => role === 'agency' ? '/agency/dashboard' : '/';
+export const homeFor = (role?: string) =>
+  role === 'agency' ? '/agency/dashboard' : role === 'admin' ? '/admin/dashboard' : '/account';
 
 /** Single sign-on entry: Mevi accounts are managed centrally, so there is no local sign-in/sign-up form. */
 export function SignInPage() {
