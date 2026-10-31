@@ -7,10 +7,12 @@ const recent = (orders: Order[]) => [...orders].sort((a, b) => b.createdAt.local
 // The demo agency account always manages the first agency.
 const myAgency = () => db.agencies[0] ?? notFound();
 
-export function getPublicAgency(slug: string): PublicAgency {
-  const a = db.agencies.find(x => x.slug === slug) ?? notFound();
-  return { id: a.id, slug: a.slug, displayName: a.displayName, logoUrl: a.logoUrl, primaryColor: a.primaryColor, active: a.active };
-}
+const toPublic = (a: Agency): PublicAgency =>
+  ({ id: a.id, slug: a.slug, displayName: a.displayName, logoUrl: a.logoUrl, coverUrl: a.coverUrl ?? null, primaryColor: a.primaryColor, active: a.active, contactName: a.contactName, contactPhone: a.contactPhone });
+
+export const getPublicAgency = (slug: string) => toPublic(db.agencies.find(x => x.slug === slug) ?? notFound());
+
+export const listPublicAgencies = () => db.agencies.filter(a => a.active).map(toPublic);
 
 export function getAgencySummary(): AgencySummary {
   const orders = db.orders.filter(o => o.agencySlug === myAgency().slug);

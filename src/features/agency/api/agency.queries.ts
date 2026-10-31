@@ -3,6 +3,7 @@ import type { AgencyUpdate } from '@/shared/types';
 import { agencyApi } from './agency.api';
 
 export const agencyKeys = {
+  publicList: ['agencies', 'list'] as const,
   public: (slug: string) => ['agencies', slug] as const,
   summary: ['agency', 'summary'] as const,
   settings: ['agency', 'settings'] as const,
@@ -10,6 +11,9 @@ export const agencyKeys = {
 
 export const usePublicAgency = (slug: string) =>
   useQuery({ queryKey: agencyKeys.public(slug), queryFn: () => agencyApi.getPublic(slug), enabled: !!slug });
+
+export const usePublicAgencies = () =>
+  useQuery({ queryKey: agencyKeys.publicList, queryFn: agencyApi.listPublic });
 
 export const useAgencySummary = () =>
   useQuery({ queryKey: agencyKeys.summary, queryFn: agencyApi.getSummary });

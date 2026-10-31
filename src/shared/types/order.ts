@@ -4,6 +4,10 @@ export interface OrderItem {
   id: number;
   productId: number;
   productName: string;
+  variantId?: string;
+  variantLabel?: string;
+  farmId?: string | null;
+  farmName?: string | null;
   quantity: number;
   unitPrice: number;
   lineTotal: number;
@@ -33,5 +37,5 @@ export interface OrderInput {
   district: string;
   note?: string | null;
   agencySlug?: string | null;
-  items: { productId: number; quantity: number }[];
+  items: { productId: number; quantity: number; variantId?: string; farmId?: string | null }[];
 }

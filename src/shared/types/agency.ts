@@ -5,6 +5,8 @@ export interface Agency {
   slug: string;
   displayName: string;
   logoUrl: string | null;
+  /** Storefront hero image; falls back to a default farm photo. */
+  coverUrl?: string | null;
   primaryColor: string;
   contactName: string;
   contactPhone: string;
@@ -13,7 +15,7 @@ export interface Agency {
   createdAt?: string;
 }
 
-export type PublicAgency = Pick<Agency, 'id' | 'slug' | 'displayName' | 'logoUrl' | 'primaryColor' | 'active'>;
+export type PublicAgency = Pick<Agency, 'id' | 'slug' | 'displayName' | 'logoUrl' | 'coverUrl' | 'primaryColor' | 'active' | 'contactName' | 'contactPhone'>;
 
 export type AgencyUpdate = Partial<Omit<Agency, 'id'>>;
 

@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from 'react';
 import { Link, useLocation } from 'wouter';
-import { ArrowLeft, BadgeCheck, ClipboardList, LogOut, Menu, Package, ShoppingBag, Store, UserRound } from 'lucide-react';
+import { ArrowLeft, BadgeCheck, ClipboardList, Image, LogOut, Menu, Package, ShoppingBag, Store, UserRound } from 'lucide-react';
 import { useAuthStore } from '@/features/auth/model/auth.store';
 import { basePath } from '@/shared/config';
 import { Brand } from '@/shared/ui/brand';
@@ -11,6 +11,7 @@ const adminNav = [
   { href: '/admin/products/approval', label: 'Duyệt sản phẩm', icon: BadgeCheck },
   { href: '/admin/orders', label: 'Đơn đặt hàng', icon: ShoppingBag },
   { href: '/admin/agencies', label: 'Đại lý', icon: Store },
+  { href: '/admin/banners', label: 'Banner', icon: Image },
 ];
 
 // Longest matching prefix wins so /admin/products/approval doesn't also light up /admin/products.

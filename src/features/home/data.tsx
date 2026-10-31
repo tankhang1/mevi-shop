@@ -9,8 +9,3 @@ export const categoryTiles = [
   { name: 'Sữa', desc: 'Sữa tươi nguyên chất từ cao nguyên Mộc Châu.', image: 'https://images.pexels.com/photos/5946720/pexels-photo-5946720.jpeg?auto=compress&cs=tinysrgb&w=300', bg: '#e3ece6' },
 ];
 
-export const heroSlides = [
-  { tag: 'Mùa vụ mới · Đà Lạt', title: <>Rau củ sạch<br />giao trong ngày</>, desc: 'Hái sáng sớm, giao tận nhà trước bữa tối. Combo rau củ gia đình chỉ từ 159.000 ₫.', cta: 'Mua combo ngay', href: '/product/15', image: 'https://images.pexels.com/photos/2255935/pexels-photo-2255935.jpeg?auto=compress&cs=tinysrgb&w=1600', from: '#214c3a', to: '#5f8f6e' },
-  { tag: 'Siêu sale trái cây', title: <>Giảm đến 20%<br />trái cây tươi</>, desc: 'Nho Ninh Thuận, bơ sáp Đắk Lắk, chuối Laba — đặc sản ba miền, giá tốt mỗi tuần.', cta: 'Săn deal trái cây', href: '/shop?category=Trái cây tươi', image: 'https://images.pexels.com/photos/1132047/pexels-photo-1132047.jpeg?auto=compress&cs=tinysrgb&w=1600', from: '#8a4a2c', to: '#bd6e46' },
-  { tag: 'Từ nông trại Việt', title: <>Biết rõ nguồn gốc<br />từng sản phẩm</>, desc: 'Mỗi sản phẩm Mevi đều có vùng trồng, quy cách và hướng dẫn bảo quản rõ ràng.', cta: 'Khám phá cửa hàng', href: '/shop', image: 'https://images.pexels.com/photos/4750270/pexels-photo-4750270.jpeg?auto=compress&cs=tinysrgb&w=1600', from: '#285e45', to: '#7fa36b' },
-];

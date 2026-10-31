@@ -1,7 +1,7 @@
-import { useCart } from "@/features/cart/model/cart.store";
+import { farmNameOf, unitPriceOf, useCart, variantLabelOf } from "@/features/cart/model/cart.store";
+import { stockOf } from "@/shared/lib/product-options";
 import { Link } from "wouter";
 import { ArrowRight, Trash2 } from "lucide-react";
-import { priceOf } from "@/features/products/product-utils";
 import { imageFallback } from "@/shared/config";
 import { fmt } from "@/shared/lib/format";
 import { Empty } from "@/shared/ui/feedback";
@@ -12,7 +12,7 @@ export function CartPage() {
   const cart = useCart();
   return (
     <PageFrame>
-      <main className="shell py-6 md:py-14 pb-28 md:pb-14">
+      <main className="shell py-6 md:py-14 pb-20 md:pb-14">
         <SectionTitle
           eyebrow="Đơn đặt hàng"
           title="Giỏ hàng"
@@ -32,9 +32,12 @@ export function CartPage() {
           <>
             <div className="grid items-start gap-6 lg:grid-cols-[1fr_340px]">
               <div className="surface divide-y divide-[#ece8de]">
-                {cart.items.map((item) => (
+                {cart.items.map((item) => {
+                  const stock = stockOf(item.product, item.variantId, item.farmId);
+                  const farm = farmNameOf(item);
+                  return (
                   <div
-                    key={item.productId}
+                    key={item.key}
                     className="flex gap-4 p-4 sm:p-5"
                     data-testid={`row-cart-${item.productId}`}
                   >
@@ -51,15 +54,21 @@ export function CartPage() {
                         {item.product.name}
                       </Link>
                       <p className="mt-1 text-xs text-muted-foreground">
-                        {item.product.packageSize}
+                        Quy cách: {variantLabelOf(item)}
+                        {farm && <> · Vườn: {farm}</>}
                       </p>
                       <p className="mt-2 font-bold text-[#285e45]">
-                        {fmt(priceOf(item.product))}
+                        {fmt(unitPriceOf(item))}
                       </p>
+                      {item.quantity > stock && (
+                        <p className="mt-1 text-xs font-bold text-[#a7473d]">
+                          {stock ? `Chỉ còn ${stock} sản phẩm` : "Đã hết hàng"}
+                        </p>
+                      )}
                     </div>
                     <div className="flex flex-col items-end justify-between">
                       <button
-                        onClick={() => cart.update(item.productId, 0)}
+                        onClick={() => cart.update(item.key, 0)}
                         className="text-[#8a968f] hover:text-[#a7473d] p-1"
                         aria-label="Xóa sản phẩm"
                         data-testid={`button-remove-${item.productId}`}
@@ -70,7 +79,7 @@ export function CartPage() {
                         <button
                           className="px-2.5 py-1 text-[#52645a] hover:bg-white rounded-l-lg transition"
                           onClick={() =>
-                            cart.update(item.productId, item.quantity - 1)
+                            cart.update(item.key, item.quantity - 1)
                           }
                           data-testid={`button-qty-minus-${item.productId}`}
                         >
@@ -80,9 +89,10 @@ export function CartPage() {
                           {item.quantity}
                         </span>
                         <button
-                          className="px-2.5 py-1 text-[#52645a] hover:bg-white rounded-r-lg transition"
+                          className="px-2.5 py-1 text-[#52645a] hover:bg-white rounded-r-lg transition disabled:opacity-35"
+                          disabled={item.quantity >= stock}
                           onClick={() =>
-                            cart.update(item.productId, item.quantity + 1)
+                            cart.update(item.key, item.quantity + 1)
                           }
                           data-testid={`button-qty-plus-${item.productId}`}
                         >
@@ -91,7 +101,8 @@ export function CartPage() {
                       </div>
                     </div>
                   </div>
-                ))}
+                  );
+                })}
               </div>
 
               {/* Desktop summary card */}

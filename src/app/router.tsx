@@ -5,6 +5,9 @@ import { AdminApproval } from "@/features/admin/pages/admin-approval";
 import { AdminOrders } from "@/features/admin/pages/admin-orders";
 import { AdminAgencies } from "@/features/admin/pages/admin-agencies";
 import { AdminAgencyDetail } from "@/features/admin/pages/admin-agency-detail";
+import { AdminBanners } from "@/features/admin/pages/admin-banners";
+import { AgencyStorePage } from "@/features/agency-store/agency-store-page";
+import { CategoriesPage } from "@/features/products/pages/categories-page";
 import { useEffect } from "react";
 import { Route, Switch, useLocation, Redirect } from "wouter";
 import { ErrorBoundary } from "@/components/error-boundary";
@@ -123,6 +126,14 @@ export function Router() {
             )}
           />
           <Route
+            path="/admin/banners"
+            component={() => (
+              <Gate role="admin">
+                <AdminBanners />
+              </Gate>
+            )}
+          />
+          <Route
             path="/agency/dashboard"
             component={() => (
               <Gate role="agency">
@@ -145,11 +156,13 @@ export function Router() {
           <Switch>
             <Route path="/" component={HomeRoute} />
             <Route path="/shop" component={CatalogPage} />
+            <Route path="/categories" component={CategoriesPage} />
             <Route path="/product/:id" component={ProductPage} />
             <Route path="/shops" component={ShopsPage} />
             <Route path="/trace" component={TracePage} />
             <Route path="/wholesale" component={WholesalePage} />
             <Route path="/shops/:slug" component={ShopPage} />
+            <Route path="/dai-ly/:slug" component={AgencyStorePage} />
             <Route path="/orders" component={CustomerOrdersPage} />
             <Route path="/account" component={AccountPage} />
             <Route path="/cart" component={CartPage} />

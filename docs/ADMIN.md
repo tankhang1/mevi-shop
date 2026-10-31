@@ -22,6 +22,7 @@
 | `/admin/orders` | Đơn đặt hàng | Lọc theo trạng thái: all/new/confirmed/processing/shipped/completed/cancelled. Bảng mã đơn, người nhận, địa chỉ, tổng tiền, trạng thái; đổi trạng thái đơn **(bắt buộc hộp thoại xác nhận, xem bên dưới)**. |
 | `/admin/agencies` | Đại lý | Danh sách đại lý (tìm theo tên/slug/SĐT, lọc Hoạt động/Tạm dừng); thêm đại lý mới; bật/tắt hoạt động (có xác nhận). Click dòng → trang chi tiết. |
 | `/admin/agencies/:id` | Chi tiết đại lý | Xem/sửa toàn bộ thông tin, thống kê và đơn hàng của đại lý (xem bên dưới). |
+| `/admin/banners` | Banner | CRUD banner trang chủ (ảnh, nhãn, tiêu đề, mô tả, nút, màu phủ, thứ tự, ẩn/hiện). Liên kết tới: nhóm sản phẩm (`/shop?category=`), sản phẩm (`/product/:id`) gian hàng Đại lý/CTV (`/dai-ly/:slug`) hoặc gian hàng nông trại (`/shops/:slug`). |
 
 ### Form sản phẩm
 - Bắt buộc: Tên, SKU, Danh mục, Giá bán (VND).
@@ -64,3 +65,7 @@
 
 ## Dựng lại
 Có thể khôi phục code gốc từ git: `git show cc4da8b:src/App.tsx` (các hàm `AdminShell`, `AdminDashboard`, `AdminProducts`, `ProductEditor`, `ApprovalPage`, `OrdersPage`, `AgenciesPage`).
+
+## Gian hàng công khai Đại lý/CTV (`/dai-ly/:slug`)
+
+Trang storefront theo màu/logo đại lý, có SĐT liên hệ, tìm kiếm + lọc danh mục. Vào trang sẽ lưu `mevi-agency-ref` → đơn đặt sau đó gắn `agencySlug` của đại lý. Đại lý tạm dừng → báo "tạm ngừng hoạt động". Danh sách đại lý hoạt động hiển thị ở `/shops`. Link chia sẻ ở trang chi tiết đại lý trỏ tới trang này.

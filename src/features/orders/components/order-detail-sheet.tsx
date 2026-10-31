@@ -18,9 +18,12 @@ import {
   DrawerDescription,
   DrawerFooter,
 } from "@/components/ui/drawer";
+import { reorderLine } from "@/features/orders/model/reorder";
 import { useCartStore } from "@/features/cart/model/cart.store";
 import { useLocation } from "wouter";
 import { useState } from "react";
+import { useProducts } from "@/features/products/api/products.queries";
+import { BasicLine, OrderItemTrace } from "@/features/orders/components/order-item-trace";
 
 interface OrderDetailSheetProps {
   order: Order | null;
@@ -36,31 +39,14 @@ export function OrderDetailSheet({
   const [, setLocation] = useLocation();
   const [reordered, setReordered] = useState(false);
   const addToCart = useCartStore((s) => s.add);
+  const { data: products = [] } = useProducts();
 
   if (!order) return null;
 
   const handleReorder = () => {
     // Add each order item back to cart using available product data
     order.items.forEach((item) => {
-      addToCart(
-        {
-          id: item.productId,
-          name: item.productName,
-          sku: `SKU-${item.productId}`,
-          category: "Nông sản",
-          description: "",
-          origin: order.province || "Việt Nam",
-          packageSize: "Tiêu chuẩn",
-          shelfLife: "12 tháng",
-          storageInstructions: "",
-          price: item.unitPrice,
-          salePrice: null,
-          status: "approved",
-          createdAt: new Date().toISOString(),
-          imageUrls: [],
-        },
-        item.quantity,
-      );
+      addToCart(...reorderLine(order, item));
     });
 
     setReordered(true);
@@ -135,12 +121,18 @@ export function OrderDetailSheet({
                   active: order.status === "completed",
                   icon: Check,
                 },
-              ].map((step, idx) => {
+              ].map((step, idx, steps) => {
                 const Icon = step.icon;
+                const next = steps[idx + 1];
+                // Done segments are solid; the one leading to the current step marches; the rest stay idle.
+                const line = !next ? null : next.active ? "bg-[#285e45]" : step.active ? "track-dash" : "track-dash-idle";
                 return (
-                  <div key={idx} className="flex flex-col items-center">
+                  <div key={idx} className="relative flex flex-col items-center">
+                    {line && order.status !== "cancelled" && (
+                      <span aria-hidden className={`absolute top-[15px] left-[calc(50%+20px)] right-[calc(-50%+20px)] h-0.5 rounded-full ${line}`} />
+                    )}
                     <div
-                      className={`h-8 w-8 rounded-full grid place-items-center text-xs transition ${
+                      className={`relative z-10 h-8 w-8 rounded-full grid place-items-center text-xs transition ${
                         step.active
                           ? "bg-[#285e45] text-white font-bold"
                           : "bg-[#e9e6dd] text-[#8e9992]"
@@ -195,24 +187,15 @@ export function OrderDetailSheet({
               Sản phẩm ({order.items.length})
             </p>
             <div className="divide-y divide-[#ece8de] rounded-2xl border border-[#ece8de] bg-white overflow-hidden">
-              {order.items.map((item) => (
-                <div
-                  key={item.id}
-                  className="p-3.5 flex items-center justify-between gap-3"
-                >
-                  <div className="min-w-0 flex-1">
-                    <p className="font-bold text-[#214c3a] text-xs truncate">
-                      {item.productName}
-                    </p>
-                    <p className="text-[11px] text-muted-foreground mt-0.5">
-                      {fmt(item.unitPrice)} × {item.quantity}
-                    </p>
-                  </div>
-                  <strong className="text-xs font-bold text-[#285e45]">
-                    {fmt(item.lineTotal)}
-                  </strong>
-                </div>
-              ))}
+              {order.items.map((item) => {
+                const product = products.find((p) => p.id === item.productId);
+                // Traceability is only meaningful once the goods are delivered.
+                return order.status === "completed" ? (
+                  <OrderItemTrace key={item.id} item={item} product={product} />
+                ) : (
+                  <BasicLine key={item.id} item={item} packageSize={[item.variantLabel ?? product?.packageSize, item.farmName].filter(Boolean).join(" · ")} />
+                );
+              })}
             </div>
           </div>
 

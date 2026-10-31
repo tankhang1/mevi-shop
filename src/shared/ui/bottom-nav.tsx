@@ -1,11 +1,17 @@
 import { memo } from "react";
 import { Link, useLocation } from "wouter";
-import { Home, PackageCheck, ShoppingCart, User } from "lucide-react";
+import { Home, LayoutGrid, PackageCheck, ShoppingCart, User } from "lucide-react";
 import { useCartStore, selectCount } from "@/features/cart/model/cart.store";
 import { useCustomerOrdersStore } from "@/features/orders/api/customer-orders";
 
 const NAV_TABS = [
   { href: "/", label: "Trang chủ", icon: Home, testId: "bottom-tab-home" },
+  {
+    href: "/categories",
+    label: "Danh mục",
+    icon: LayoutGrid,
+    testId: "bottom-tab-categories",
+  },
   {
     href: "/orders",
     label: "Đơn hàng",
@@ -43,13 +49,15 @@ export const BottomNav = memo(function BottomNav() {
       className="fixed bottom-0 inset-x-0 z-50 md:hidden bg-[#fffefa]/95 backdrop-blur-lg border-t border-[#e6e2d7] pb-[env(safe-area-inset-bottom)] shadow-[0_-4px_24px_rgba(0,0,0,0.06)]"
       data-testid="mobile-bottom-nav"
     >
-      <div className="grid grid-cols-4 h-16 items-center px-1">
+      <div className="grid grid-cols-5 h-16 items-center px-1">
         {NAV_TABS.map((tab) => {
           const Icon = tab.icon;
           const active =
             tab.href === "/"
               ? location === "/"
-              : tab.href === "/orders"
+              : tab.href === "/categories"
+                ? location.startsWith("/categories") || location.startsWith("/shop")
+                : tab.href === "/orders"
                 ? location.startsWith("/orders")
                 : tab.href === "/cart"
                   ? location.startsWith("/cart")

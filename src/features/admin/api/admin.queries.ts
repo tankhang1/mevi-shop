@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import type { AgencyInput, AgencyUpdate, OrderStatus, ProductInput, ProductModeration } from '@/shared/types';
+import type { AgencyInput, AgencyUpdate, BannerInput, OrderStatus, ProductInput, ProductModeration } from '@/shared/types';
 import { productKeys } from '@/features/products/api/products.queries';
 import { adminApi, type OrderStatusFilter, type ProductStatusFilter } from './admin.api';
 
@@ -10,6 +10,7 @@ export const adminKeys = {
   orders: (status: OrderStatusFilter) => ['admin', 'orders', status] as const,
   agencies: ['admin', 'agencies'] as const,
   agency: (id: number) => ['admin', 'agencies', id] as const,
+  banners: ['admin', 'banners'] as const,
   agencyOrders: (id: number, status: OrderStatusFilter) => ['admin', 'agencies', id, 'orders', status] as const,
 };
 
@@ -21,6 +22,7 @@ function useInvalidateAdmin() {
     qc.invalidateQueries({ queryKey: productKeys.all }),
     qc.invalidateQueries({ queryKey: ['agencies'] }),
     qc.invalidateQueries({ queryKey: ['agency'] }),
+    qc.invalidateQueries({ queryKey: ['banners'] }),
   ]);
 }
 
@@ -80,4 +82,20 @@ export function useUpdateAgency() {
     mutationFn: ({ id, ...patch }: AgencyUpdate & { id: number }) => adminApi.updateAgency(id, patch),
     onSuccess: invalidate,
   });
+}
+
+export const useAdminBanners = () => useQuery({ queryKey: adminKeys.banners, queryFn: adminApi.listBanners });
+
+export function useSaveBanner() {
+  const invalidate = useInvalidateAdmin();
+  return useMutation({
+    mutationFn: ({ id, ...input }: Partial<BannerInput> & { id: number | null }) =>
+      id === null ? adminApi.createBanner(input as BannerInput) : adminApi.updateBanner(id, input),
+    onSuccess: invalidate,
+  });
+}
+
+export function useDeleteBanner() {
+  const invalidate = useInvalidateAdmin();
+  return useMutation({ mutationFn: adminApi.deleteBanner, onSuccess: invalidate });
 }

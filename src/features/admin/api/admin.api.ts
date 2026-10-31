@@ -1,6 +1,6 @@
 import { http } from '@/shared/api/http-client';
 import type {
-  AdminSummary, Agency, AgencyInput, AgencyUpdate, Order, OrderStatus, Product, ProductInput, ProductModeration,
+  AdminSummary, Agency, Banner, BannerInput, AgencyInput, AgencyUpdate, Order, OrderStatus, Product, ProductInput, ProductModeration,
 } from '@/shared/types';
 
 export type ProductStatusFilter = 'all' | 'pending' | 'approved' | 'rejected';
@@ -23,4 +23,9 @@ export const adminApi = {
   listAgencyOrders: (id: number, status: OrderStatusFilter) => http.get<Order[]>(`/admin/agencies/${id}/orders`, { status }),
   createAgency: (input: AgencyInput) => http.post<Agency>('/admin/agencies', input),
   updateAgency: (id: number, patch: AgencyUpdate) => http.patch<Agency>(`/admin/agencies/${id}`, patch),
+
+  listBanners: () => http.get<Banner[]>('/admin/banners'),
+  createBanner: (input: BannerInput) => http.post<Banner>('/admin/banners', input),
+  updateBanner: (id: number, patch: Partial<BannerInput>) => http.patch<Banner>(`/admin/banners/${id}`, patch),
+  deleteBanner: (id: number) => http.delete<null>(`/admin/banners/${id}`),
 };

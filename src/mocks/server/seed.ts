@@ -1,4 +1,4 @@
-import type { Agency, Order, Product } from '@/shared/types';
+import type { Agency, Banner, Order, Product } from '@/shared/types';
 
 const now = Date.now();
 const daysAgo = (d: number) => new Date(now - d * 86_400_000).toISOString();
@@ -24,9 +24,47 @@ export const seedProducts: Product[] = [
   { id: 18, name: 'Rau mùi hữu cơ', sku: 'RC-RM-100', category: 'Rau củ', description: 'Rau mùi thơm, lá xanh mướt, thu hoạch sáng sớm.', origin: 'Hà Nội', packageSize: 'Bó 100g', shelfLife: '4 ngày', storageInstructions: 'Cắm gốc vào nước hoặc bọc giấy ẩm.', imageUrls: ['https://images.pexels.com/photos/7456525/pexels-photo-7456525.jpeg?auto=compress&cs=tinysrgb&w=900', '/products/p18-1.jpg', '/products/p18-2.jpg', '/products/p18-3.jpg'], price: 12000, salePrice: null, status: 'pending', createdAt: daysAgo(0) },
 ];
 
+// Richer option data for a few products; the rest fall back to derived defaults (see product-options).
+const extras: Record<number, Partial<Product>> = {
+  1: {
+    kind: 'farm',
+    descriptionHtml: '<h3>Hương vị</h3><p>Robusta rang mộc <strong>100% hạt chín</strong>, vị đậm, hậu ngọt, ít chua.</p><h3>Gợi ý pha</h3><ul><li>Phin: 20–25g bột, nước 92–96°C</li><li>Pha máy: xay mịn, chiết 25–30 giây</li></ul><p><em>Đóng gói van một chiều, giữ hương đến 12 tháng.</em></p>',
+    variants: [
+      { id: '250g', label: 'Túi 250g', price: 99000, salePrice: 89000, stock: 0 },
+      { id: '500g', label: 'Túi 500g', price: 189000, salePrice: 165000, stock: 0 },
+      { id: '1kg', label: 'Túi 1kg', price: 360000, salePrice: 320000, stock: 0 },
+    ],
+    farms: [
+      { id: 'cuor-dang', name: 'Vườn cà phê Cư Êbur', owner: 'Anh Y Kô Niê', location: 'Cư Ê Bur, Buôn Ma Thuột', certification: 'VietGAP', stock: { '250g': 40, '500g': 25, '1kg': 8 } },
+      { id: 'ea-tu', name: 'Vườn Ea Tu', owner: 'Chị H\'Hen Byă', location: 'Ea Tu, Buôn Ma Thuột', certification: '4C', stock: { '250g': 12, '500g': 0, '1kg': 3 } },
+    ],
+  },
+  5: {
+    kind: 'general',
+    descriptionHtml: '<p>Sữa bò tươi <strong>thanh trùng ở 75°C</strong>, giữ trọn vị béo tự nhiên.</p><ul><li>Không chất bảo quản</li><li>Bảo quản lạnh 2–6°C, dùng trong 7 ngày</li></ul>',
+    variants: [
+      { id: '500ml', label: 'Chai 500ml', price: 24000, salePrice: null, stock: 60 },
+      { id: '1l', label: 'Chai 1L', price: 42000, salePrice: null, stock: 35 },
+      { id: 'thung', label: 'Thùng 12 chai 1L', price: 480000, salePrice: 455000, stock: 4 },
+    ],
+  },
+  7: {
+    kind: 'farm',
+    variants: [
+      { id: '125g', label: 'Hộp 125g', price: 95000, salePrice: null, stock: 0 },
+      { id: '500g', label: 'Hộp 500g', price: 350000, salePrice: 329000, stock: 0 },
+    ],
+    farms: [
+      { id: 'da-lat-xanh', name: 'Nông trại Đà Lạt Xanh', owner: 'HTX Đà Lạt Xanh', location: 'Phường 7, Đà Lạt', certification: 'VietGAP', stock: { '125g': 30, '500g': 10 } },
+      { id: 'don-duong', name: 'Vườn Đơn Dương', owner: 'Anh Nguyễn Văn Tâm', location: 'Đơn Dương, Lâm Đồng', certification: 'GlobalGAP', stock: { '125g': 18, '500g': 0 } },
+    ],
+  },
+};
+seedProducts.forEach(p => Object.assign(p, extras[p.id]));
+
 export const seedAgencies: Agency[] = [
-  { id: 1, slug: 'dalat-xanh', displayName: 'Đà Lạt Xanh', logoUrl: null, primaryColor: '#2f6b4f', contactName: 'Nguyễn Thị Lan', contactPhone: '0901234567', contactEmail: 'lan@dalatxanh.vn', active: true },
-  { id: 2, slug: 'mekong-farm', displayName: 'Mekong Farm', logoUrl: null, primaryColor: '#a5582f', contactName: 'Trần Văn Minh', contactPhone: '0912345678', contactEmail: 'minh@mekongfarm.vn', active: true },
+  { id: 1, slug: 'dalat-xanh', displayName: 'Đà Lạt Xanh', logoUrl: null, coverUrl: 'https://images.pexels.com/photos/2255935/pexels-photo-2255935.jpeg?auto=compress&cs=tinysrgb&w=1600', primaryColor: '#2f6b4f', contactName: 'Nguyễn Thị Lan', contactPhone: '0901234567', contactEmail: 'lan@dalatxanh.vn', active: true },
+  { id: 2, slug: 'mekong-farm', displayName: 'Mekong Farm', logoUrl: null, coverUrl: 'https://images.pexels.com/photos/1132047/pexels-photo-1132047.jpeg?auto=compress&cs=tinysrgb&w=1600', primaryColor: '#a5582f', contactName: 'Trần Văn Minh', contactPhone: '0912345678', contactEmail: 'minh@mekongfarm.vn', active: true },
 ];
 
 function makeOrder(id: number, customerName: string, status: Order['status'], items: [number, number][], agencySlug: string | null, d: number): Order {
@@ -43,4 +81,10 @@ export const seedOrders: Order[] = [
   makeOrder(2, 'Phạm Quốc Huy', 'shipped', [[2, 3]], null, 4),
   makeOrder(3, 'Võ Thu Trang', 'confirmed', [[4, 1], [5, 1]], 'mekong-farm', 2),
   makeOrder(4, 'Đặng Hoàng Nam', 'new', [[1, 1]], 'dalat-xanh', 0),
+];
+
+export const seedBanners: Banner[] = [
+  { id: 1, tag: 'Mùa vụ mới · Đà Lạt', title: 'Rau củ sạch\ngiao trong ngày', description: 'Hái sáng sớm, giao tận nhà trước bữa tối. Combo rau củ gia đình chỉ từ 159.000 ₫.', ctaLabel: 'Mua combo ngay', imageUrl: 'https://images.pexels.com/photos/2255935/pexels-photo-2255935.jpeg?auto=compress&cs=tinysrgb&w=1600', fromColor: '#214c3a', toColor: '#5f8f6e', linkType: 'product', linkTarget: '15', active: true, sortOrder: 1, createdAt: daysAgo(30) },
+  { id: 2, tag: 'Siêu sale trái cây', title: 'Giảm đến 20%\ntrái cây tươi', description: 'Nho Ninh Thuận, bơ sáp Đắk Lắk, chuối Laba — đặc sản ba miền, giá tốt mỗi tuần.', ctaLabel: 'Săn deal trái cây', imageUrl: 'https://images.pexels.com/photos/1132047/pexels-photo-1132047.jpeg?auto=compress&cs=tinysrgb&w=1600', fromColor: '#8a4a2c', toColor: '#bd6e46', linkType: 'category', linkTarget: 'Trái cây tươi', active: true, sortOrder: 2, createdAt: daysAgo(20) },
+  { id: 3, tag: 'Đại lý Mevi', title: 'Gian hàng\nĐà Lạt Xanh', description: 'Đại lý chính thức tại Đà Lạt — đặt hàng qua gian hàng để được tư vấn và giao nhanh trong khu vực.', ctaLabel: 'Ghé gian hàng', imageUrl: 'https://images.pexels.com/photos/4750270/pexels-photo-4750270.jpeg?auto=compress&cs=tinysrgb&w=1600', fromColor: '#285e45', toColor: '#7fa36b', linkType: 'agency', linkTarget: 'dalat-xanh', active: true, sortOrder: 3, createdAt: daysAgo(10) },
 ];

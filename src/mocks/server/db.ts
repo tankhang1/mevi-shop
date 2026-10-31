@@ -1,17 +1,18 @@
-import type { Agency, Order, Product } from '@/shared/types';
-import { seedAgencies, seedOrders, seedProducts } from './seed';
+import type { Agency, Banner, Order, Product } from '@/shared/types';
+import { seedAgencies, seedBanners, seedOrders, seedProducts } from './seed';
 
 // In-browser fake backend. All data is dummy and persisted in localStorage.
-interface Db { products: Product[]; orders: Order[]; agencies: Agency[]; seq: number }
+interface Db { products: Product[]; orders: Order[]; agencies: Agency[]; banners: Banner[]; seq: number }
 
-const STORAGE_KEY = 'mevi-mock-db-v3';
+const STORAGE_KEY = 'mevi-mock-db-v4';
 
 function load(): Db {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) return JSON.parse(raw);
+    // Older saved DBs predate banners; backfill rather than wiping the user's data.
+    if (raw) return { banners: seedBanners, ...JSON.parse(raw) };
   } catch { /* fall through to seed */ }
-  return { products: seedProducts, orders: seedOrders, agencies: seedAgencies, seq: 100 };
+  return { products: seedProducts, orders: seedOrders, agencies: seedAgencies, banners: seedBanners, seq: 100 };
 }
 
 export const db = load();

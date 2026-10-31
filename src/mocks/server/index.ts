@@ -1,9 +1,9 @@
-import type { Agency, AgencyInput, Order, OrderInput, Product, ProductInput, ProductModeration } from '@/shared/types';
+import type { Agency, AgencyInput, Banner, BannerInput, Order, OrderInput, Product, ProductInput, ProductModeration } from '@/shared/types';
 import * as admin from './handlers/admin';
 import { MockHttpError } from './db';
 import { getProduct, listProducts } from './handlers/products';
 import { createOrder } from './handlers/orders';
-import { getAgencySettings, getAgencySummary, getPublicAgency, updateAgencySettings } from './handlers/agency';
+import { getAgencySettings, getAgencySummary, getPublicAgency, listPublicAgencies, updateAgencySettings } from './handlers/agency';
 
 export { MockHttpError };
 
@@ -21,6 +21,8 @@ export function mockRequest(method: string, url: string, body: unknown): unknown
   switch (route) {
     case 'GET /products': return listProducts(q);
     case 'GET /products/:id': return getProduct(Number(seg[1]));
+    case 'GET /agencies': return listPublicAgencies();
+    case 'GET /banners': return admin.listBanners().filter(b => b.active);
     case 'POST /orders': return createOrder(body as OrderInput);
     case 'GET /agency/summary': return getAgencySummary();
     case 'GET /agency/settings': return getAgencySettings();
@@ -38,6 +40,10 @@ export function mockRequest(method: string, url: string, body: unknown): unknown
     case 'POST /admin/agencies': return admin.createAgency(body as AgencyInput);
     case 'GET /admin/agencies/:id': return admin.getAgency(id);
     case 'PATCH /admin/agencies/:id': return admin.updateAgency(id, body as Partial<Agency>);
+    case 'GET /admin/banners': return admin.listBanners();
+    case 'POST /admin/banners': return admin.createBanner(body as BannerInput);
+    case 'PATCH /admin/banners/:id': return admin.updateBanner(id, body as Partial<Banner>);
+    case 'DELETE /admin/banners/:id': return admin.deleteBanner(id);
     case 'GET /admin/agencies/:id/orders': return admin.listAgencyOrders(id, status);
   }
   throw new MockHttpError(404, `No mock for ${method} ${path}`);

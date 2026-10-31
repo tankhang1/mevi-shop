@@ -1,4 +1,4 @@
-import type { Agency, AgencyInput, AdminSummary, Order, Product, ProductInput, ProductModeration } from '@/shared/types';
+import type { Agency, AgencyInput, Banner, BannerInput, AdminSummary, Order, Product, ProductInput, ProductModeration } from '@/shared/types';
 import { db, MockHttpError, notFound, save, updateIn } from '../db';
 
 const revenue = (orders: Order[]) => orders.filter(o => o.status === 'completed').reduce((s, o) => s + o.total, 0);
@@ -69,4 +69,20 @@ export function updateAgency(id: number, patch: Partial<Agency>) {
   // Keep the agency's order history attached when its slug changes.
   if (patch.slug && patch.slug !== before) { db.orders.forEach(o => { if (o.agencySlug === before) o.agencySlug = patch.slug!; }); save(); }
   return agency;
+}
+
+// Banners
+export const listBanners = () => [...db.banners].sort((a, b) => a.sortOrder - b.sortOrder);
+
+export function createBanner(input: BannerInput): Banner {
+  const banner: Banner = { ...input, id: ++db.seq, createdAt: new Date().toISOString() };
+  db.banners.push(banner); save();
+  return banner;
+}
+
+export const updateBanner = (id: number, patch: Partial<Banner>) => updateIn(db.banners, id, patch);
+
+export function deleteBanner(id: number) {
+  db.banners = db.banners.filter(b => b.id !== id); save();
+  return null;
 }

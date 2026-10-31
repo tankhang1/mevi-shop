@@ -2,7 +2,7 @@ import { useState, type FormEvent } from 'react';
 import type { AgencyInput } from '@/shared/types';
 import { Field } from '@/shared/ui/field';
 
-export const emptyAgency: AgencyInput = { slug: '', displayName: '', logoUrl: '', primaryColor: '#285e45', contactName: '', contactPhone: '', contactEmail: '' };
+export const emptyAgency: AgencyInput = { slug: '', displayName: '', logoUrl: '', coverUrl: '', primaryColor: '#285e45', contactName: '', contactPhone: '', contactEmail: '' };
 
 const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const COLOR_RE = /^#[0-9a-fA-F]{6}$/;
@@ -17,7 +17,7 @@ interface AgencyFormProps {
 }
 
 export function AgencyForm({ initial = emptyAgency, submitLabel, pending, error, onSubmit, onCancel }: AgencyFormProps) {
-  const [form, setForm] = useState<AgencyInput>({ ...initial, logoUrl: initial.logoUrl ?? '' });
+  const [form, setForm] = useState<AgencyInput>({ ...initial, logoUrl: initial.logoUrl ?? '', coverUrl: initial.coverUrl ?? '' });
   const [localError, setLocalError] = useState('');
   const set = (k: keyof AgencyInput) => (e: { target: { value: string } }) => setForm(f => ({ ...f, [k]: e.target.value }));
   const slugChanged = initial !== emptyAgency && form.slug !== initial.slug;
@@ -27,7 +27,7 @@ export function AgencyForm({ initial = emptyAgency, submitLabel, pending, error,
     if (!SLUG_RE.test(form.slug)) return setLocalError('Slug chỉ gồm chữ thường, số và dấu gạch ngang (vd: dalat-xanh).');
     if (!COLOR_RE.test(form.primaryColor)) return setLocalError('Màu thương hiệu phải có dạng #RRGGBB.');
     setLocalError('');
-    onSubmit({ ...form, logoUrl: form.logoUrl?.trim() || null });
+    onSubmit({ ...form, logoUrl: form.logoUrl?.trim() || null, coverUrl: form.coverUrl?.trim() || null });
   };
 
   return <form onSubmit={submit} className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3" data-testid="form-agency">
@@ -37,6 +37,7 @@ export function AgencyForm({ initial = emptyAgency, submitLabel, pending, error,
       <div className="flex gap-2"><input type="color" className="field h-11 w-14 shrink-0 p-1" value={form.primaryColor} onChange={set('primaryColor')} data-testid="input-agency-color" /><input className="field font-mono" value={form.primaryColor} onChange={set('primaryColor')} /></div>
     </Field>
     <Field label="Logo URL"><input className="field" value={form.logoUrl ?? ''} onChange={set('logoUrl')} placeholder="https://..." data-testid="input-agency-logo" /></Field>
+    <Field label="Ảnh bìa gian hàng URL"><input className="field" value={form.coverUrl ?? ''} onChange={set('coverUrl')} placeholder="https://... (để trống dùng ảnh mặc định)" data-testid="input-agency-cover" /></Field>
     <Field label="Người liên hệ"><input className="field" value={form.contactName} onChange={set('contactName')} data-testid="input-agency-contact" /></Field>
     <Field label="Điện thoại"><input className="field" value={form.contactPhone} onChange={set('contactPhone')} data-testid="input-agency-phone" /></Field>
     <Field label="Email"><input type="email" className="field" value={form.contactEmail} onChange={set('contactEmail')} data-testid="input-agency-email" /></Field>

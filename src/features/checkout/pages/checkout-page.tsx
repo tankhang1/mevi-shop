@@ -1,11 +1,10 @@
 import { useCreateOrder } from "@/features/checkout/api/orders.queries";
-import { useCart } from "@/features/cart/model/cart.store";
+import { farmNameOf, unitPriceOf, useCart, variantLabelOf } from "@/features/cart/model/cart.store";
 import { useCustomerOrdersStore } from "@/features/orders/api/customer-orders";
 import { useState, type FormEvent } from "react";
 import { Link, useLocation } from "wouter";
 import { ArrowLeft, Banknote } from "lucide-react";
 import { shopRef } from "@/app/providers/agency-brand-provider";
-import { priceOf } from "@/features/products/product-utils";
 import { fmt } from "@/shared/lib/format";
 import { Empty } from "@/shared/ui/feedback";
 import { Field } from "@/shared/ui/field";
@@ -42,6 +41,8 @@ export function CheckoutPage() {
         items: cart.items.map((item) => ({
           productId: item.productId,
           quantity: item.quantity,
+          variantId: item.variantId,
+          farmId: item.farmId,
         })),
       },
       {
@@ -51,9 +52,12 @@ export function CheckoutPage() {
           cart.clear();
           setLocation("/checkout/success");
         },
-        onError: () =>
+        // Stock conflicts (409) carry a readable message naming the item.
+        onError: (e) =>
           setMessage(
-            "Chưa thể ghi nhận đơn. Vui lòng kiểm tra thông tin và thử lại.",
+            (e as { status?: number }).status === 409
+              ? `${e.message}. Vui lòng cập nhật giỏ hàng.`
+              : "Chưa thể ghi nhận đơn. Vui lòng kiểm tra thông tin và thử lại.",
           ),
       },
     );
@@ -162,7 +166,7 @@ export function CheckoutPage() {
             <div className="mt-4 space-y-3">
               {cart.items.map((item) => (
                 <div
-                  key={item.productId}
+                  key={item.key}
                   className="flex justify-between gap-3 text-sm"
                 >
                   <span className="min-w-0">
@@ -170,9 +174,13 @@ export function CheckoutPage() {
                     <span className="text-muted-foreground">
                       × {item.quantity}
                     </span>
+                    <span className="block text-xs text-muted-foreground">
+                      {variantLabelOf(item)}
+                      {farmNameOf(item) && <> · {farmNameOf(item)}</>}
+                    </span>
                   </span>
                   <strong className="shrink-0">
-                    {fmt(priceOf(item.product) * item.quantity)}
+                    {fmt(unitPriceOf(item) * item.quantity)}
                   </strong>
                 </div>
               ))}

@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
-import { Minus, Plus, ShoppingBag, Zap, Check } from "lucide-react";
+import { ShoppingBag, Zap, Check } from "lucide-react";
 import type { Product } from "@/shared/types";
 import { useCartStore } from "@/features/cart/model/cart.store";
-import { priceOf } from "@/features/products/product-utils";
+import { PurchaseOptions, usePurchaseSelection } from "@/features/products/components/purchase-options";
 import { fmt } from "@/shared/lib/format";
 import { imageFallback } from "@/shared/config";
 import {
@@ -28,20 +28,16 @@ export function ProductQuickBuySheet({
   product,
   mode,
 }: ProductQuickBuySheetProps) {
-  const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
   const [, setLocation] = useLocation();
   const addToCart = useCartStore((s) => s.add);
-
-  const unitPrice = priceOf(product);
-  const lineTotal = unitPrice * quantity;
-
-  const handleMinus = () => setQuantity((q) => Math.max(1, q - 1));
-  const handlePlus = () => setQuantity((q) => q + 1);
+  const state = usePurchaseSelection(product);
+  const { variantId, farmId, quantity } = state.selection;
+  const lineTotal = state.unitPrice * quantity;
 
   const handleConfirm = () => {
-    addToCart(product, quantity);
-
+    if (!state.canBuy) return;
+    addToCart(product, quantity, { variantId, farmId });
     if (mode === "buy") {
       onOpenChange(false);
       setLocation("/checkout/confirm");
@@ -50,14 +46,14 @@ export function ProductQuickBuySheet({
       setTimeout(() => {
         setAdded(false);
         onOpenChange(false);
-        setQuantity(1);
+        state.setQuantity(1);
       }, 700);
     }
   };
 
   return (
     <Drawer open={open} onOpenChange={onOpenChange}>
-      <DrawerContent className="bg-[#fffefa] border-[#e6e2d7] max-h-[85vh] rounded-t-[28px] focus:outline-none">
+      <DrawerContent className="bg-[#fffefa] border-[#e6e2d7] max-h-[88vh] rounded-t-[28px] focus:outline-none">
         <DrawerHeader className="text-left pb-3 border-b border-[#ece8de]">
           <div className="flex gap-3 items-center">
             <img
@@ -70,70 +66,23 @@ export function ProductQuickBuySheet({
                 {product.name}
               </DrawerTitle>
               <DrawerDescription className="text-xs text-[#758179] mt-0.5">
-                {product.packageSize} · {product.origin}
+                {state.variant.label} · {product.origin}
               </DrawerDescription>
               <div className="flex items-baseline gap-2 mt-1">
-                <span className="text-lg font-extrabold text-[#285e45]">
-                  {fmt(unitPrice)}
-                </span>
-                {product.salePrice != null && (
-                  <span className="text-xs text-muted-foreground line-through">
-                    {fmt(product.price)}
-                  </span>
+                <span className="text-lg font-extrabold text-[#285e45]">{fmt(state.unitPrice)}</span>
+                {state.variant.salePrice != null && (
+                  <span className="text-xs text-muted-foreground line-through">{fmt(state.variant.price)}</span>
                 )}
               </div>
             </div>
           </div>
         </DrawerHeader>
 
-        <div className="p-4 space-y-5">
-          {/* Quantity selector */}
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-bold text-[#214c3a]">Số lượng đặt</p>
-              <p className="text-xs text-muted-foreground mt-0.5">
-                Đóng gói: {product.packageSize}
-              </p>
-            </div>
-
-            <div className="flex items-center rounded-xl border border-[#deddd2] bg-[#faf9f4] p-1">
-              <button
-                type="button"
-                onClick={handleMinus}
-                disabled={quantity <= 1}
-                aria-label="Giảm số lượng"
-                className="grid h-8 w-8 place-items-center rounded-lg text-[#52645a] hover:bg-white disabled:opacity-35 transition"
-                data-testid="btn-qty-minus"
-              >
-                <Minus size={15} />
-              </button>
-              <span
-                className="min-w-10 text-center font-bold text-sm text-[#214c3a]"
-                data-testid="text-sheet-qty"
-              >
-                {quantity}
-              </span>
-              <button
-                type="button"
-                onClick={handlePlus}
-                aria-label="Tăng số lượng"
-                className="grid h-8 w-8 place-items-center rounded-lg text-[#52645a] hover:bg-white transition"
-                data-testid="btn-qty-plus"
-              >
-                <Plus size={15} />
-              </button>
-            </div>
-          </div>
-
-          {/* Subtotal line */}
+        <div className="p-4 space-y-5 overflow-y-auto">
+          <PurchaseOptions product={product} state={state} compact />
           <div className="flex items-center justify-between rounded-xl bg-[#eef1e9] p-3.5 text-sm">
             <span className="font-semibold text-[#52645a]">Tạm tính:</span>
-            <span
-              className="text-lg font-black text-[#285e45]"
-              data-testid="text-sheet-total"
-            >
-              {fmt(lineTotal)}
-            </span>
+            <span className="text-lg font-black text-[#285e45]" data-testid="text-sheet-total">{fmt(lineTotal)}</span>
           </div>
         </div>
 
@@ -141,7 +90,8 @@ export function ProductQuickBuySheet({
           <button
             type="button"
             onClick={handleConfirm}
-            className={`w-full h-12 rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-sm transition active:scale-[0.98] ${
+            disabled={!state.canBuy}
+            className={`w-full h-12 rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-sm transition active:scale-[0.98] disabled:opacity-50 ${
               mode === "buy"
                 ? "bg-[#285e45] text-white hover:bg-[#1e4d38]"
                 : added
@@ -150,18 +100,12 @@ export function ProductQuickBuySheet({
             }`}
             data-testid="btn-sheet-confirm"
           >
-            {added ? (
-              <>
-                <Check size={18} /> Đã thêm vào giỏ!
-              </>
+            {!state.canBuy ? "Hết hàng" : added ? (
+              <><Check size={18} /> Đã thêm vào giỏ!</>
             ) : mode === "buy" ? (
-              <>
-                <Zap size={18} /> Mua ngay {fmt(lineTotal)}
-              </>
+              <><Zap size={18} /> Mua ngay {fmt(lineTotal)}</>
             ) : (
-              <>
-                <ShoppingBag size={18} /> Thêm vào giỏ hàng
-              </>
+              <><ShoppingBag size={18} /> Thêm vào giỏ hàng</>
             )}
           </button>
         </DrawerFooter>

@@ -1,6 +1,7 @@
 import { useState, type ReactNode } from 'react';
 import { Link, useRoute } from 'wouter';
 import { ArrowLeft, Banknote, Clock3, Copy, ExternalLink, Mail, Pencil, Phone, ShoppingBag, Store, TrendingUp } from 'lucide-react';
+import { agencyStoreHref, defaultAgencyCover } from '@/shared/types';
 import type { OrderStatusFilter } from '@/features/admin/api/admin.api';
 import { useAdminAgency, useAdminAgencyOrders, useUpdateAgency } from '@/features/admin/api/admin.queries';
 import { AdminOrderTable } from '@/features/admin/components/admin-order-table';
@@ -42,7 +43,7 @@ export function AdminAgencyDetail() {
   const orders = allOrdersQ.data ?? [];
   const completed = orders.filter(o => o.status === 'completed');
   const revenue = completed.reduce((s, o) => s + o.total, 0);
-  const shareUrl = `${window.location.origin}${basePath}/?ref=${a.slug}`;
+  const shareUrl = `${window.location.origin}${basePath}${agencyStoreHref(a.slug)}`;
   const copyLink = () => navigator.clipboard?.writeText(shareUrl).then(() => toast({ title: 'Đã sao chép link gian hàng' }), () => toast({ title: 'Không thể sao chép', variant: 'destructive' }));
 
   return <AdminShell title={a.displayName}>
@@ -82,6 +83,7 @@ export function AdminAgencyDetail() {
           <InfoRow label="Điện thoại">{a.contactPhone ? <a className="inline-flex items-center gap-1.5 text-[#285e45]" href={`tel:${a.contactPhone}`}><Phone size={14} />{a.contactPhone}</a> : '—'}</InfoRow>
           <InfoRow label="Email">{a.contactEmail ? <a className="inline-flex items-center gap-1.5 text-[#285e45]" href={`mailto:${a.contactEmail}`}><Mail size={14} />{a.contactEmail}</a> : '—'}</InfoRow>
           <InfoRow label="Màu thương hiệu"><span className="inline-flex items-center gap-2"><span className="h-5 w-5 rounded-md border border-black/10" style={{ backgroundColor: a.primaryColor }} /><span className="font-mono text-xs">{a.primaryColor}</span></span></InfoRow>
+          <InfoRow label="Ảnh bìa"><img src={a.coverUrl || defaultAgencyCover} alt="Ảnh bìa" className="h-14 w-28 rounded-xl object-cover" /></InfoRow>
           <InfoRow label="Logo">{a.logoUrl ? <img src={a.logoUrl} alt="Logo" className="h-14 w-14 rounded-xl object-cover" /> : 'Chưa có logo'}</InfoRow>
           <InfoRow label="Ngày tham gia">{a.createdAt ? dateFmt(a.createdAt) : '—'}</InfoRow>
         </dl>

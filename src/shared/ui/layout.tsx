@@ -28,6 +28,9 @@ export function Header() {
           <Link href="/shop" className="hover:text-[#285e45]">
             Cửa hàng
           </Link>
+          <Link href="/categories" className="hover:text-[#285e45]">
+            Danh mục
+          </Link>
           <Link href="/shops" className="hover:text-[#285e45]">
             Gian hàng
           </Link>
@@ -110,6 +113,9 @@ export function Header() {
         <nav className="grid gap-3 border-t border-[#e6e2d7] px-6 py-4 text-sm md:hidden animate-in slide-in-from-top-2 duration-200">
           <Link href="/shop" onClick={() => setMenu(false)}>
             Cửa hàng nông sản
+          </Link>
+          <Link href="/categories" onClick={() => setMenu(false)}>
+            Danh mục sản phẩm
           </Link>
           <Link href="/shops" onClick={() => setMenu(false)}>
             Gian hàng đối tác
@@ -199,13 +205,18 @@ export function CustomerShell({ children }: { children: ReactNode }) {
     location.startsWith("/product/") || location === "/checkout/confirm";
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#faf9f4]">
+    // Pad the whole page (not just content) so the fixed mobile bar never covers the footer.
+    <div
+      className={`min-h-screen flex flex-col bg-[#faf9f4] md:pb-0 ${
+        !hideBottomNav
+          ? "pb-[calc(4rem+env(safe-area-inset-bottom))]"
+          : location.startsWith("/product/")
+            ? "pb-[calc(54px+env(safe-area-inset-bottom))]"
+            : ""
+      }`}
+    >
       <Header />
-      <div
-        className={`flex-1 ${!hideBottomNav ? "pb-[calc(4.5rem+env(safe-area-inset-bottom))] md:pb-0" : ""}`}
-      >
-        {children}
-      </div>
+      <div className="flex-1">{children}</div>
       <Footer />
       {!hideBottomNav && <BottomNav />}
     </div>

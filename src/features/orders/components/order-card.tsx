@@ -3,6 +3,7 @@ import { useLocation } from "wouter";
 import { ChevronRight, Package, RotateCcw, Check } from "lucide-react";
 import type { Order } from "@/shared/types";
 import { fmt, dateFmt, statusLabel } from "@/shared/lib/format";
+import { reorderLine } from "@/features/orders/model/reorder";
 import { useCartStore } from "@/features/cart/model/cart.store";
 import { OrderDetailSheet } from "./order-detail-sheet";
 
@@ -57,25 +58,7 @@ export function OrderCard({ order }: OrderCardProps) {
   const handleReorder = (e: React.MouseEvent) => {
     e.stopPropagation();
     order.items.forEach((item) => {
-      addToCart(
-        {
-          id: item.productId,
-          name: item.productName,
-          sku: `SKU-${item.productId}`,
-          category: "Nông sản",
-          description: "",
-          origin: order.province || "Việt Nam",
-          packageSize: "Tiêu chuẩn",
-          shelfLife: "12 tháng",
-          storageInstructions: "",
-          price: item.unitPrice,
-          salePrice: null,
-          status: "approved",
-          createdAt: new Date().toISOString(),
-          imageUrls: [],
-        },
-        item.quantity,
-      );
+      addToCart(...reorderLine(order, item));
     });
 
     setReordered(true);

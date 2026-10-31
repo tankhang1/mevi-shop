@@ -4,9 +4,7 @@ import { Link } from 'wouter';
 import { ArrowRight, Check, PackageCheck, ShieldCheck, Store, Truck } from 'lucide-react';
 import { CategoryTiles } from '@/features/home/components/category-tiles';
 import { Feature } from '@/features/home/components/feature';
-import { FlashSale } from '@/features/home/components/flash-sale';
 import { HeroCarousel } from '@/features/home/components/hero-carousel';
-import { PromoStrip } from '@/features/home/components/promo-strip';
 import { ProductCard } from '@/features/products/components/product-card';
 import { soldOf } from '@/features/products/product-utils';
 import { ShopCard } from '@/features/shops/components/shop-card';
@@ -16,13 +14,10 @@ import { PageFrame } from '@/shared/ui/layout';
 export function HomePage() {
   const { data, isLoading, isError, refetch } = useProducts({ sort: 'featured' });
   const products = data || [];
-  const onSale = products.filter(p => p.salePrice != null);
   const bestSellers = [...products].sort((a, b) => soldOf(b) - soldOf(a)).slice(0, 8);
   return <PageFrame><main>
     <HeroCarousel />
-    <PromoStrip />
     <CategoryTiles />
-    {!isLoading && !isError && <FlashSale products={onSale} />}
     <section className="shell mt-14"><div className="mb-6 flex items-end justify-between gap-4"><div><p className="eyebrow">Được yêu thích nhất</p><h2 className="mt-2 text-3xl font-extrabold text-[#214c3a]">Bán chạy tuần này</h2></div><Link href="/shop" className="hidden items-center gap-2 text-sm font-bold text-[#285e45] sm:flex">Xem tất cả <ArrowRight size={16} /></Link></div>{isLoading ? <Loading /> : isError ? <ErrorState retry={() => refetch()} /> : bestSellers.length ? <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">{bestSellers.map(p => <ProductCard key={p.id} product={p} />)}</div> : <Empty title="Sắp có mùa mới" detail="Danh mục sản phẩm đang được cập nhật." />}<Link href="/shop" className="btn-outline mt-6 w-full sm:hidden">Xem tất cả</Link></section>
     <section className="shell mt-14"><div className="mb-6 flex items-end justify-between gap-4"><div><p className="eyebrow">Mua tận gốc</p><h2 className="mt-2 text-3xl font-extrabold text-[#214c3a]">Gian hàng nổi bật</h2></div><Link href="/shops" className="hidden items-center gap-2 text-sm font-bold text-[#285e45] sm:flex">Tất cả gian hàng <ArrowRight size={16} /></Link></div><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{shops.slice(0, 3).map(sh => <ShopCard key={sh.slug} shop={sh} />)}</div></section>
     <section className="shell mt-14 grid gap-4 md:grid-cols-2"><Link href="/shop?category=Cà phê" className="group relative h-56 overflow-hidden rounded-[28px]"><img src="/products/buon-ma-thuot-robusta.jpg" alt="" className="h-full w-full object-cover transition duration-500 group-hover:scale-105" /><div className="absolute inset-0 bg-gradient-to-r from-[#214c3a]/90 to-transparent" /><div className="absolute inset-0 flex flex-col justify-center p-7 text-white"><p className="text-xs font-bold uppercase tracking-[.16em] text-[#e0a57c]">Đặc sản Tây Nguyên</p><h3 className="mt-2 max-w-[260px] text-2xl font-extrabold leading-tight">Cà phê rang mộc giảm 13%</h3><span className="mt-4 inline-flex items-center gap-1.5 text-sm font-bold">Mua ngay <ArrowRight size={15} /></span></div></Link><Link href="/shop?category=Trà" className="group relative h-56 overflow-hidden rounded-[28px]"><img src="https://images.pexels.com/photos/461428/pexels-photo-461428.jpeg?auto=compress&cs=tinysrgb&w=1000" alt="" className="h-full w-full object-cover transition duration-500 group-hover:scale-105" /><div className="absolute inset-0 bg-gradient-to-r from-[#5f8f6e]/90 to-transparent" /><div className="absolute inset-0 flex flex-col justify-center p-7 text-white"><p className="text-xs font-bold uppercase tracking-[.16em] text-[#eef1e9]">Trà Việt</p><h3 className="mt-2 max-w-[260px] text-2xl font-extrabold leading-tight">Trà xanh Thái Nguyên & Ô long Bảo Lộc</h3><span className="mt-4 inline-flex items-center gap-1.5 text-sm font-bold">Khám phá <ArrowRight size={15} /></span></div></Link></section>
