@@ -14,7 +14,7 @@ import { ErrorBoundary } from "@/components/error-boundary";
 import NotFound from "@/pages/not-found";
 import { AgencyDashboard } from "@/features/agency/pages/agency-dashboard";
 import { AgencySettings } from "@/features/agency/pages/agency-settings";
-import { SignInPage, SignUpPage } from "@/features/auth/auth-page";
+import { AuthCallback } from "@/features/auth/auth-callback";
 import { Gate } from "@/features/auth/gate";
 import { CartPage } from "@/features/checkout/pages/cart-page";
 import { CheckoutPage } from "@/features/checkout/pages/checkout-page";
@@ -30,6 +30,7 @@ import { CustomerOrdersPage } from "@/features/orders/pages/customer-orders-page
 import { AccountPage } from "@/features/account/pages/account-page";
 
 import { CustomerShell } from "@/shared/ui/layout";
+import { PORTAL_PREFIXES, ROUTES } from "@/shared/constants/routes";
 
 export function Router() {
   const [location] = useLocation();
@@ -45,24 +46,19 @@ export function Router() {
     }
   }, [location]);
 
-  const isPortalRoute =
-    location.startsWith("/admin") ||
-    location.startsWith("/agency") ||
-    location.startsWith("/sign-in") ||
-    location.startsWith("/sign-up");
+  const isPortalRoute = PORTAL_PREFIXES.some((p) => location.startsWith(p));
 
   return (
     <ErrorBoundary resetKey={location}>
       {isPortalRoute ? (
         <Switch>
-          <Route path="/sign-in/*?" component={SignInPage} />
-          <Route path="/sign-up/*?" component={SignUpPage} />
+          <Route path={ROUTES.auth.callback} component={AuthCallback} />
           <Route
-            path="/admin"
-            component={() => <Redirect to="/admin/dashboard" />}
+            path={ROUTES.admin.root}
+            component={() => <Redirect to={ROUTES.admin.dashboard} />}
           />
           <Route
-            path="/admin/dashboard"
+            path={ROUTES.admin.dashboard}
             component={() => (
               <Gate role="admin">
                 <AdminDashboard />
@@ -70,7 +66,7 @@ export function Router() {
             )}
           />
           <Route
-            path="/admin/products"
+            path={ROUTES.admin.products}
             component={() => (
               <Gate role="admin">
                 <AdminProducts />
@@ -78,7 +74,7 @@ export function Router() {
             )}
           />
           <Route
-            path="/admin/products/new"
+            path={ROUTES.admin.productNew}
             component={() => (
               <Gate role="admin">
                 <AdminProductEditor />
@@ -86,7 +82,7 @@ export function Router() {
             )}
           />
           <Route
-            path="/admin/products/approval"
+            path={ROUTES.admin.productApproval}
             component={() => (
               <Gate role="admin">
                 <AdminApproval />
@@ -94,7 +90,7 @@ export function Router() {
             )}
           />
           <Route
-            path="/admin/products/:id/edit"
+            path={ROUTES.admin.productEdit}
             component={() => (
               <Gate role="admin">
                 <AdminProductEditor />
@@ -102,7 +98,7 @@ export function Router() {
             )}
           />
           <Route
-            path="/admin/orders"
+            path={ROUTES.admin.orders}
             component={() => (
               <Gate role="admin">
                 <AdminOrders />
@@ -110,7 +106,7 @@ export function Router() {
             )}
           />
           <Route
-            path="/admin/agencies"
+            path={ROUTES.admin.agencies}
             component={() => (
               <Gate role="admin">
                 <AdminAgencies />
@@ -118,7 +114,7 @@ export function Router() {
             )}
           />
           <Route
-            path="/admin/agencies/:id"
+            path={ROUTES.admin.agencyDetail}
             component={() => (
               <Gate role="admin">
                 <AdminAgencyDetail />
@@ -126,7 +122,7 @@ export function Router() {
             )}
           />
           <Route
-            path="/admin/banners"
+            path={ROUTES.admin.banners}
             component={() => (
               <Gate role="admin">
                 <AdminBanners />
@@ -134,7 +130,7 @@ export function Router() {
             )}
           />
           <Route
-            path="/agency/dashboard"
+            path={ROUTES.agency.dashboard}
             component={() => (
               <Gate role="agency">
                 <AgencyDashboard />
@@ -142,7 +138,7 @@ export function Router() {
             )}
           />
           <Route
-            path="/agency/settings"
+            path={ROUTES.agency.settings}
             component={() => (
               <Gate role="agency">
                 <AgencySettings />
@@ -154,20 +150,21 @@ export function Router() {
       ) : (
         <CustomerShell>
           <Switch>
-            <Route path="/" component={HomeRoute} />
-            <Route path="/shop" component={CatalogPage} />
-            <Route path="/categories" component={CategoriesPage} />
-            <Route path="/product/:id" component={ProductPage} />
-            <Route path="/shops" component={ShopsPage} />
-            <Route path="/trace" component={TracePage} />
-            <Route path="/wholesale" component={WholesalePage} />
-            <Route path="/shops/:slug" component={ShopPage} />
-            <Route path="/dai-ly/:slug" component={AgencyStorePage} />
-            <Route path="/orders" component={CustomerOrdersPage} />
-            <Route path="/account" component={AccountPage} />
-            <Route path="/cart" component={CartPage} />
-            <Route path="/checkout/confirm" component={CheckoutPage} />
-            <Route path="/checkout/success" component={SuccessPage} />
+            <Route path={ROUTES.home} component={HomeRoute} />
+            <Route path={ROUTES.shop} component={CatalogPage} />
+            <Route path={ROUTES.categories} component={CategoriesPage} />
+            <Route path={ROUTES.product} component={ProductPage} />
+            <Route path={ROUTES.shopProduct} component={ProductPage} />
+            <Route path={ROUTES.shops} component={ShopsPage} />
+            <Route path={ROUTES.trace} component={TracePage} />
+            <Route path={ROUTES.wholesale} component={WholesalePage} />
+            <Route path={ROUTES.shopDetail} component={ShopPage} />
+            <Route path={ROUTES.agencyStore} component={AgencyStorePage} />
+            <Route path={ROUTES.orders} component={CustomerOrdersPage} />
+            <Route path={ROUTES.account} component={AccountPage} />
+            <Route path={ROUTES.cart} component={CartPage} />
+            <Route path={ROUTES.checkoutConfirm} component={CheckoutPage} />
+            <Route path={ROUTES.checkoutSuccess} component={SuccessPage} />
             <Route component={NotFound} />
           </Switch>
         </CustomerShell>

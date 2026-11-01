@@ -1,8 +1,8 @@
 import { useProduct } from "@/features/products/api/products.queries";
 import { useCartStore } from "@/features/cart/model/cart.store";
 import { reviewsOf } from "@/features/reviews/model/reviews";
-import { useState } from "react";
-import { Link, useRoute } from "wouter";
+import { useEffect, useState } from "react";
+import { Link, useLocation, useRoute } from "wouter";
 import {
   ArrowLeft,
   ArrowRight,
@@ -13,7 +13,9 @@ import {
   Sprout,
 } from "lucide-react";
 import { ProductGallery } from "@/features/products/components/product-gallery";
-import { ratingOf, soldOf } from "@/features/products/product-utils";
+import { productHref, ratingOf, soldOf } from "@/features/products/product-utils";
+import { parseProductSlug } from "@/features/shop/model/product-url";
+import { ROUTES } from "@/shared/constants/routes";
 import { ReviewForm } from "@/features/reviews/review-form";
 import { ReviewsBlock } from "@/features/reviews/reviews-block";
 import { PurchaseOptions, usePurchaseSelection } from "@/features/products/components/purchase-options";
@@ -29,10 +31,21 @@ import { Stars } from "@/shared/ui/stars";
 import { ProductMobileActionBar } from "@/features/products/components/product-mobile-action-bar";
 
 export function ProductPage() {
-  const [, params] = useRoute("/product/:id");
-  const id = Number(params?.id || 0);
+  // `/products/<handle>-i.<id>` (real shop) or legacy `/product/:id`.
+  const [, legacy] = useRoute(ROUTES.product);
+  const [, seo] = useRoute(ROUTES.shopProduct);
+  const slug = seo?.slug ? parseProductSlug(decodeURIComponent(seo.slug)) : null;
+  const id = slug?.id ?? Number(legacy?.id || 0);
   const { data: product, isLoading, isError, refetch } = useProduct(id);
   const [reviewVersion, setReviewVersion] = useState(0);
+  const [location, setLocation] = useLocation();
+
+  // Product renamed / opened by id → move to the canonical slug URL.
+  useEffect(() => {
+    if (product?.handle === undefined) return;
+    const canonical = productHref(product);
+    if (location !== canonical) setLocation(canonical, { replace: true });
+  }, [product, location, setLocation]);
 
   if (isLoading)
     return (
@@ -66,7 +79,7 @@ export function ProductPage() {
           <ProductGallery product={product} />
           <div className="py-1">
             <p className="eyebrow">
-              {product.category} · {product.origin}
+              {[product.category, product.origin].filter(Boolean).join(" · ")}
             </p>
             <h1
               className="mt-3 text-3xl font-bold leading-tight md:text-4xl"
@@ -83,11 +96,20 @@ export function ProductPage() {
                 {ratingOf(product)}
               </span>
               <span>
-                · {reviewsOf(product.id).length} đánh giá · Đã bán{" "}
+                · {product.ratingCount ?? reviewsOf(product.id).length} đánh giá · Đã bán{" "}
                 {soldOf(product)}
               </span>
             </a>
-            <p className="mt-4 text-sm leading-7 text-muted-foreground">
+            {!!product.certifications?.length && (
+              <div className="mt-3 flex flex-wrap gap-1.5" data-testid="list-certifications">
+                {product.certifications.map((c) => (
+                  <span key={c} className="inline-flex items-center gap-1 rounded-full bg-[#eef1e9] px-2.5 py-1 text-[11px] font-bold text-[#285e45]">
+                    <ShieldCheck size={12} /> {c}
+                  </span>
+                ))}
+              </div>
+            )}
+            <p className="mt-4 whitespace-pre-line text-sm leading-7 text-muted-foreground">
               {product.description}
             </p>
             <div className="mt-6 flex items-end gap-3">
@@ -140,7 +162,7 @@ export function ProductPage() {
                 </Link>
               </div>
               <dl className="mt-4 grid gap-4 text-sm sm:grid-cols-2">
-                <Detail label="Vùng trồng" value={product.origin} />
+                {product.origin && <Detail label="Vùng trồng" value={product.origin} />}
                 <Detail label="Quy cách đóng gói" value={variantsOf(product).map((v) => v.label).join(", ")} />
                 <Detail label="Hạn sử dụng" value={product.shelfLife} />
                 <Detail label="Bảo quản" value={product.storageInstructions} />

@@ -1,6 +1,6 @@
 import { Link } from 'wouter';
 import { UserRound, Sparkles, LogIn, ShieldCheck, Store } from 'lucide-react';
-import { useAuthStore } from '@/features/auth/model/auth.store';
+import { login, useAuthStore } from '@/features/auth/model/auth.store';
 
 export function ProfileHeader() {
   const { user } = useAuthStore();
@@ -21,13 +21,14 @@ export function ProfileHeader() {
         </div>
 
         <div className="mt-5 pt-4 border-t border-white/15 flex items-center justify-between">
-          <Link
-            href="/sign-in"
+          <button
+            type="button"
+            onClick={login}
             className="w-full inline-flex items-center justify-center gap-2 h-11 rounded-xl bg-[#e0a57c] text-[#214c3a] text-xs font-black hover:bg-[#d8976b] active:scale-[0.98] transition shadow"
             data-testid="btn-account-signin"
           >
             <LogIn size={15} /> Đăng nhập tài khoản Mevi
-          </Link>
+          </button>
         </div>
       </div>
     );

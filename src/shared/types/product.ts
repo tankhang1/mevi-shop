@@ -44,6 +44,19 @@ export interface Product {
   status: ProductStatus;
   rejectionReason?: string | null;
   createdAt: string;
+
+  // ---- Filled only for products from the real shop API (/api/public/shop) ----
+  /** URL slug part: `/products/<handle>-i.<id>`. */
+  handle?: string;
+  categoryId?: number;
+  /** List item only: variants are not loaded yet → must open the detail page to buy. */
+  summaryOnly?: boolean;
+  variantCount?: number;
+  ratingAverage?: number | null;
+  ratingCount?: number;
+  soldCount?: number;
+  tags?: string[];
+  certifications?: string[];
 }
 
 export type ProductSort = 'featured' | 'newest' | 'price-asc' | 'price-desc';

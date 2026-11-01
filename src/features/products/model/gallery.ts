@@ -10,8 +10,9 @@ const categoryPhotos: Record<string, string[]> = {
   'Trái cây sấy': [px(1132047, 1200), px(4499231, 1200), px(1028599, 1200)],
   'Sữa': [px(4750270, 1200), px(4499231, 1200), px(2255935, 1200)],
 };
-export function galleryOf(product: { imageUrls?: string[]; category: string }): string[] {
+export function galleryOf(product: { imageUrls?: string[]; category: string; handle?: string }): string[] {
   const own = (product.imageUrls || []).filter(Boolean);
+  if (product.handle !== undefined) return own;
   const extras = (categoryPhotos[product.category] || [px(2255935, 1200)]).filter(u => !own.some(o => o.split('?')[0] === u.split('?')[0]));
   return (own.length > 1 ? own : [...own, ...extras]).slice(0, 5);
 }

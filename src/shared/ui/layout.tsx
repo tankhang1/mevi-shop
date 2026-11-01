@@ -1,5 +1,5 @@
 import { useCartStore, selectCount } from "@/features/cart/model/cart.store";
-import { useAuthStore } from "@/features/auth/model/auth.store";
+import { login, useAuthStore } from "@/features/auth/model/auth.store";
 import { useState, type ReactNode } from "react";
 import { Link, useLocation } from "wouter";
 import {
@@ -10,7 +10,7 @@ import {
   UserRound,
   X,
 } from "lucide-react";
-import { homeFor } from "@/features/auth/auth-page";
+import { homeFor } from "@/features/auth/model/home";
 import { ADMIN_URL } from "@/shared/config";
 import { Brand } from "@/shared/ui/brand";
 
@@ -73,13 +73,14 @@ export function Header() {
               </button>
             </div>
           ) : (
-            <Link
-              href="/sign-in"
+            <button
+              type="button"
+              onClick={login}
               className="hidden items-center gap-2 px-3 py-2 text-sm font-semibold text-[#52645a] sm:flex"
               data-testid="link-sign-in"
             >
               <UserRound size={17} /> Đăng nhập
-            </Link>
+            </button>
           )}
 
           {/* Cart Icon on Header (Quick access) */}
@@ -147,13 +148,13 @@ export function Header() {
               </button>
             </>
           ) : (
-            <Link
-              href="/sign-in"
-              onClick={() => setMenu(false)}
-              className="font-bold text-[#285e45]"
+            <button
+              type="button"
+              onClick={() => { setMenu(false); login(); }}
+              className="text-left font-bold text-[#285e45]"
             >
               Đăng nhập tài khoản
-            </Link>
+            </button>
           )}
         </nav>
       )}
@@ -181,12 +182,13 @@ export function Footer() {
         </div>
         <div>
           <p className="font-bold">Dành cho đối tác</p>
-          <Link
+          <button
+            type="button"
+            onClick={login}
             className="mt-3 block text-sm text-[#c3d0c5] hover:text-white"
-            href="/sign-in"
           >
             Cổng đại lý
-          </Link>
+          </button>
           <a className="mt-2 block text-sm text-[#c3d0c5]" href="/wholesale">
             Hợp tác cùng Mevi
           </a>
@@ -202,7 +204,7 @@ export function Footer() {
 export function CustomerShell({ children }: { children: ReactNode }) {
   const [location] = useLocation();
   const hideBottomNav =
-    location.startsWith("/product/") || location === "/checkout/confirm";
+    (location.startsWith("/product/") || location.startsWith("/products/")) || location === "/checkout/confirm";
 
   return (
     // Pad the whole page (not just content) so the fixed mobile bar never covers the footer.
@@ -210,7 +212,7 @@ export function CustomerShell({ children }: { children: ReactNode }) {
       className={`min-h-screen flex flex-col bg-[#faf9f4] md:pb-0 ${
         !hideBottomNav
           ? "pb-[calc(4rem+env(safe-area-inset-bottom))]"
-          : location.startsWith("/product/")
+          : (location.startsWith("/product/") || location.startsWith("/products/"))
             ? "pb-[calc(54px+env(safe-area-inset-bottom))]"
             : ""
       }`}

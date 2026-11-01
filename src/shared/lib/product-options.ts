@@ -34,4 +34,4 @@ export function stockOf(p: Product, variantId: string, farmId?: string | null) {
 export const totalStock = (p: Product) => variantsOf(p).reduce((n, v) => n + stockOf(p, v.id), 0);
 
 /** Whether a one-tap "add to cart" is unambiguous (single option, no farm choice). */
-export const needsOptions = (p: Product) => variantsOf(p).length > 1 || farmsOf(p).length > 1;
+export const needsOptions = (p: Product) => !!p.summaryOnly || variantsOf(p).length > 1 || farmsOf(p).length > 1;

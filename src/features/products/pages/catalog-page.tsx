@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'wouter';
 import { Search, Store, X } from 'lucide-react';
 import { shopRef } from '@/app/providers/agency-brand-provider';
-import { categoryTiles } from '@/features/home/data';
+import { useCategoryTiles } from '@/features/products/api/categories';
 import { ProductCard } from '@/features/products/components/product-card';
 import { AppSelect } from '@/shared/ui/app-select';
 import { Loading, ErrorState, Empty } from '@/shared/ui/feedback';
@@ -17,6 +17,7 @@ export const sortOptions = [
 export type SortKey = typeof sortOptions[number]['value'];
 
 export function CatalogPage() {
+  const { tiles: categoryTiles } = useCategoryTiles();
   const params = new URLSearchParams(window.location.search);
   const [search, setSearch] = useState(params.get('q') || '');
   const [category, setCategory] = useState(params.get('category') || '');

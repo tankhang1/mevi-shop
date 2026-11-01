@@ -39,7 +39,7 @@ export const BottomNav = memo(function BottomNav() {
 
   // Hide Bottom Navigation on Product Detail Page and Checkout Confirmation Form
   // On Product Detail, a dedicated ProductMobileActionBar will be shown instead
-  if (location.startsWith("/product/") || location === "/checkout/confirm") {
+  if (location.startsWith("/product/") || location.startsWith("/products/") || location === "/checkout/confirm") {
     return null;
   }
 
@@ -61,8 +61,7 @@ export const BottomNav = memo(function BottomNav() {
                 ? location.startsWith("/orders")
                 : tab.href === "/cart"
                   ? location.startsWith("/cart")
-                  : location.startsWith("/account") ||
-                    location.startsWith("/sign-in");
+                  : location.startsWith("/account");
 
           const badge =
             tab.href === "/cart" && cartCount > 0

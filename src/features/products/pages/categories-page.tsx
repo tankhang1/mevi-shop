@@ -1,11 +1,12 @@
 import { Link } from 'wouter';
 import { ChevronRight } from 'lucide-react';
-import { categoryTiles } from '@/features/home/data';
+import { useCategoryTiles } from '@/features/products/api/categories';
 import { useProducts } from '@/features/products/api/products.queries';
 import { PageFrame } from '@/shared/ui/layout';
 
 /** All product groups; tapping one opens the catalog filtered to that group. */
 export function CategoriesPage() {
+  const { tiles: categoryTiles } = useCategoryTiles();
   const { data: products = [] } = useProducts();
   const countOf = (name: string) => products.filter(p => p.category === name).length;
   return <PageFrame><main className="shell py-8 md:py-12">
