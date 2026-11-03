@@ -21,9 +21,9 @@ export interface ShopCategoryRef {
   handle: string;
 }
 
-export type ProductStatus = 'ACTIVE' | 'INACTIVE';
-export type ShelfLifeUnit = 'DAY' | 'WEEK' | 'MONTH' | 'YEAR';
-export type StorageCondition = 'AMBIENT' | 'CHILLED' | 'FROZEN';
+export type ProductStatus = "ACTIVE" | "INACTIVE";
+export type ShelfLifeUnit = "DAY" | "WEEK" | "MONTH" | "YEAR";
+export type StorageCondition = "AMBIENT" | "CHILLED" | "FROZEN";
 
 /** Item of `GET /api/public/shop/products`. */
 export interface ShopProductSummary {
@@ -109,4 +109,35 @@ export interface ShopProductListParams {
 export interface ShopProductDetailParams {
   /** Partner storefront the customer came from (referral tracking). */
   storefrontId?: PublicId;
+}
+
+/** Body for `POST /api/public/shop/partner-contact-requests`. */
+export interface CreatePartnerContactRequestPayload {
+  fullName: string;
+  phoneNumber: string;
+  email?: string;
+  province?: string;
+  note?: string;
+}
+
+/** Public storefront detail `GET /api/public/shop/storefronts/{id}`. */
+export interface PublicStorefront {
+  id: PublicId;
+  handle: string;
+  name: string;
+  slogan: string | null;
+  brandColor: string | null;
+  logoUrl: string | null;
+  coverImageUrl: string | null;
+  description: string | null;
+  province: string | null;
+  verified: boolean;
+  joinedYear: number;
+  productCount: number;
+  followerCount: number;
+}
+
+export interface StorefrontProductListParams {
+  page?: number;
+  size?: number;
 }
