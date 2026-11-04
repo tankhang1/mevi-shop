@@ -53,7 +53,15 @@ export function Header() {
               >
                 <ShieldCheck size={15} /> Trang quản trị
               </a>
-              <Link
+              {user.role === "admin" ? (<a href={ADMIN_URL} target="_blank" rel="noreferrer"
+                className="flex items-center gap-2 rounded-full py-1 pl-1 pr-3 text-sm font-semibold text-[#214c3a] hover:bg-[#eef1e9]"
+                data-testid="link-account"
+              >
+                <span className="grid h-8 w-8 place-items-center rounded-full bg-[#285e45] text-xs font-bold text-white">
+                  {user.fullName.split(" ").slice(-1)[0][0]?.toUpperCase()}
+                </span>
+                <span className="max-w-[120px] truncate">{user.fullName}</span>
+              </a>) : (<Link
                 href={homeFor(user.role)}
                 className="flex items-center gap-2 rounded-full py-1 pl-1 pr-3 text-sm font-semibold text-[#214c3a] hover:bg-[#eef1e9]"
                 data-testid="link-account"
@@ -62,7 +70,7 @@ export function Header() {
                   {user.fullName.split(" ").slice(-1)[0][0]?.toUpperCase()}
                 </span>
                 <span className="max-w-[120px] truncate">{user.fullName}</span>
-              </Link>
+              </Link>)}
               <button
                 onClick={() => signOut()}
                 className="grid h-9 w-9 place-items-center rounded-full text-[#718077] hover:bg-[#eef1e9] hover:text-[#214c3a]"
