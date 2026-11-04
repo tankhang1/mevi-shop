@@ -25,15 +25,15 @@ export function Header() {
       <div className="shell flex h-[62px] md:h-[74px] items-center justify-between gap-5">
         <Brand />
         <nav className="hidden items-center gap-8 text-sm font-semibold text-[#52645a] md:flex">
-          <Link href="/shop" className="hover:text-[#285e45]">
+          {/* <Link href="/shop" className="hover:text-[#285e45]">
             Cửa hàng
-          </Link>
+          </Link> */}
           <Link href="/categories" className="hover:text-[#285e45]">
             Danh mục
           </Link>
-          <Link href="/shops" className="hover:text-[#285e45]">
+          {/* <Link href="/shops" className="hover:text-[#285e45]">
             Gian hàng
-          </Link>
+          </Link> */}
           <Link href="/trace" className="hover:text-[#285e45]">
             Truy xuất nguồn gốc
           </Link>
@@ -112,15 +112,15 @@ export function Header() {
       </div>
       {menu && (
         <nav className="grid gap-3 border-t border-[#e6e2d7] px-6 py-4 text-sm md:hidden animate-in slide-in-from-top-2 duration-200">
-          <Link href="/shop" onClick={() => setMenu(false)}>
+          {/* <Link href="/shop" onClick={() => setMenu(false)}>
             Cửa hàng nông sản
-          </Link>
+          </Link> */}
           <Link href="/categories" onClick={() => setMenu(false)}>
             Danh mục sản phẩm
           </Link>
-          <Link href="/shops" onClick={() => setMenu(false)}>
+          {/* <Link href="/shops" onClick={() => setMenu(false)}>
             Gian hàng đối tác
-          </Link>
+          </Link> */}
           <Link href="/trace" onClick={() => setMenu(false)}>
             Truy xuất nguồn gốc
           </Link>
