@@ -38,7 +38,7 @@ export function AccountMenu() {
   return (
     <div className="space-y-5">
       {/* Quick Status Tiles */}
-      <div className="grid grid-cols-4 gap-2 text-center">
+      <div className="grid grid-cols-3 gap-2 text-center">
         <Link
           href="/orders"
           className="rounded-2xl border border-[#e7e4d9] bg-[#fffefa] p-3 shadow-sm hover:border-[#285e45] transition"
@@ -85,14 +85,14 @@ export function AccountMenu() {
           </span>
         </Link>
 
-        <div className="rounded-2xl border border-[#e7e4d9] bg-[#fffefa] p-3 shadow-sm">
+        {/* <div className="rounded-2xl border border-[#e7e4d9] bg-[#fffefa] p-3 shadow-sm">
           <div className="mx-auto grid h-9 w-9 place-items-center rounded-xl bg-[#fce7f3] text-[#9d174d]">
             <Sparkles size={18} />
           </div>
           <span className="text-[11px] font-bold text-[#214c3a] block mt-1.5">
             120 M-Xu
           </span>
-        </div>
+        </div> */}
       </div>
 
       {/* Group 1: Shopping Management */}
@@ -115,7 +115,7 @@ export function AccountMenu() {
           </div>
         </Link>
 
-        <Link
+        {/* <Link
           href="/shop"
           className="flex items-center justify-between p-4 hover:bg-[#faf9f4] transition"
         >
@@ -143,7 +143,7 @@ export function AccountMenu() {
             </span>
           </div>
           <ChevronRight size={15} className="text-muted-foreground" />
-        </Link>
+        </Link> */}
       </div>
 
       {/* Group 2: Partner / Management Portal */}
