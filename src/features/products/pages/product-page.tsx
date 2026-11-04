@@ -1,6 +1,6 @@
 import { useProduct } from "@/features/products/api/products.queries";
 import { useCartStore } from "@/features/cart/model/cart.store";
-import { reviewsOf } from "@/features/reviews/model/reviews";
+// import { reviewsOf } from "@/features/reviews/model/reviews";
 import { useEffect, useState } from "react";
 import { Link, useLocation, useRoute } from "wouter";
 import {
@@ -13,12 +13,13 @@ import {
   Sprout,
 } from "lucide-react";
 import { ProductGallery } from "@/features/products/components/product-gallery";
-import { productHref, ratingOf, soldOf } from "@/features/products/product-utils";
+// ratingOf hidden with reviews
+import { productHref, soldOf } from "@/features/products/product-utils";
 import { parseProductSlug } from "@/features/shop/model/product-url";
 import { ROUTES } from "@/shared/constants/routes";
-import { ProductReviews } from "@/features/reviews/product-reviews";
-import { ReviewForm } from "@/features/reviews/review-form";
-import { ReviewsBlock } from "@/features/reviews/reviews-block";
+// import { ProductReviews } from "@/features/reviews/product-reviews";
+// import { ReviewForm } from "@/features/reviews/review-form";
+// import { ReviewsBlock } from "@/features/reviews/reviews-block";
 import { PurchaseOptions, usePurchaseSelection } from "@/features/products/components/purchase-options";
 import { farmsOf, kindOf, variantsOf } from "@/shared/lib/product-options";
 import { RichText } from "@/shared/ui/rich-text";
@@ -27,7 +28,7 @@ import { fmt } from "@/shared/lib/format";
 import { Loading, ErrorState } from "@/shared/ui/feedback";
 import { Detail } from "@/shared/ui/field";
 import { PageFrame } from "@/shared/ui/layout";
-import { Stars } from "@/shared/ui/stars";
+// import { Stars } from "@/shared/ui/stars";
 
 import { ProductMobileActionBar } from "@/features/products/components/product-mobile-action-bar";
 
@@ -38,7 +39,7 @@ export function ProductPage() {
   const slug = seo?.slug ? parseProductSlug(decodeURIComponent(seo.slug)) : null;
   const id = slug?.id ?? Number(legacy?.id || 0);
   const { data: product, isLoading, isError, refetch } = useProduct(id);
-  const [reviewVersion, setReviewVersion] = useState(0);
+//   const [reviewVersion, setReviewVersion] = useState(0);
   const [location, setLocation] = useLocation();
 
   // Product renamed / opened by id → move to the canonical slug URL.
@@ -65,7 +66,7 @@ export function ProductPage() {
       </PageFrame>
     );
 
-  const reviews = reviewsOf(product.id);
+//   const reviews = reviewsOf(product.id);
   const farms = farmsOf(product);
   return (
     <PageFrame hideBottomNav>
@@ -88,7 +89,7 @@ export function ProductPage() {
             >
               {product.name}
             </h1>
-            <a
+            {/* <a
               href="#reviews"
               className="mt-3 inline-flex items-center gap-2 text-sm text-muted-foreground"
             >
@@ -100,7 +101,8 @@ export function ProductPage() {
                 · {product.ratingCount ?? reviewsOf(product.id).length} đánh giá · Đã bán{" "}
                 {soldOf(product)}
               </span>
-            </a>
+            </a> */}
+            <p className="mt-3 text-sm text-muted-foreground">Đã bán {soldOf(product)}</p>
             {!!product.certifications?.length && (
               <div className="mt-3 flex flex-wrap gap-1.5" data-testid="list-certifications">
                 {product.certifications.map((c) => (
@@ -183,7 +185,7 @@ export function ProductPage() {
             <RichText html={product.descriptionHtml} className="mt-4" />
           </section>
         )}
-        <section id="reviews" className="mt-14 scroll-mt-24">
+        {/* <section id="reviews" className="mt-14 scroll-mt-24">
           <h2 className="text-2xl font-extrabold text-[#214c3a]">
             Đánh giá sản phẩm
           </h2>
@@ -198,7 +200,7 @@ export function ProductPage() {
               <ReviewsBlock key={reviewVersion} reviews={reviews} />
             </>
           )}
-        </section>
+        </section> */}
       </main>
 
       {/* Mobile-only Bottom Action Bar */}

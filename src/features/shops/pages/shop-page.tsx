@@ -1,13 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useLocation, useRoute } from "wouter";
-import { BadgeCheck, Check, Plus, Star } from "lucide-react";
+import { BadgeCheck, Check, Plus } from "lucide-react";
 import { ProductCard } from "@/features/products/components/product-card";
 import {
   sortOptions,
   type SortKey,
 } from "@/features/products/pages/catalog-page";
 import { useProducts } from "@/features/products/api/products.queries";
-import { ReviewsBlock } from "@/features/reviews/reviews-block";
+// import { ReviewsBlock } from "@/features/reviews/reviews-block";
 import { useShopStats } from "@/features/shops/components/shop-card";
 import { shops, shopBySlug } from "@/features/shops/model/shops";
 import {
@@ -305,10 +305,10 @@ export function ShopPage() {
     const products = (legacyCatalog || []).filter((p) =>
       legacyShop.productIds.includes(p.id),
     );
-    const { reviews, rating } = legacyStats;
+//     const { reviews, rating } = legacyStats;
     const tabs = [
       { key: "products", label: `Sản phẩm (${products.length})` },
-      { key: "reviews", label: `Đánh giá (${reviews.length})` },
+//       { key: "reviews", label: `Đánh giá (${reviews.length})` },
       { key: "about", label: "Giới thiệu" },
     ] as const;
 
@@ -375,9 +375,9 @@ export function ShopPage() {
                 </button>
               </div>
             </div>
-            <div className="grid grid-cols-2 border-t border-[#ece8de] md:grid-cols-4">
+            <div className="grid grid-cols-2 border-t border-[#ece8de] md:grid-cols-3">
               {[
-                {
+                /* {
                   label: "Đánh giá",
                   value: (
                     <span className="inline-flex items-center gap-1">
@@ -389,7 +389,7 @@ export function ShopPage() {
                       {rating.toFixed(1)}
                     </span>
                   ),
-                },
+                }, */
                 { label: "Sản phẩm", value: products.length },
                 {
                   label: "Người theo dõi",
@@ -452,9 +452,9 @@ export function ShopPage() {
               )}
             </div>
           )}
-          {tab === "reviews" && (
+          {/* {tab === "reviews" && (
             <ReviewsBlock reviews={reviews} products={legacyCatalog} />
-          )}
+          )} */}
           {tab === "about" && (
             <div className="mt-6 grid gap-5 lg:grid-cols-[1.4fr_1fr]">
               <div className="surface p-6">
