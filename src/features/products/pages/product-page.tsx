@@ -133,7 +133,7 @@ export function ProductPage() {
             </p>
 
             {farms.length > 0 && (
-              <div className="mt-6 rounded-2xl border border-[#e6e2d7] bg-[#fffefa] p-5" data-testid="section-farms">
+              <div className="mt-6 rounded-2xl border border-[#e6e2d7] bg-[#fffefa] p-5 md:hidden" data-testid="section-farms">
                 <div className="flex items-center gap-2 font-bold">
                   <Sprout size={19} className="text-[#285e45]" /> Thông tin vườn
                 </div>
