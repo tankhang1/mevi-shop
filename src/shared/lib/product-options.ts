@@ -26,7 +26,7 @@ export const variantPrice = (v: Pick<ProductVariant, 'price' | 'salePrice'>) => 
 
 /** Units available for a variant (from a specific farm for farm products; summed when no farm chosen). */
 export function stockOf(p: Product, variantId: string, farmId?: string | null) {
-  if (kindOf(p) === 'general') return variantOf(p, variantId).stock;
+  if (kindOf(p) === 'general' || p.farmStockShared) return variantOf(p, variantId).stock;
   const farms = farmId ? farmsOf(p).filter(f => f.id === farmId) : farmsOf(p);
   return farms.reduce((n, f) => n + (f.stock[variantId] ?? 0), 0);
 }

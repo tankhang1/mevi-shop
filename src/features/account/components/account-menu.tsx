@@ -20,12 +20,12 @@ import {
   demoUsers,
   type Role,
 } from "@/features/auth/model/auth.store";
-import { useCustomerOrdersStore } from "@/features/orders/api/customer-orders";
+import { useMyOrders } from "@/features/orders/api/my-orders.queries";
 import { ADMIN_URL } from "@/shared/config";
 
 export function AccountMenu() {
   const { user, signIn, signOut } = useAuthStore();
-  const orders = useCustomerOrdersStore((s) => s.orders);
+  const { orders } = useMyOrders();
 
   const pendingCount = orders.filter((o) =>
     ["new", "confirmed"].includes(o.status),

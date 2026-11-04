@@ -7,6 +7,8 @@ export interface OrderItem {
   variantId?: string;
   variantLabel?: string;
   farmId?: string | null;
+  /** Production zone code, the key of the traceability page. */
+  farmCode?: string | null;
   farmName?: string | null;
   quantity: number;
   unitPrice: number;

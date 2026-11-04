@@ -144,7 +144,7 @@ export function ProductPage() {
                         {f.name}
                         {f.certification && <span className="rounded-full bg-[#eef1e9] px-2 py-0.5 text-[10px] text-[#285e45]">{f.certification}</span>}
                       </p>
-                      <p className="mt-1 text-xs text-muted-foreground">Chủ vườn: {f.owner} · {f.location}</p>
+                      <p className="mt-1 text-xs text-muted-foreground">{[f.owner && `Chủ vườn: ${f.owner}`, f.location, f.code && `Mã vùng: ${f.code}`].filter(Boolean).join(" · ")}</p>
                     </div>
                   ))}
                 </div>

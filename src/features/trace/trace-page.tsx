@@ -1,6 +1,9 @@
 import { shopOfProduct } from '@/features/shops/model/shops';
 import { galleryOf } from '@/features/products/model/gallery';
 import { traceOf } from '@/features/trace/model/trace';
+import { traceabilityApi } from '@/features/trace/api/traceability.api';
+import { ZoneTraceResult } from '@/features/trace/zone-trace-result';
+import { useQuery } from '@tanstack/react-query';
 import { useState, type ReactNode } from 'react';
 import { Link } from 'wouter';
 import { ArrowRight, BadgeCheck, Check, Leaf, Package, Search, ShieldCheck, Sprout, Store, Truck } from 'lucide-react';
@@ -8,7 +11,7 @@ import { useAllProducts } from '@/features/products/product-utils';
 import { ShopCard } from '@/features/shops/components/shop-card';
 import { imageFallback } from '@/shared/config';
 import { dateFmt } from '@/shared/lib/format';
-import { Empty } from '@/shared/ui/feedback';
+import { Empty, Loading } from '@/shared/ui/feedback';
 import { Detail } from '@/shared/ui/field';
 import { PageFrame } from '@/shared/ui/layout';
 
@@ -26,6 +29,13 @@ export function TracePage() {
   // A batch code is the SKU plus a "-L####" suffix, so match either form.
   const product = code ? products.find(p => norm(code) === p.sku || norm(code).startsWith(`${p.sku}-L`)) : undefined;
   const trace = product ? traceOf(product) : null;
+  const zoneCode = code.trim().toUpperCase();
+  const zoneQuery = useQuery({
+    queryKey: ['trace-zone', zoneCode],
+    queryFn: ({ signal }) => traceabilityApi.getZone(zoneCode, signal),
+    enabled: !!zoneCode && !product,
+    retry: false,
+  });
   const shop = product ? shopOfProduct(product.id) : null;
   const lookup = (value: string) => {
     setInput(value); setCode(value);
@@ -36,7 +46,9 @@ export function TracePage() {
   return <PageFrame><main className="shell py-6 md:py-10">
     <section className="relative overflow-hidden rounded-[28px] bg-[#214c3a] text-white"><img src="/products/p17-3.jpg" alt="" className="absolute inset-0 h-full w-full object-cover" /><div className="absolute inset-0 bg-gradient-to-r from-[#214c3a] via-[#214c3a]/90 to-[#214c3a]/30" /><div className="relative grid gap-8 px-7 py-10 md:grid-cols-[1.2fr_.8fr] md:items-center md:px-12 md:py-14"><div><p className="text-xs font-bold uppercase tracking-[.18em] text-[#e0a57c]">Truy xuất nguồn gốc</p><h1 className="mt-3 text-4xl font-extrabold leading-tight tracking-tight md:text-5xl">Biết rõ hành trình<br />từ nông trại đến bàn ăn</h1><p className="mt-3 max-w-lg text-sm leading-6 text-white/85">Nhập mã sản phẩm hoặc mã lô in trên bao bì (hoặc quét mã QR) để xem vùng trồng, ngày thu hoạch, kiểm định và vận chuyển.</p><form onSubmit={e => { e.preventDefault(); lookup(input); }} className="mt-6 flex max-w-lg gap-2"><label className="relative flex-1"><Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#718077]" size={18} /><input className="field pl-10 uppercase placeholder:normal-case" placeholder="VD: CF-BMT-500 hoặc mã lô" value={input} onChange={e => setInput(e.target.value)} data-testid="input-trace-code" /></label><button className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-[#e0a57c] px-5 text-sm font-extrabold text-[#214c3a]" data-testid="button-trace-lookup">Tra cứu</button></form><div className="mt-4 flex flex-wrap items-center gap-2 text-xs"><span className="text-white/70">Thử nhanh:</span>{samples.map(p => <button key={p.id} onClick={() => lookup(p.sku)} className="rounded-full bg-white/15 px-3 py-1 font-semibold backdrop-blur hover:bg-white/25">{p.sku}</button>)}</div></div><div className="hidden justify-self-end md:block"><div className="rotate-2 rounded-3xl bg-white p-5 text-[#214c3a] shadow-2xl"><div className="grid h-40 w-40 grid-cols-7 gap-1 rounded-xl bg-white p-2">{Array.from({ length: 49 }, (_, n) => <span key={n} className={`rounded-[2px] ${[0,1,2,7,9,14,15,16,4,5,6,11,13,18,19,20,28,29,30,35,37,42,43,44,24,26,32,38,40,46,22,17].includes(n) ? 'bg-[#214c3a]' : 'bg-transparent'}`} />)}</div><p className="mt-3 text-center text-xs font-bold">Quét QR trên bao bì</p><p className="text-center text-[10px] text-muted-foreground">để xem hành trình sản phẩm</p></div></div></div></section>
 
-    {code && !product && data && <Empty title="Không tìm thấy mã này" detail="Kiểm tra lại mã sản phẩm hoặc mã lô in trên bao bì." action={<button className="btn-outline" onClick={() => lookup('')}>Xóa tìm kiếm</button>} />}
+    {zoneQuery.isLoading && <Loading />}
+    {zoneQuery.data && !product && <ZoneTraceResult zone={zoneQuery.data} />}
+    {code && !product && data && !zoneQuery.isLoading && !zoneQuery.data && <Empty title="Không tìm thấy mã này" detail="Kiểm tra lại mã sản phẩm hoặc mã lô in trên bao bì." action={<button className="btn-outline" onClick={() => lookup('')}>Xóa tìm kiếm</button>} />}
 
     {product && trace && <section className="rise mt-8 grid gap-6 lg:grid-cols-[360px_1fr]" data-testid="trace-result">
       <aside className="grid h-fit gap-4 lg:sticky lg:top-24"><div className="surface overflow-hidden"><img src={galleryOf(product)[0] || imageFallback} alt={product.name} className="aspect-[4/3] w-full object-cover" /><div className="p-5"><p className="text-xs text-muted-foreground">{product.category} · {product.origin}</p><h2 className="mt-1 text-xl font-extrabold text-[#214c3a]">{product.name}</h2><div className="mt-3 flex flex-wrap gap-1.5">{trace.certifications.map(c => <span key={c} className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-bold ${certStyles[c] || 'bg-[#eef1e9] text-[#285e45]'}`}><BadgeCheck size={12} />{c}</span>)}</div><dl className="mt-5 grid grid-cols-2 gap-4 border-t border-[#ece8de] pt-4 text-sm"><Detail label="Mã lô" value={trace.batch} /><Detail label="Mã sản phẩm" value={product.sku} /><Detail label="Thu hoạch" value={dateFmt(trace.harvested)} /><Detail label="Đóng gói" value={dateFmt(trace.packed)} /><Detail label="Hạn sử dụng" value={product.shelfLife} /><Detail label="Bảo quản" value={trace.temperature} /></dl><Link href={`/product/${product.id}`} className="btn-primary mt-5 w-full">Xem sản phẩm <ArrowRight size={16} /></Link></div></div>{shop && <ShopCard shop={shop} compact />}</aside>

@@ -71,6 +71,10 @@ export interface RatingBucket {
   count: number;
 }
 
+export interface ShopSupplySource {
+  productionZone: { id: number; code: string; name: string };
+}
+
 /** `GET /api/public/shop/products/{id}`. `media[0]` is the cover. */
 export interface ShopProductDetail {
   id: PublicId;
@@ -88,6 +92,8 @@ export interface ShopProductDetail {
   shelfLifeUnit: ShelfLifeUnit | null;
   storageCondition: StorageCondition | null;
   storageInstructions: string | null;
+  /** Gardens supplying an agricultural product; null/empty when none are set. */
+  supplySources?: ShopSupplySource[] | null;
   variants: ShopProductVariant[];
   ratingAverage: number | null;
   ratingCount: number;

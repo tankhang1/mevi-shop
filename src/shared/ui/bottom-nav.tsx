@@ -2,7 +2,7 @@ import { memo } from "react";
 import { Link, useLocation } from "wouter";
 import { Home, LayoutGrid, PackageCheck, ShoppingCart, User } from "lucide-react";
 import { useCartStore, selectCount } from "@/features/cart/model/cart.store";
-import { useCustomerOrdersStore } from "@/features/orders/api/customer-orders";
+import { useMyOrders } from "@/features/orders/api/my-orders.queries";
 
 const NAV_TABS = [
   { href: "/", label: "Trang chủ", icon: Home, testId: "bottom-tab-home" },
@@ -35,7 +35,8 @@ const NAV_TABS = [
 export const BottomNav = memo(function BottomNav() {
   const [location] = useLocation();
   const cartCount = useCartStore(selectCount);
-  const activeOrdersCount = useCustomerOrdersStore((s) => s.getActiveCount());
+  const { orders } = useMyOrders();
+  const activeOrdersCount = orders.filter((o) => !["completed", "cancelled"].includes(o.status)).length;
 
   // Hide Bottom Navigation on Product Detail Page and Checkout Confirmation Form
   // On Product Detail, a dedicated ProductMobileActionBar will be shown instead

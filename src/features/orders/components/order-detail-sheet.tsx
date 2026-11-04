@@ -23,7 +23,8 @@ import { useCartStore } from "@/features/cart/model/cart.store";
 import { useLocation } from "wouter";
 import { useState } from "react";
 import { useProducts } from "@/features/products/api/products.queries";
-import { BasicLine, OrderItemTrace } from "@/features/orders/components/order-item-trace";
+import { BasicLine, OrderItemTrace, OrderItemZone } from "@/features/orders/components/order-item-trace";
+import { USE_REAL_SHOP } from "@/features/products/api/products.api";
 
 interface OrderDetailSheetProps {
   order: Order | null;
@@ -189,8 +190,10 @@ export function OrderDetailSheet({
             <div className="divide-y divide-[#ece8de] rounded-2xl border border-[#ece8de] bg-white overflow-hidden">
               {order.items.map((item) => {
                 const product = products.find((p) => p.id === item.productId);
-                // Traceability is only meaningful once the goods are delivered.
-                return order.status === "completed" ? (
+                // A chosen garden is known from the moment of ordering, so it shows at every status.
+                if (item.farmCode) return <OrderItemZone key={item.id} item={item} />;
+                // Demo batch data: never shown for real orders.
+                return !USE_REAL_SHOP && order.status === "completed" ? (
                   <OrderItemTrace key={item.id} item={item} product={product} />
                 ) : (
                   <BasicLine key={item.id} item={item} packageSize={[item.variantLabel ?? product?.packageSize, item.farmName].filter(Boolean).join(" · ")} />

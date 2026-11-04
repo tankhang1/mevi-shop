@@ -6,6 +6,10 @@ import { PageFrame } from "@/shared/ui/layout";
 import { useCustomerOrdersStore } from "@/features/orders/api/customer-orders";
 import { OrderCard } from "@/features/orders/components/order-card";
 import { OrderLookup } from "@/features/orders/components/order-lookup";
+import { useMyOrders } from "@/features/orders/api/my-orders.queries";
+import { USE_REAL_SHOP } from "@/features/products/api/products.api";
+import { login, useAuthStore } from "@/features/auth/model/auth.store";
+import { ErrorState, Loading } from "@/shared/ui/feedback";
 
 type StatusFilter = "all" | "pending" | "shipping" | "completed" | "cancelled";
 
@@ -13,7 +17,8 @@ export function CustomerOrdersPage() {
   const [activeTab, setActiveTab] = useState<StatusFilter>("all");
   const [searchQuery, setSearchQuery] = useState("");
 
-  const orders = useCustomerOrdersStore((s) => s.orders);
+  const { orders, isLoading, isError, refetch } = useMyOrders();
+  const user = useAuthStore((s) => s.user);
   const initDemoOrders = useCustomerOrdersStore((s) => s.initDemoOrders);
 
   // Tab definitions
@@ -125,7 +130,16 @@ export function CustomerOrdersPage() {
         </div>
 
         {/* Orders list */}
-        {filteredOrders.length > 0 ? (
+        {USE_REAL_SHOP && !user ? (
+          <div className="rounded-2xl border border-dashed border-[#d8d5cb] bg-[#fffefa] p-8 text-center my-6">
+            <h2 className="text-base font-bold text-[#214c3a]">Đăng nhập để xem đơn hàng</h2>
+            <button type="button" className="btn-primary mt-4 text-xs h-10 px-4" onClick={login} data-testid="button-orders-login">Đăng nhập</button>
+          </div>
+        ) : isLoading ? (
+          <Loading />
+        ) : isError ? (
+          <ErrorState retry={() => refetch()} />
+        ) : filteredOrders.length > 0 ? (
           <div className="space-y-3.5">
             {filteredOrders.map((order) => (
               <OrderCard key={order.id} order={order} />
@@ -151,7 +165,7 @@ export function CustomerOrdersPage() {
               <Link href="/shop" className="btn-primary text-xs h-10 px-4">
                 Khám phá cửa hàng <ArrowRight size={14} />
               </Link>
-              {orders.length === 0 && (
+              {!USE_REAL_SHOP && orders.length === 0 && (
                 <button
                   type="button"
                   onClick={initDemoOrders}

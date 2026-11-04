@@ -1,6 +1,10 @@
 import { useCreateOrder } from "@/features/checkout/api/orders.queries";
 import { farmNameOf, unitPriceOf, useCart, variantLabelOf } from "@/features/cart/model/cart.store";
+import { authStorage } from "@/features/auth/api/auth.storage";
+import { login, useAuthStore } from "@/features/auth/model/auth.store";
 import { useCustomerOrdersStore } from "@/features/orders/api/customer-orders";
+import { orderErrorMessage } from "@/features/orders/model/shop-order-adapter";
+import { USE_REAL_SHOP } from "@/features/products/api/products.api";
 import { useState, type FormEvent } from "react";
 import { Link, useLocation } from "wouter";
 import { ArrowLeft, Banknote } from "lucide-react";
@@ -15,6 +19,9 @@ export function CheckoutPage() {
   const cart = useCart();
   const [, setLocation] = useLocation();
   const createOrder = useCreateOrder();
+  const user = useAuthStore((s) => s.user);
+  // The real order API needs a logged-in customer.
+  const needsLogin = USE_REAL_SHOP && (!user || !authStorage.getToken());
   const [values, setValues] = useState({
     customerName: "",
     phone: "",
@@ -48,17 +55,13 @@ export function CheckoutPage() {
       {
         onSuccess: (order) => {
           localStorage.setItem("mevi-last-order", JSON.stringify(order));
-          useCustomerOrdersStore.getState().addOrder(order);
+          if (!USE_REAL_SHOP) useCustomerOrdersStore.getState().addOrder(order);
           cart.clear();
           setLocation("/checkout/success");
         },
         // Stock conflicts (409) carry a readable message naming the item.
         onError: (e) =>
-          setMessage(
-            (e as { status?: number }).status === 409
-              ? `${e.message}. Vui lòng cập nhật giỏ hàng.`
-              : "Chưa thể ghi nhận đơn. Vui lòng kiểm tra thông tin và thử lại.",
-          ),
+          setMessage(orderErrorMessage(e, cart.items.map((item) => item.product.name))),
       },
     );
   };
@@ -212,13 +215,24 @@ export function CheckoutPage() {
                 {message}
               </p>
             )}
-            <button
-              className="btn-primary mt-5 w-full"
-              disabled={createOrder.isPending}
-              data-testid="button-place-order"
-            >
-              {createOrder.isPending ? "Đang gửi đơn..." : "Đặt hàng"}
-            </button>
+            {needsLogin ? (
+              <button
+                type="button"
+                className="btn-primary mt-5 w-full"
+                onClick={login}
+                data-testid="button-login-to-order"
+              >
+                Đăng nhập để đặt hàng
+              </button>
+            ) : (
+              <button
+                className="btn-primary mt-5 w-full"
+                disabled={createOrder.isPending}
+                data-testid="button-place-order"
+              >
+                {createOrder.isPending ? "Đang gửi đơn..." : "Đặt hàng"}
+              </button>
+            )}
             <p className="mt-3 text-center text-[11px] text-muted-foreground">
               Đặt hàng không đồng nghĩa với thanh toán
             </p>

@@ -15,6 +15,8 @@ export interface ProductVariant {
 
 export interface ProductFarm {
   id: string;
+  /** Production zone code, used for traceability. */
+  code?: string;
   name: string;
   owner: string;
   location: string;
@@ -41,6 +43,8 @@ export interface Product {
   descriptionHtml?: string;
   variants?: ProductVariant[];
   farms?: ProductFarm[];
+  /** Stock is tracked per variant only; gardens have no quantity of their own. */
+  farmStockShared?: boolean;
   status: ProductStatus;
   rejectionReason?: string | null;
   createdAt: string;

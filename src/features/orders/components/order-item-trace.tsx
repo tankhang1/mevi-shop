@@ -39,6 +39,32 @@ export function OrderItemTrace({ item, product }: { item: OrderItem; product?: P
   );
 }
 
+/** Order line with the garden chosen at order time and a QR to its traceability page. */
+export function OrderItemZone({ item }: { item: OrderItem }) {
+  const tracePath = `/trace?code=${encodeURIComponent(item.farmCode ?? "")}`;
+  return (
+    <div className="p-3.5" data-testid={`order-item-zone-${item.id}`}>
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0 flex-1">
+          <p className="font-bold text-[#214c3a] text-xs">{item.productName}</p>
+          <p className="mt-0.5 text-[11px] text-muted-foreground">{fmt(item.unitPrice)} × {item.quantity}{item.variantLabel ? ` · ${item.variantLabel}` : ""}</p>
+        </div>
+        <strong className="text-xs font-bold text-[#285e45]">{fmt(item.lineTotal)}</strong>
+      </div>
+      <div className="mt-2 flex gap-3 rounded-xl border border-dashed border-[#cfdccf] bg-[#f3f7f1] p-2.5">
+        <Link href={tracePath} className="shrink-0 rounded-lg bg-white p-1.5" aria-label="Mở trang truy xuất nguồn gốc">
+          <QRCodeSVG value={`${window.location.origin}${basePath}${tracePath}`} size={72} fgColor="#214c3a" />
+        </Link>
+        <div className="min-w-0 flex-1 space-y-1 text-[11px] text-[#3d5045]">
+          <p className="flex items-center gap-1.5 font-bold text-[#285e45]"><Sprout size={13} className="shrink-0" />{item.farmName}</p>
+          <p>Mã vùng <span className="font-mono font-bold">{item.farmCode}</span></p>
+          <Link href={tracePath} className="inline-flex items-center gap-1 font-bold text-[#285e45]">Xem truy xuất nguồn gốc <ExternalLink size={11} /></Link>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function BasicLine({ item, packageSize }: { item: OrderItem; packageSize?: string }) {
   return (
     <div className="p-3.5 flex items-center justify-between gap-3">

@@ -59,9 +59,10 @@ export function PurchaseOptions({ product, state, compact }: { product: Product;
           return <button key={f.id} type="button" disabled={!left} onClick={() => state.selectFarm(f.id)} data-testid={`option-farm-${f.id}`}
             className={`rounded-xl border p-3 text-left text-xs transition disabled:cursor-not-allowed disabled:opacity-45 ${on ? "border-[#285e45] bg-[#eef1e9] ring-1 ring-[#285e45]" : "border-[#deddd2] bg-white hover:border-[#285e45]"}`}>
             <span className="flex items-center justify-between gap-2"><span className="flex items-center gap-1.5 text-sm font-bold text-[#214c3a]"><Sprout size={14} className="text-[#285e45]" />{f.name}</span>{f.certification && <span className="inline-flex items-center gap-0.5 rounded-full bg-white px-2 py-0.5 text-[10px] font-bold text-[#285e45]"><BadgeCheck size={11} />{f.certification}</span>}</span>
-            <span className="mt-1 flex items-center gap-1.5 text-[#52645a]"><UserRound size={12} />{f.owner}</span>
-            <span className="mt-0.5 flex items-center gap-1.5 text-[#52645a]"><MapPin size={12} />{f.location}</span>
-            <span className={`mt-1.5 block font-bold ${left ? "text-[#285e45]" : "text-[#a7473d]"}`}>{left ? `Còn ${left} sản phẩm` : "Hết hàng quy cách này"}</span>
+            {f.owner && <span className="mt-1 flex items-center gap-1.5 text-[#52645a]"><UserRound size={12} />{f.owner}</span>}
+            {f.location && <span className="mt-0.5 flex items-center gap-1.5 text-[#52645a]"><MapPin size={12} />{f.location}</span>}
+            {f.code && <span className="mt-1 block font-mono text-[11px] text-[#52645a]">Mã vùng: {f.code}</span>}
+            {(!left || !product.farmStockShared) && <span className={`mt-1.5 block font-bold ${left ? "text-[#285e45]" : "text-[#a7473d]"}`}>{left ? `Còn ${left} sản phẩm` : "Hết hàng quy cách này"}</span>}
           </button>;
         })}</div>
       </div>}

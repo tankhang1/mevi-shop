@@ -1,4 +1,4 @@
-import type { Product, ProductVariant } from '@/shared/types';
+import type { Product, ProductFarm, ProductVariant } from '@/shared/types';
 import type { ShelfLifeUnit, ShopProductDetail, ShopProductSummary, StorageCondition } from '../api/shop.types';
 
 // Maps the public shop API onto the storefront `Product` shape, so cards, cart and purchase options stay unchanged.
@@ -45,6 +45,11 @@ export function detailToProduct(p: ShopProductDetail): Product {
     ...priceFields(v.price, v.compareAtPrice),
     stock: v.inventoryQuantity,
   }));
+  // The API has no per-garden stock yet, so every garden shares its variant's stock (`farmStockShared`).
+  const stock = Object.fromEntries(variants.map(v => [v.id, v.stock]));
+  const farms: ProductFarm[] = (p.supplySources ?? []).map(({ productionZone: z }) => ({
+    id: String(z.id), code: z.code, name: z.name, owner: '', location: '', stock,
+  }));
   const cheapest = [...variants].sort((a, b) => (a.salePrice ?? a.price) - (b.salePrice ?? b.price))[0];
   const storage = [p.storageCondition && storageLabels[p.storageCondition], p.storageInstructions].filter(Boolean).join(' · ');
   return {
@@ -62,7 +67,9 @@ export function detailToProduct(p: ShopProductDetail): Product {
     imageUrls: p.media.map(m => m.url),
     price: cheapest?.price ?? 0,
     salePrice: cheapest?.salePrice ?? null,
-    kind: 'general',
+    kind: p.agricultural && farms.length ? 'farm' : 'general',
+    farms,
+    farmStockShared: true,
     variants,
     variantCount: variants.length,
     ratingAverage: p.ratingAverage,

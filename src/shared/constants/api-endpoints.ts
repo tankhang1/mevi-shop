@@ -10,7 +10,19 @@ export const API_ENDPOINTS = {
     profile: "/api/me/profile",
     roles: "/api/me/roles",
   },
+  shop: {
+    customer: {
+      orders: "/api/shop/customer/orders",
+      orderDetail: (id: number | string) => `/api/shop/customer/orders/${id}`,
+      cancelOrder: (id: number | string) =>
+        `/api/shop/customer/orders/${id}/cancel`,
+    },
+  },
   public: {
+    traceability: {
+      zone: (code: string) =>
+        `/api/public/traceability/production-zones/${encodeURIComponent(code)}`,
+    },
     shop: {
       categories: "/api/public/shop/product-categories",
       products: "/api/public/shop/products",
