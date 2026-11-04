@@ -1,4 +1,7 @@
 import { farmNameOf, unitPriceOf, useCart, variantLabelOf } from "@/features/cart/model/cart.store";
+import { authStorage } from "@/features/auth/api/auth.storage";
+import { login, useAuthStore } from "@/features/auth/model/auth.store";
+import { USE_REAL_SHOP } from "@/features/products/api/products.api";
 import { stockOf } from "@/shared/lib/product-options";
 import { Link } from "wouter";
 import { ArrowRight, Trash2 } from "lucide-react";
@@ -10,6 +13,23 @@ import { SectionTitle } from "@/shared/ui/section-title";
 
 export function CartPage() {
   const cart = useCart();
+  const user = useAuthStore((s) => s.user);
+  if (USE_REAL_SHOP && (!user || !authStorage.getToken()))
+    return (
+      <PageFrame>
+        <main className="shell py-12">
+          <Empty
+            title="Đăng nhập để xem giỏ hàng"
+            detail="Sản phẩm bạn đã chọn vẫn được giữ lại sau khi đăng nhập."
+            action={
+              <button type="button" className="btn-primary" onClick={login} data-testid="button-cart-login">
+                Đăng nhập
+              </button>
+            }
+          />
+        </main>
+      </PageFrame>
+    );
   return (
     <PageFrame>
       <main className="shell py-6 md:py-14 pb-20 md:pb-14">
