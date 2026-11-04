@@ -260,7 +260,7 @@ export function AccountMenu() {
         </a>
       </div>
 
-      {/* Demo Role Switcher (Convenient for Pair-programming testing) */}
+      {/* Demo Role Switcher (Convenient for Pair-programming testing)
       <div className="rounded-2xl border border-[#e7e4d9] bg-[#faf9f4] p-4">
         <p className="text-xs font-bold uppercase tracking-wider text-[#758179] mb-2.5 flex items-center gap-1.5">
           <UserCheck size={14} /> Chuyển vai trò thử nghiệm:
@@ -282,6 +282,7 @@ export function AccountMenu() {
           ))}
         </div>
       </div>
+      */}
 
       {/* Sign out button */}
       {user && (

@@ -24,23 +24,23 @@ export function Header() {
     <header className="sticky top-0 z-40 border-b border-[#e6e2d7] bg-[#faf9f4]/95 backdrop-blur-md">
       <div className="shell flex h-[62px] md:h-[74px] items-center justify-between gap-5">
         <Brand />
-        <nav className="hidden items-center gap-8 text-sm font-semibold text-[#52645a] md:flex">
-          {/* <Link href="/shop" className="hover:text-[#285e45]">
+        {/* <nav className="hidden items-center gap-8 text-sm font-semibold text-[#52645a] md:flex">
+          <Link href="/shop" className="hover:text-[#285e45]">
             Cửa hàng
-          </Link> */}
+          </Link>
           <Link href="/categories" className="hover:text-[#285e45]">
             Danh mục
           </Link>
-          {/* <Link href="/shops" className="hover:text-[#285e45]">
+          <Link href="/shops" className="hover:text-[#285e45]">
             Gian hàng
-          </Link> */}
+          </Link>
           <Link href="/trace" className="hover:text-[#285e45]">
             Truy xuất nguồn gốc
           </Link>
           <Link href="/wholesale" className="hover:text-[#285e45]">
             Khách sỉ & đại lý
           </Link>
-        </nav>
+        </nav> */}
         <div className="flex items-center gap-2">
           {user ? (
             <div className="hidden items-center gap-1 sm:flex">
@@ -99,7 +99,7 @@ export function Header() {
             )}
           </Link>
 
-          {/* Mobile menu toggle for secondary links */}
+          {/* Mobile menu toggle for secondary links
           <button
             className="grid h-9 w-9 place-items-center rounded-lg text-[#52645a] md:hidden"
             onClick={() => setMenu(!menu)}
@@ -108,6 +108,7 @@ export function Header() {
           >
             {menu ? <X size={20} /> : <Menu size={20} />}
           </button>
+          */}
         </div>
       </div>
       {menu && (
