@@ -16,6 +16,7 @@ import { ProductGallery } from "@/features/products/components/product-gallery";
 import { productHref, ratingOf, soldOf } from "@/features/products/product-utils";
 import { parseProductSlug } from "@/features/shop/model/product-url";
 import { ROUTES } from "@/shared/constants/routes";
+import { ProductReviews } from "@/features/reviews/product-reviews";
 import { ReviewForm } from "@/features/reviews/review-form";
 import { ReviewsBlock } from "@/features/reviews/reviews-block";
 import { PurchaseOptions, usePurchaseSelection } from "@/features/products/components/purchase-options";
@@ -186,11 +187,17 @@ export function ProductPage() {
           <h2 className="text-2xl font-extrabold text-[#214c3a]">
             Đánh giá sản phẩm
           </h2>
-          <ReviewForm
-            product={product}
-            onSubmitted={() => setReviewVersion((v) => v + 1)}
-          />
-          <ReviewsBlock key={reviewVersion} reviews={reviews} />
+          {product.handle !== undefined ? (
+            <ProductReviews key={product.id} product={product} />
+          ) : (
+            <>
+              <ReviewForm
+                product={product}
+                onSubmitted={() => setReviewVersion((v) => v + 1)}
+              />
+              <ReviewsBlock key={reviewVersion} reviews={reviews} />
+            </>
+          )}
         </section>
       </main>
 

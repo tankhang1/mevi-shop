@@ -1,4 +1,4 @@
-export interface Review { id: string; productId: number; author: string; rating: number; date: string; content: string; tags: string[]; helpful: number; images?: string[]; mine?: boolean }
+export interface Review { id: string; productId: number; author: string; rating: number; date: string; content: string; tags: string[]; helpful: number; images?: string[]; mine?: boolean; /** Thumbnails matching `images` by index. */ thumbnails?: string[]; verified?: boolean; hidden?: boolean; reply?: string; /** API returned no customer name, `author` is a placeholder. */ authorMissing?: boolean }
 
 const authors = ['Nguyễn Thu Hà', 'Trần Minh Khoa', 'Lê Bảo Ngọc', 'Phạm Gia Huy', 'Võ Thị Mai', 'Đỗ Quang Vinh', 'Huỳnh Anh Thư', 'Bùi Đức Long', 'Ngô Phương Linh', 'Đặng Hữu Tài'];
 const praise = [

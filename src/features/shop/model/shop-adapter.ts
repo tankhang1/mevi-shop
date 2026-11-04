@@ -67,6 +67,7 @@ export function detailToProduct(p: ShopProductDetail): Product {
     variantCount: variants.length,
     ratingAverage: p.ratingAverage,
     ratingCount: p.ratingCount,
+    ratingDistribution: p.ratingDistribution,
     soldCount: p.soldCount,
     tags: p.tags,
     certifications: p.certifications,

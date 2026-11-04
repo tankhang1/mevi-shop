@@ -54,6 +54,8 @@ export interface Product {
   variantCount?: number;
   ratingAverage?: number | null;
   ratingCount?: number;
+  /** Detail only: 5★ → 1★. */
+  ratingDistribution?: { stars: number; count: number }[];
   soldCount?: number;
   tags?: string[];
   certifications?: string[];
