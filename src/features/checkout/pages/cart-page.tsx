@@ -2,6 +2,7 @@ import { farmNameOf, unitPriceOf, useCart, variantLabelOf } from "@/features/car
 import { authStorage } from "@/features/auth/api/auth.storage";
 import { login, useAuthStore } from "@/features/auth/model/auth.store";
 import { USE_REAL_SHOP } from "@/features/products/api/products.api";
+import { RegisterLink } from "@/features/auth/components/register-link";
 import { stockOf } from "@/shared/lib/product-options";
 import { Link } from "wouter";
 import { ArrowRight, Trash2 } from "lucide-react";
@@ -22,9 +23,12 @@ export function CartPage() {
             title="Đăng nhập để xem giỏ hàng"
             detail="Sản phẩm bạn đã chọn vẫn được giữ lại sau khi đăng nhập."
             action={
-              <button type="button" className="btn-primary" onClick={login} data-testid="button-cart-login">
-                Đăng nhập
-              </button>
+              <div className="flex flex-wrap justify-center gap-3">
+                <button type="button" className="btn-primary" onClick={login} data-testid="button-cart-login">
+                  Đăng nhập
+                </button>
+                <RegisterLink className="btn-outline" />
+              </div>
             }
           />
         </main>

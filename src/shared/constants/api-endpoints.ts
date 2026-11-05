@@ -10,6 +10,10 @@ export const API_ENDPOINTS = {
     profile: "/api/me/profile",
     roles: "/api/me/roles",
   },
+  registrations: {
+    create: "/api/registrations",
+    phoneAvailability: "/api/registrations/phone-availability",
+  },
   shop: {
     customer: {
       orders: "/api/shop/customer/orders",

@@ -16,6 +16,7 @@ import { AgencyDashboard } from "@/features/agency/pages/agency-dashboard";
 import { AgencySettings } from "@/features/agency/pages/agency-settings";
 import { AuthCallback } from "@/features/auth/auth-callback";
 import { Gate } from "@/features/auth/gate";
+import { RegisterPage } from "@/features/auth/pages/register-page";
 import { CartPage } from "@/features/checkout/pages/cart-page";
 import { CheckoutPage } from "@/features/checkout/pages/checkout-page";
 import { SuccessPage } from "@/features/checkout/pages/success-page";
@@ -162,6 +163,7 @@ export function Router() {
             <Route path={ROUTES.agencyStore} component={AgencyStorePage} />
             <Route path={ROUTES.orders} component={CustomerOrdersPage} />
             <Route path={ROUTES.account} component={AccountPage} />
+            <Route path={ROUTES.register} component={RegisterPage} />
             <Route path={ROUTES.cart} component={CartPage} />
             <Route path={ROUTES.checkoutConfirm} component={CheckoutPage} />
             <Route path={ROUTES.checkoutSuccess} component={SuccessPage} />

@@ -11,6 +11,7 @@ import {
   X,
 } from "lucide-react";
 import { homeFor } from "@/features/auth/model/home";
+import { RegisterLink } from "@/features/auth/components/register-link";
 import { ADMIN_URL } from "@/shared/config";
 import { Brand } from "@/shared/ui/brand";
 
@@ -90,6 +91,7 @@ export function Header() {
               <UserRound size={17} /> Đăng nhập
             </button>
           )}
+          {!user && <RegisterLink className="hidden rounded-full border border-[#d7e1d3] px-3 py-1.5 text-xs font-bold text-[#285e45] hover:bg-[#eef1e9] sm:inline-flex" />}
 
           {/* Cart Icon on Header (Quick access) */}
           <Link
@@ -157,13 +159,18 @@ export function Header() {
               </button>
             </>
           ) : (
-            <button
-              type="button"
-              onClick={() => { setMenu(false); login(); }}
-              className="text-left font-bold text-[#285e45]"
-            >
-              Đăng nhập tài khoản
-            </button>
+            <>
+              <button
+                type="button"
+                onClick={() => { setMenu(false); login(); }}
+                className="text-left font-bold text-[#285e45]"
+              >
+                Đăng nhập tài khoản
+              </button>
+              <RegisterLink className="font-bold text-[#285e45]" onClick={() => setMenu(false)}>
+                Đăng ký tài khoản
+              </RegisterLink>
+            </>
           )}
         </nav>
       )}

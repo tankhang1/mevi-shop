@@ -16,6 +16,7 @@ export const ROUTES = {
   checkoutSuccess: "/checkout/success",
   orders: "/orders",
   account: "/account",
+  register: "/register",
 
   auth: {
     callback: "/auth/callback",

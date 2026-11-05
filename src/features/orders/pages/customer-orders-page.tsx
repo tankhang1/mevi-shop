@@ -6,6 +6,7 @@ import { PageFrame } from "@/shared/ui/layout";
 import { useCustomerOrdersStore } from "@/features/orders/api/customer-orders";
 import { OrderCard } from "@/features/orders/components/order-card";
 import { OrderLookup } from "@/features/orders/components/order-lookup";
+import { RegisterLink } from "@/features/auth/components/register-link";
 import { useMyOrders } from "@/features/orders/api/my-orders.queries";
 import { USE_REAL_SHOP } from "@/features/products/api/products.api";
 import { login, useAuthStore } from "@/features/auth/model/auth.store";
@@ -134,6 +135,7 @@ export function CustomerOrdersPage() {
           <div className="rounded-2xl border border-dashed border-[#d8d5cb] bg-[#fffefa] p-8 text-center my-6">
             <h2 className="text-base font-bold text-[#214c3a]">Đăng nhập để xem đơn hàng</h2>
             <button type="button" className="btn-primary mt-4 text-xs h-10 px-4" onClick={login} data-testid="button-orders-login">Đăng nhập</button>
+            <RegisterLink className="btn-outline mt-4 ml-2 text-xs h-10 px-4" />
           </div>
         ) : isLoading ? (
           <Loading />

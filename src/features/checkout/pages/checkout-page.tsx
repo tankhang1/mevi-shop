@@ -1,6 +1,7 @@
 import { useCreateOrder } from "@/features/checkout/api/orders.queries";
 import { farmNameOf, unitPriceOf, useCart, variantLabelOf } from "@/features/cart/model/cart.store";
 import { authStorage } from "@/features/auth/api/auth.storage";
+import { RegisterLink } from "@/features/auth/components/register-link";
 import { login, useAuthStore } from "@/features/auth/model/auth.store";
 import { useCustomerOrdersStore } from "@/features/orders/api/customer-orders";
 import { orderErrorMessage } from "@/features/orders/model/shop-order-adapter";
@@ -216,14 +217,19 @@ export function CheckoutPage() {
               </p>
             )}
             {needsLogin ? (
-              <button
-                type="button"
-                className="btn-primary mt-5 w-full"
-                onClick={login}
-                data-testid="button-login-to-order"
-              >
-                Đăng nhập để đặt hàng
-              </button>
+              <>
+                <button
+                  type="button"
+                  className="btn-primary mt-5 w-full"
+                  onClick={login}
+                  data-testid="button-login-to-order"
+                >
+                  Đăng nhập để đặt hàng
+                </button>
+                <p className="mt-3 text-center text-xs text-muted-foreground">
+                  Chưa có tài khoản? <RegisterLink className="font-bold text-[#285e45] hover:underline" />
+                </p>
+              </>
             ) : (
               <button
                 className="btn-primary mt-5 w-full"

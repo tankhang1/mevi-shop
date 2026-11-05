@@ -1,5 +1,6 @@
 import { Link } from 'wouter';
 import { UserRound, Sparkles, LogIn, ShieldCheck, Store } from 'lucide-react';
+import { RegisterLink } from '@/features/auth/components/register-link';
 import { login, useAuthStore } from '@/features/auth/model/auth.store';
 
 export function ProfileHeader() {
@@ -20,7 +21,7 @@ export function ProfileHeader() {
           </div>
         </div>
 
-        <div className="mt-5 pt-4 border-t border-white/15 flex items-center justify-between">
+        <div className="mt-5 pt-4 border-t border-white/15 grid gap-3">
           <button
             type="button"
             onClick={login}
@@ -29,6 +30,9 @@ export function ProfileHeader() {
           >
             <LogIn size={15} /> Đăng nhập tài khoản Mevi
           </button>
+          <p className="text-center text-xs text-white/80">
+            Chưa có tài khoản? <RegisterLink className="font-bold text-white underline">Đăng ký ngay</RegisterLink>
+          </p>
         </div>
       </div>
     );
