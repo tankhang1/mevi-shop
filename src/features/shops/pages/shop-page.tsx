@@ -141,49 +141,44 @@ export function ShopPage() {
       <PageFrame>
         <main className="shell py-6 md:py-10">
           <section className="overflow-hidden rounded-[28px] border border-[#e7e4d9] bg-white">
-            <div className="relative h-44 md:h-60">
+            <div className="relative h-28 md:h-60">
               <img
                 src={coverUrl}
                 alt=""
                 className="h-full w-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-transparent to-black/35" />
-              <nav className="absolute left-6 top-5 flex items-center gap-1.5 text-xs font-semibold text-white/85 md:left-10">
-                <Link href="/" className="hover:text-white">
+              <nav className="absolute inset-x-4 top-3 flex items-center gap-1.5 text-xs font-semibold text-white/85 md:left-10 md:right-10 md:top-5">
+                <Link href="/" className="shrink-0 hover:text-white">
                   Trang chủ
                 </Link>
                 <span>/</span>
-                <Link href="/shops" className="hover:text-white">
+                <Link href="/shops" className="shrink-0 hover:text-white">
                   Gian hàng
                 </Link>
                 <span>/</span>
-                <span className="text-white">{storefront.name}</span>
+                <span className="truncate text-white">{storefront.name}</span>
               </nav>
             </div>
 
-            <div className="flex flex-col gap-5 px-6 pb-7 md:flex-row md:items-end md:justify-between md:px-10">
-              <div className="flex items-end gap-5">
+            <div className="flex flex-col gap-5 px-4 pb-4 md:flex-row md:items-end md:justify-between md:px-10 md:pb-7">
+              <div className="flex min-w-0 items-end gap-3 md:gap-5">
                 <img
                   src={logoUrl}
                   alt=""
-                  className="relative z-10 -mt-12 h-24 w-24 shrink-0 rounded-3xl border-4 border-white object-cover shadow-lg md:-mt-14 md:h-28 md:w-28"
-                  style={
-                    storefront.brandColor
-                      ? { borderColor: storefront.brandColor }
-                      : undefined
-                  }
+                  className="relative z-10 -mt-6 h-16 w-16 shrink-0 rounded-2xl border-[3px] border-white object-cover shadow-lg md:-mt-14 md:h-28 md:w-28 md:rounded-3xl md:border-4"
                 />
-                <div className="pb-1 pt-4">
+                <div className="min-w-0 pt-3 md:pb-1 md:pt-4">
                   <h1
-                    className="flex items-center gap-2 text-2xl font-extrabold leading-tight text-[#214c3a] md:text-3xl"
+                    className="flex items-center gap-1.5 text-lg font-extrabold leading-tight text-[#214c3a] md:gap-2 md:text-3xl"
                     data-testid="text-shop-name"
                   >
                     {storefront.name}
                     {storefront.verified && (
-                      <BadgeCheck className="text-[#285e45]" />
+                      <BadgeCheck className="size-[18px] shrink-0 text-[#285e45] md:size-6" />
                     )}
                   </h1>
-                  <p className="mt-1.5 text-sm text-muted-foreground">
+                  <p className="mt-1 text-xs text-muted-foreground md:mt-1.5 md:text-sm">
                     {storefront.slogan ? `${storefront.slogan} · ` : ""}
                     {storefront.province || "Toàn quốc"}
                   </p>
@@ -192,28 +187,28 @@ export function ShopPage() {
             </div>
 
             <div className={`grid grid-cols-2 border-t border-[#ece8de] ${storefront.followerCount > 0 ? "md:grid-cols-3" : ""}`}>
-              <div className="border-[#ece8de] px-6 py-4 md:px-10">
-                <p className="text-lg font-extrabold text-[#214c3a]">
+              <div className="border-[#ece8de] px-4 py-2.5 md:px-10 md:py-4">
+                <p className="text-base font-extrabold text-[#214c3a] md:text-lg">
                   {storefront.productCount}
                 </p>
                 <p className="text-xs text-muted-foreground">Sản phẩm</p>
               </div>
               {storefront.followerCount > 0 && (
-              <div className="border-l border-[#ece8de] px-6 py-4 md:px-10">
-                <p className="text-lg font-extrabold text-[#214c3a]">
+              <div className="border-l border-[#ece8de] px-4 py-2.5 md:px-10 md:py-4">
+                <p className="text-base font-extrabold text-[#214c3a] md:text-lg">
                   {compactNumber(storefront.followerCount)}
                 </p>
                 <p className="text-xs text-muted-foreground">Người theo dõi</p>
               </div>
               )}
               <div
-                className={`border-[#ece8de] px-6 py-4 md:px-10 ${
+                className={`border-[#ece8de] px-4 py-2.5 md:px-10 md:py-4 ${
                   storefront.followerCount > 0
                     ? "col-span-2 border-t md:col-span-1 md:border-l md:border-t-0"
                     : "border-l"
                 }`}
               >
-                <p className="text-lg font-extrabold text-[#214c3a]">
+                <p className="text-base font-extrabold text-[#214c3a] md:text-lg">
                   {`Tham gia ${storefront.joinedYear}`}
                 </p>
                 <p className="text-xs text-muted-foreground">
