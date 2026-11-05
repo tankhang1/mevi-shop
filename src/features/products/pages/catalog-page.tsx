@@ -1,3 +1,4 @@
+import { sortProducts } from '@/features/products/api/products.api';
 import { useProducts } from '@/features/products/api/products.queries';
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useLocation } from 'wouter';
@@ -28,8 +29,10 @@ export function CatalogPage() {
     const qs = next.toString();
     window.history.replaceState(null, '', `${window.location.pathname}${qs ? `?${qs}` : ''}`);
   }, [category]);
-  const queryParams = useMemo(() => ({ q: search || undefined, category: category || undefined, sort }), [search, category, sort]);
-  const { data, isLoading, isError, refetch } = useProducts(queryParams);
+  const queryParams = useMemo(() => ({ q: search || undefined, category: category || undefined }), [search, category]);
+  const { data: fetched, isLoading, isError, refetch } = useProducts(queryParams);
+  // Sorting is local for now: changing it must not refetch (the backend has no sort param).
+  const data = useMemo(() => fetched && sortProducts(fetched, sort), [fetched, sort]);
   const active = categoryTiles.find(c => c.name === category);
   const ref = shopRef();
   const [, navigate] = useLocation();

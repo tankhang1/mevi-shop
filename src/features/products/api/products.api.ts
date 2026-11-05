@@ -13,13 +13,14 @@ const priceOf = (p: Product) => p.salePrice ?? p.price;
 const categories = () => queryClient.fetchQuery({ queryKey: shopKeys.categories(), queryFn: shopApi.listCategories, staleTime: 5 * 60_000 });
 
 // Backend has no sort / price filter: newest first only, so the rest is done client-side.
-function sortProducts(list: Product[], sort: ListProductsParams['sort']) {
+export function sortProducts(list: Product[], sort: ListProductsParams['sort']) {
   const by = {
+    newest: (a: Product, b: Product) => b.createdAt.localeCompare(a.createdAt),
     'price-asc': (a: Product, b: Product) => priceOf(a) - priceOf(b),
     'price-desc': (a: Product, b: Product) => priceOf(b) - priceOf(a),
     featured: (a: Product, b: Product) => (b.soldCount ?? 0) - (a.soldCount ?? 0),
   } as const;
-  return sort && sort !== 'newest' ? [...list].sort(by[sort]) : list;
+  return sort ? [...list].sort(by[sort]) : list;
 }
 
 async function listReal(params: ListProductsParams = {}): Promise<Product[]> {
