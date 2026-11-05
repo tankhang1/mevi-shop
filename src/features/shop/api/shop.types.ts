@@ -144,6 +144,8 @@ export interface PublicStorefront {
 }
 
 export interface StorefrontProductListParams {
+  /** Name, code, handle or variant SKU (case-insensitive); results keep the partner's order. */
+  keyword?: string;
   page?: number;
   size?: number;
 }

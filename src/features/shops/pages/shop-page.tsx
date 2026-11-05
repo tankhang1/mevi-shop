@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useLocation, useRoute } from "wouter";
-import { BadgeCheck, Check, Plus } from "lucide-react";
+import { BadgeCheck, Check, Plus, Search, X } from "lucide-react";
 import { ProductCard } from "@/features/products/components/product-card";
 import {
   sortOptions,
@@ -19,6 +19,7 @@ import {
   parseStorefrontSlug,
   storefrontPath,
 } from "@/features/shop/model/storefront-url";
+import { BackendError } from "@/shared/api/api-client";
 import { imageFallback } from "@/shared/config";
 import { compactNumber } from "@/shared/lib/format";
 import { AppSelect } from "@/shared/ui/app-select";
@@ -37,16 +38,26 @@ export function ShopPage() {
     data: storefront,
     isLoading: isStorefrontLoading,
     isError: isStorefrontError,
+    error: storefrontError,
     refetch: refetchStorefront,
   } = useStorefront(storefrontId);
 
-  const [page, setPage] = useState(0);
+  const [search, setSearch] = useState("");
+  const [keyword, setKeyword] = useState("");
+  useEffect(() => {
+    const timer = setTimeout(() => setKeyword(search.trim()), 300);
+    return () => clearTimeout(timer);
+  }, [search]);
   const {
     data: productsPage,
     isLoading: isProductsLoading,
     isError: isProductsError,
     refetch: refetchProducts,
-  } = useStorefrontProducts(storefrontId, { page, size: 24 });
+  } = useStorefrontProducts(storefrontId, {
+    keyword: keyword || undefined,
+    page: 0,
+    size: 24,
+  });
 
   // Fallback for legacy demo slugs (e.g. nong-trai-da-lat-xanh) when not a real numeric ID
   const legacyShop = useMemo(
@@ -159,49 +170,35 @@ export function ShopPage() {
                   </p>
                 </div>
               </div>
-
-              <div className="flex gap-2">
-                <button
-                  className={following ? "btn-outline" : "btn-primary"}
-                  onClick={() => setFollowing(!following)}
-                  data-testid="button-follow-shop"
-                >
-                  {following ? (
-                    <>
-                      <Check size={16} /> Đang theo dõi
-                    </>
-                  ) : (
-                    <>
-                      <Plus size={16} /> Theo dõi
-                    </>
-                  )}
-                </button>
-              </div>
             </div>
 
-            <div className="grid grid-cols-2 border-t border-[#ece8de] md:grid-cols-3">
+            <div className={`grid grid-cols-2 border-t border-[#ece8de] ${storefront.followerCount > 0 ? "md:grid-cols-3" : ""}`}>
               <div className="border-[#ece8de] px-6 py-4 md:px-10">
                 <p className="text-lg font-extrabold text-[#214c3a]">
                   {storefront.productCount}
                 </p>
                 <p className="text-xs text-muted-foreground">Sản phẩm</p>
               </div>
+              {storefront.followerCount > 0 && (
               <div className="border-l border-[#ece8de] px-6 py-4 md:px-10">
                 <p className="text-lg font-extrabold text-[#214c3a]">
-                  {compactNumber(
-                    storefront.followerCount + (following ? 1 : 0),
-                  )}
+                  {compactNumber(storefront.followerCount)}
                 </p>
                 <p className="text-xs text-muted-foreground">Người theo dõi</p>
               </div>
-              <div className="col-span-2 border-t border-[#ece8de] px-6 py-4 md:col-span-1 md:border-l md:border-t-0 md:px-10">
+              )}
+              <div
+                className={`border-[#ece8de] px-6 py-4 md:px-10 ${
+                  storefront.followerCount > 0
+                    ? "col-span-2 border-t md:col-span-1 md:border-l md:border-t-0"
+                    : "border-l"
+                }`}
+              >
                 <p className="text-lg font-extrabold text-[#214c3a]">
-                  {storefront.joinedYear
-                    ? `Từ ${storefront.joinedYear}`
-                    : "Mới tham gia"}
+                  {`Tham gia ${storefront.joinedYear}`}
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  Thời gian hoạt động
+                  Trên Mevi
                 </p>
               </div>
             </div>
@@ -226,6 +223,29 @@ export function ShopPage() {
 
           {tab === "products" && (
             <div className="mt-6">
+              <label className="relative mb-5 block">
+                <Search
+                  className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#718077]"
+                  size={18}
+                />
+                <input
+                  className="field pl-10"
+                  placeholder="Tìm trong gian hàng..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  data-testid="input-search-shop-products"
+                />
+                {search && (
+                  <button
+                    type="button"
+                    onClick={() => setSearch("")}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#718077]"
+                    aria-label="Xóa tìm kiếm"
+                  >
+                    <X size={16} />
+                  </button>
+                )}
+              </label>
               {isProductsLoading ? (
                 <Loading />
               ) : isProductsError ? (
@@ -236,6 +256,16 @@ export function ShopPage() {
                     <ProductCard key={p.id} product={p} />
                   ))}
                 </div>
+              ) : keyword ? (
+                <Empty
+                  title="Không tìm thấy sản phẩm"
+                  detail="Thử tên hoặc mã sản phẩm khác."
+                  action={
+                    <button className="btn-outline" onClick={() => setSearch("")}>
+                      Xem tất cả sản phẩm
+                    </button>
+                  }
+                />
               ) : (
                 <Empty
                   title="Gian hàng chưa có sản phẩm"
@@ -277,11 +307,7 @@ export function ShopPage() {
                   />
                   <Detail
                     label="Tham gia Mevi"
-                    value={
-                      storefront.joinedYear
-                        ? `Từ năm ${storefront.joinedYear}`
-                        : "2026"
-                    }
+                    value={`Từ năm ${storefront.joinedYear}`}
                   />
                   <Detail
                     label="Xác minh"
@@ -498,6 +524,23 @@ export function ShopPage() {
               </div>
             </div>
           )}
+        </main>
+      </PageFrame>
+    );
+  }
+
+  // 404 / 400 mean the storefront is unavailable; anything else (network, 5xx) can be retried.
+  if (
+    isStorefrontError &&
+    !(
+      storefrontError instanceof BackendError &&
+      (storefrontError.status === 404 || storefrontError.status === 400)
+    )
+  ) {
+    return (
+      <PageFrame>
+        <main className="shell py-12">
+          <ErrorState retry={() => refetchStorefront()} />
         </main>
       </PageFrame>
     );
