@@ -1,4 +1,8 @@
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  useInfiniteQuery,
+  useQuery,
+} from "@tanstack/react-query";
 import { BackendError } from "@/shared/api/api-client";
 import { shopApi } from "./shop.api";
 import type {
@@ -67,6 +71,26 @@ export const useStorefront = (id: PublicId | null | undefined) =>
     retry: (count, e) =>
       !(e instanceof BackendError && (e.status === 404 || e.status === 400)) &&
       count < 1,
+  });
+
+/** "Xem thêm" list: each next page is appended until the backend reports `last`. */
+export const useInfiniteStorefrontProducts = (
+  id: PublicId | null | undefined,
+  params: Omit<StorefrontProductListParams, "page"> = {},
+) =>
+  useInfiniteQuery({
+    queryKey: [...shopKeys.storefrontProducts(id ?? 0, params), "infinite"],
+    queryFn: ({ signal, pageParam }) =>
+      shopApi.listStorefrontProducts(
+        id!,
+        { ...params, page: pageParam },
+        signal,
+      ),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) =>
+      lastPage.last ? undefined : lastPage.page + 1,
+    enabled: !!id,
+    placeholderData: keepPreviousData,
   });
 
 export const useStorefrontProducts = (

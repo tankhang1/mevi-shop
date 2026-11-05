@@ -11,8 +11,8 @@ import { useProducts } from "@/features/products/api/products.queries";
 import { useShopStats } from "@/features/shops/components/shop-card";
 import { shops, shopBySlug } from "@/features/shops/model/shops";
 import {
+  useInfiniteStorefrontProducts,
   useStorefront,
-  useStorefrontProducts,
 } from "@/features/shop/api/shop.queries";
 import {
   productSortToApi,
@@ -65,12 +65,15 @@ export function ShopPage() {
     isLoading: isProductsLoading,
     isError: isProductsError,
     refetch: refetchProducts,
-  } = useStorefrontProducts(storefrontId, {
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+    isFetchNextPageError,
+  } = useInfiniteStorefrontProducts(storefrontId, {
     keyword: keyword || undefined,
     sort:
       productSort === "recommended" ? undefined : productSortToApi[productSort],
-    page: 0,
-    size: 24,
+    size: 10,
   });
 
   // Fallback for legacy demo slugs (e.g. nong-trai-da-lat-xanh) when not a real numeric ID
@@ -122,7 +125,9 @@ export function ShopPage() {
 
   // Real Storefront View
   if (storefront) {
-    const products = (productsPage?.content || []).map(summaryToProduct);
+    const products = (productsPage?.pages ?? [])
+      .flatMap((p) => p.content)
+      .map(summaryToProduct);
     const coverUrl =
       storefront.coverImageUrl ||
       "https://images.pexels.com/photos/2733918/pexels-photo-2733918.jpeg?auto=compress&cs=tinysrgb&w=1600";
@@ -276,14 +281,34 @@ export function ShopPage() {
               </div>
               {isProductsLoading ? (
                 <Loading />
-              ) : isProductsError ? (
+              ) : isProductsError && !isFetchNextPageError ? (
                 <ErrorState retry={() => refetchProducts()} />
               ) : products.length ? (
-                <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-4">
-                  {products.map((p) => (
-                    <ProductCard key={p.id} product={p} />
-                  ))}
-                </div>
+                <>
+                  <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-4">
+                    {products.map((p) => (
+                      <ProductCard key={p.id} product={p} />
+                    ))}
+                  </div>
+                  {hasNextPage && (
+                    <div className="mt-6 text-center">
+                      {isFetchNextPageError && (
+                        <p className="mb-2 text-sm text-muted-foreground">
+                          Không tải được thêm sản phẩm, vui lòng thử lại.
+                        </p>
+                      )}
+                      <button
+                        type="button"
+                        className="btn-outline"
+                        disabled={isFetchingNextPage}
+                        onClick={() => fetchNextPage()}
+                        data-testid="button-shop-products-more"
+                      >
+                        {isFetchingNextPage ? "Đang tải..." : "Xem thêm"}
+                      </button>
+                    </div>
+                  )}
+                </>
               ) : keyword ? (
                 <Empty
                   title="Không tìm thấy sản phẩm"
