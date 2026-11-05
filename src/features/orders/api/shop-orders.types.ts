@@ -24,14 +24,15 @@ export interface ShopOrderRequest {
 export interface ShopOrderItem {
   id: number;
   product: { id: number; code: string; title: string; imageUrl: string | null };
-  variant: { id: number; title: string } | null;
+  /** null = bought by base unit; `id` is null when the variant was deleted later. */
+  variant: { id: number | null; title: string } | null;
   sku: string;
   baseUnit: string | null;
   quantity: number;
   unitPrice: number;
   lineTotal: number;
   /** Garden chosen at order time; null when none was chosen. */
-  productionZone: { id: number; code: string; name: string } | null;
+  productionZone: { id: number; code: string; name: string | null } | null;
 }
 
 export interface ShopOrder {
@@ -42,7 +43,14 @@ export interface ShopOrder {
   note: string | null;
   items: ShopOrderItem[];
   total: number;
-  storefront: { id: number } | null;
+  storefront: { id: number; name?: string } | null;
+  shippingCarrier: string | null;
+  trackingCode: string | null;
+  confirmedAt: string | null;
+  shippingAt: string | null;
+  deliveredAt: string | null;
+  cancelledAt: string | null;
+  cancelReason: string | null;
   createdAt: string;
 }
 

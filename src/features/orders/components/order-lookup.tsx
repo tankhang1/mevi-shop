@@ -32,7 +32,7 @@ export function OrderLookup({ query, onQueryChange }: OrderLookupProps) {
           setLocalVal(e.target.value);
           onQueryChange(e.target.value);
         }}
-        placeholder="Tra cứu theo mã đơn (#MV1001) hoặc Số điện thoại..."
+        placeholder="Tìm theo mã đơn, số điện thoại hoặc tên sản phẩm..."
         className="w-full h-11 pl-10 pr-9 rounded-2xl border border-[#deddd2] bg-[#fffefa] text-xs text-[#214c3a] placeholder:text-[#959d96] focus:outline-none focus:border-[#285e45] focus:ring-2 focus:ring-[#285e45]/10 transition"
         data-testid="input-order-lookup"
       />

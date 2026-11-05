@@ -6,6 +6,7 @@ export interface OrderItem {
   productName: string;
   variantId?: string;
   variantLabel?: string;
+  imageUrl?: string | null;
   farmId?: string | null;
   /** Production zone code, the key of the traceability page. */
   farmCode?: string | null;
@@ -29,6 +30,13 @@ export interface Order {
   agencySlug: string | null;
   items: OrderItem[];
   createdAt: string;
+  shippingCarrier?: string | null;
+  trackingCode?: string | null;
+  confirmedAt?: string | null;
+  shippingAt?: string | null;
+  deliveredAt?: string | null;
+  cancelledAt?: string | null;
+  cancelReason?: string | null;
 }
 
 export interface OrderInput {

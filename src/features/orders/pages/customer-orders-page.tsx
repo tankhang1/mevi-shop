@@ -2,6 +2,7 @@ import { useState, useMemo } from "react";
 import { Link } from "wouter";
 import { ShoppingBag, ArrowRight, PhoneCall, RefreshCw } from "lucide-react";
 import type { Order } from "@/shared/types";
+import { statusLabel } from "@/shared/lib/format";
 import { PageFrame } from "@/shared/ui/layout";
 import { useCustomerOrdersStore } from "@/features/orders/api/customer-orders";
 import { OrderCard } from "@/features/orders/components/order-card";
@@ -12,7 +13,10 @@ import { USE_REAL_SHOP } from "@/features/products/api/products.api";
 import { login, useAuthStore } from "@/features/auth/model/auth.store";
 import { ErrorState, Loading } from "@/shared/ui/feedback";
 
-type StatusFilter = "all" | "pending" | "shipping" | "completed" | "cancelled";
+type StatusFilter = "all" | Order["status"];
+
+// One tab per backend status, labelled exactly like the order badge.
+const STATUS_TABS: Order["status"][] = ["new", "confirmed", "shipped", "completed", "cancelled"];
 
 export function CustomerOrdersPage() {
   const [activeTab, setActiveTab] = useState<StatusFilter>("all");
@@ -22,29 +26,17 @@ export function CustomerOrdersPage() {
   const user = useAuthStore((s) => s.user);
   const initDemoOrders = useCustomerOrdersStore((s) => s.initDemoOrders);
 
-  // Tab definitions
-  const tabs = [
-    { key: "all" as StatusFilter, label: "Tất cả" },
-    { key: "pending" as StatusFilter, label: "Chờ xử lý" },
-    { key: "shipping" as StatusFilter, label: "Đang giao" },
-    { key: "completed" as StatusFilter, label: "Hoàn tất" },
-    { key: "cancelled" as StatusFilter, label: "Đã hủy" },
+  const tabs: { key: StatusFilter; label: string }[] = [
+    { key: "all", label: "Tất cả" },
+    ...STATUS_TABS.map((key) => ({ key, label: statusLabel(key) })),
   ];
 
   // Filtering logic
   const filteredOrders = useMemo(() => {
     let list = orders;
 
-    // Filter by tab
-    if (activeTab === "pending") {
-      list = list.filter((o) => ["new", "confirmed"].includes(o.status));
-    } else if (activeTab === "shipping") {
-      list = list.filter((o) => ["processing", "shipped"].includes(o.status));
-    } else if (activeTab === "completed") {
-      list = list.filter((o) => o.status === "completed");
-    } else if (activeTab === "cancelled") {
-      list = list.filter((o) => o.status === "cancelled");
-    }
+    if (activeTab !== "all") list = list.filter((o) => o.status === activeTab);
+
 
     // Filter by search query
     if (searchQuery.trim()) {
@@ -62,20 +54,8 @@ export function CustomerOrdersPage() {
   }, [orders, activeTab, searchQuery]);
 
   // Tab counts
-  const countFor = (tab: StatusFilter) => {
-    if (tab === "all") return orders.length;
-    if (tab === "pending")
-      return orders.filter((o) => ["new", "confirmed"].includes(o.status))
-        .length;
-    if (tab === "shipping")
-      return orders.filter((o) => ["processing", "shipped"].includes(o.status))
-        .length;
-    if (tab === "completed")
-      return orders.filter((o) => o.status === "completed").length;
-    if (tab === "cancelled")
-      return orders.filter((o) => o.status === "cancelled").length;
-    return 0;
-  };
+  const countFor = (tab: StatusFilter) =>
+    tab === "all" ? orders.length : orders.filter((o) => o.status === tab).length;
 
   return (
     <PageFrame>

@@ -45,12 +45,20 @@ export function fromShopOrder(o: ShopOrder): Order {
     status: statuses[o.status],
     agencySlug: null,
     createdAt: o.createdAt,
+    shippingCarrier: o.shippingCarrier,
+    trackingCode: o.trackingCode,
+    confirmedAt: o.confirmedAt,
+    shippingAt: o.shippingAt,
+    deliveredAt: o.deliveredAt,
+    cancelledAt: o.cancelledAt,
+    cancelReason: o.cancelReason,
     items: o.items.map(it => ({
       id: it.id,
       productId: it.product.id,
       productName: it.product.title,
-      variantId: it.variant ? String(it.variant.id) : undefined,
-      variantLabel: it.variant?.title,
+      variantId: it.variant?.id != null ? String(it.variant.id) : undefined,
+      variantLabel: it.variant?.title ?? (it.baseUnit ? baseUnits[it.baseUnit] ?? it.baseUnit : undefined),
+      imageUrl: it.product.imageUrl,
       farmId: it.productionZone ? String(it.productionZone.id) : null,
       farmCode: it.productionZone?.code ?? null,
       farmName: it.productionZone?.name ?? null,
@@ -60,6 +68,13 @@ export function fromShopOrder(o: ShopOrder): Order {
     })),
   };
 }
+
+const baseUnits: Record<string, string> = { KG: 'kg', GRAM: 'gram', LITER: 'lít', ML: 'ml', PIECE: 'cái', BOX: 'hộp', BOTTLE: 'chai', PACK: 'gói', BAG: 'túi' };
+
+const carriers: Record<string, string> = {
+  SELF_DELIVERY: 'Mevi tự giao', GHN: 'GHN', GHTK: 'GHTK', VIETTEL_POST: 'Viettel Post', VNPOST: 'VNPost', JT_EXPRESS: 'J&T Express', NINJA_VAN: 'Ninja Van', OTHER: 'Đơn vị khác',
+};
+export const carrierLabel = (code: string) => carriers[code] ?? code;
 
 const fieldLabel = (field: string, names: string[]) => {
   const line = /^items\[(\d+)\]\.(\w+)$/.exec(field);
