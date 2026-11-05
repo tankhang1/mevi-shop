@@ -1,12 +1,14 @@
 import { useCreateOrder } from "@/features/checkout/api/orders.queries";
 import { farmNameOf, unitPriceOf, useCart, variantLabelOf } from "@/features/cart/model/cart.store";
+import { useCurrentUser } from "@/features/auth/api/auth.queries";
 import { authStorage } from "@/features/auth/api/auth.storage";
+import { useMyOrders } from "@/features/orders/api/my-orders.queries";
 import { RegisterLink } from "@/features/auth/components/register-link";
 import { login, useAuthStore } from "@/features/auth/model/auth.store";
 import { useCustomerOrdersStore } from "@/features/orders/api/customer-orders";
 import { orderErrorMessage } from "@/features/orders/model/shop-order-adapter";
 import { USE_REAL_SHOP } from "@/features/products/api/products.api";
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { Link, useLocation } from "wouter";
 import { ArrowLeft, Banknote } from "lucide-react";
 import { shopRef } from "@/app/providers/agency-brand-provider";
@@ -34,6 +36,24 @@ export function CheckoutPage() {
   const [message, setMessage] = useState("");
   const set = (key: keyof typeof values, value: string) =>
     setValues((old) => ({ ...old, [key]: value }));
+
+  // Prefill from the latest order, then the profile. Never overwrites what the customer typed.
+  const { data: profile } = useCurrentUser();
+  const { orders, isLoading: ordersLoading } = useMyOrders();
+  const lastOrder = USE_REAL_SHOP && !needsLogin ? orders[0] : undefined;
+  useEffect(() => {
+    // Wait for orders so name and address come from the same source.
+    if (needsLogin || ordersLoading) return;
+    const phone = lastOrder?.phone || profile?.phoneNumber || profile?.phone || "";
+    setValues((old) => ({
+      ...old,
+      customerName: old.customerName || lastOrder?.customerName || profile?.fullName || "",
+      phone: old.phone || phone.replace(/^\+?84/, "0"),
+      province: old.province || lastOrder?.province || profile?.province || "",
+      district: old.district || lastOrder?.district || "",
+      address: old.address || lastOrder?.address || "",
+    }));
+  }, [needsLogin, ordersLoading, lastOrder, profile]);
   const submit = (e: FormEvent) => {
     e.preventDefault();
     setMessage("");

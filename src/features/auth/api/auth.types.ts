@@ -13,6 +13,8 @@ export interface AuthMeResponse {
   fullName: string | null;
   email?: string | null;
   phone?: string | null;
+  phoneNumber?: string | null;
+  province?: string | null;
   avatarUrl?: string | null;
   roleCodes: string[];
   workspaceRoles: WorkspaceRole[];
