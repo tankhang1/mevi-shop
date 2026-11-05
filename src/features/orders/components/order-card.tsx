@@ -76,21 +76,23 @@ export function OrderCard({ order }: OrderCardProps) {
         data-testid={`card-order-${order.id}`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between pb-3 border-b border-[#ece8de]">
-          <div className="flex items-center gap-2">
-            <span className="grid h-7 w-7 place-items-center rounded-lg bg-[#eef1e9] text-[#285e45]">
+        <div className="flex items-center justify-between gap-2 pb-3 border-b border-[#ece8de]">
+          <div className="flex min-w-0 items-center gap-2">
+            <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-[#eef1e9] text-[#285e45]">
               <Package size={15} />
             </span>
-            <span className="font-mono text-xs font-black text-[#214c3a]">
-              {order.code}
-            </span>
-            <span className="text-[11px] text-muted-foreground">
-              · {dateFmt(order.createdAt)}
-            </span>
+            <div className="min-w-0">
+              <p className="truncate font-mono text-xs font-black text-[#214c3a]">
+                {order.code}
+              </p>
+              <p className="text-[11px] text-muted-foreground">
+                {dateFmt(order.createdAt)}
+              </p>
+            </div>
           </div>
 
           <span
-            className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold ${statusStyle.bg} ${statusStyle.text}`}
+            className={`inline-flex shrink-0 items-center gap-1 whitespace-nowrap px-2 py-0.5 rounded-full text-[10px] font-bold ${statusStyle.bg} ${statusStyle.text}`}
           >
             <span className={`w-1.5 h-1.5 rounded-full ${statusStyle.dot}`} />
             {statusLabel(order.status)}
