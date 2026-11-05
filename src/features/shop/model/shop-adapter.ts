@@ -1,5 +1,12 @@
-import type { Product, ProductFarm, ProductVariant } from '@/shared/types';
-import type { ShelfLifeUnit, ShopProductDetail, ShopProductSummary, StorageCondition } from '../api/shop.types';
+import type { Product, ProductFarm, ProductSort, ProductVariant } from '@/shared/types';
+import type { ShelfLifeUnit, ShopProductDetail, ShopProductSort, ShopProductSummary, StorageCondition } from '../api/shop.types';
+
+export const productSortToApi: Record<ProductSort, ShopProductSort> = {
+  featured: 'FEATURED',
+  newest: 'NEWEST',
+  'price-asc': 'PRICE_ASC',
+  'price-desc': 'PRICE_DESC',
+};
 
 // Maps the public shop API onto the storefront `Product` shape, so cards, cart and purchase options stay unchanged.
 // UI price convention: `price` = original, `salePrice` = discounted (API: `price` + `compareAtPrice` strike-through).

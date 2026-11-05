@@ -45,6 +45,7 @@ export interface ShopProductSummary {
   /** 1–5, null when no reviews. */
   ratingAverage: number | null;
   ratingCount: number;
+  /** Delivered orders containing this product, all time. Several variants in one order count once; cancelled orders don't count. */
   soldCount: number;
   createdAt: IsoDateTime;
   updatedAt: IsoDateTime;
@@ -99,15 +100,26 @@ export interface ShopProductDetail {
   ratingCount: number;
   /** Always 5 items, 5★ → 1★. Bar width = count / ratingCount. */
   ratingDistribution: RatingBucket[];
+  /** Delivered orders containing this product, all time. Several variants in one order count once; cancelled orders don't count. */
   soldCount: number;
   createdAt: IsoDateTime;
   updatedAt: IsoDateTime;
 }
 
+/**
+ * Product sort; ties put the newest record first. An invalid value → 400.
+ * - `FEATURED` (Nổi bật): product revenue over the current + 2 previous months (VN time), highest first.
+ * - `NEWEST` (Mới nhất): newest created first.
+ * - `PRICE_ASC` (Giá thấp đến cao) / `PRICE_DESC` (Giá cao đến thấp): by `minPrice`.
+ */
+export type ShopProductSort = "FEATURED" | "NEWEST" | "PRICE_ASC" | "PRICE_DESC";
+
 export interface ShopProductListParams {
   categoryId?: number;
   /** Name, code, handle or variant SKU (case-insensitive). */
   keyword?: string;
+  /** Defaults to `NEWEST` on the backend. The "Nổi bật" dropdown default must send `FEATURED` explicitly. */
+  sort?: ShopProductSort;
   page?: number;
   size?: number;
 }
@@ -126,7 +138,7 @@ export interface CreatePartnerContactRequestPayload {
   note?: string;
 }
 
-/** Public storefront detail `GET /api/public/shop/storefronts/{id}`. */
+/** Public storefront: `GET /api/public/shop/storefronts/{id}` and items of `GET /api/public/shop/storefronts`. */
 export interface PublicStorefront {
   id: PublicId;
   handle: string;
@@ -143,9 +155,28 @@ export interface PublicStorefront {
   followerCount: number;
 }
 
+/**
+ * Storefront sort; ties put the newest record first. An invalid value → 400.
+ * - `REVENUE` (Doanh thu cao nhất): revenue from orders placed via the storefront's referral link,
+ *   over the current + 2 previous months (VN time), highest first. Storefronts with no revenue come last.
+ * - `NEWEST` (Mới nhất): newest created first.
+ */
+export type StorefrontSort = "REVENUE" | "NEWEST";
+
+export interface StorefrontListParams {
+  /** Defaults to `REVENUE` on the backend. */
+  sort?: StorefrontSort;
+  /** 0-based, default 0. */
+  page?: number;
+  /** 1–100, default 20. */
+  size?: number;
+}
+
 export interface StorefrontProductListParams {
-  /** Name, code, handle or variant SKU (case-insensitive); results keep the partner's order. */
+  /** Name, code, handle or variant SKU (case-insensitive). */
   keyword?: string;
+  /** Omit for the partner's own order, which is the storefront page default ("Gian hàng đề xuất"). */
+  sort?: ShopProductSort;
   page?: number;
   size?: number;
 }

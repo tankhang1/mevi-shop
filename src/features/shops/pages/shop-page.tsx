@@ -14,7 +14,10 @@ import {
   useStorefront,
   useStorefrontProducts,
 } from "@/features/shop/api/shop.queries";
-import { summaryToProduct } from "@/features/shop/model/shop-adapter";
+import {
+  productSortToApi,
+  summaryToProduct,
+} from "@/features/shop/model/shop-adapter";
 import {
   parseStorefrontSlug,
   storefrontPath,
@@ -26,6 +29,13 @@ import { AppSelect } from "@/shared/ui/app-select";
 import { Empty, ErrorState, Loading } from "@/shared/ui/feedback";
 import { Detail } from "@/shared/ui/field";
 import { PageFrame } from "@/shared/ui/layout";
+
+// "recommended" sends no `sort`, which keeps the partner's own order.
+type StorefrontProductSortKey = SortKey | "recommended";
+const storefrontSortOptions: { value: StorefrontProductSortKey; label: string }[] = [
+  { value: "recommended", label: "Gian hàng đề xuất" },
+  ...sortOptions,
+];
 
 export function ShopPage() {
   const [, params] = useRoute("/shops/:slug");
@@ -48,6 +58,8 @@ export function ShopPage() {
     const timer = setTimeout(() => setKeyword(search.trim()), 300);
     return () => clearTimeout(timer);
   }, [search]);
+  const [productSort, setProductSort] =
+    useState<StorefrontProductSortKey>("recommended");
   const {
     data: productsPage,
     isLoading: isProductsLoading,
@@ -55,6 +67,8 @@ export function ShopPage() {
     refetch: refetchProducts,
   } = useStorefrontProducts(storefrontId, {
     keyword: keyword || undefined,
+    sort:
+      productSort === "recommended" ? undefined : productSortToApi[productSort],
     page: 0,
     size: 24,
   });
@@ -223,7 +237,8 @@ export function ShopPage() {
 
           {tab === "products" && (
             <div className="mt-6">
-              <label className="relative mb-5 block">
+              <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <label className="relative block flex-1">
                 <Search
                   className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#718077]"
                   size={18}
@@ -246,6 +261,19 @@ export function ShopPage() {
                   </button>
                 )}
               </label>
+                <div className="flex items-center gap-2">
+                  <span className="whitespace-nowrap text-sm text-muted-foreground">
+                    Sắp xếp
+                  </span>
+                  <AppSelect<StorefrontProductSortKey>
+                    className="w-[190px]"
+                    value={productSort}
+                    onChange={setProductSort}
+                    options={storefrontSortOptions}
+                    testId="select-storefront-product-sort"
+                  />
+                </div>
+              </div>
               {isProductsLoading ? (
                 <Loading />
               ) : isProductsError ? (

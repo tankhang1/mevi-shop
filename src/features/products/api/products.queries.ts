@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import type { ListProductsParams } from '@/shared/types';
 import { productsApi } from './products.api';
 
@@ -9,7 +9,7 @@ export const productKeys = {
 };
 
 export const useProducts = (params: ListProductsParams = {}) =>
-  useQuery({ queryKey: productKeys.list(params), queryFn: () => productsApi.list(params) });
+  useQuery({ queryKey: productKeys.list(params), queryFn: () => productsApi.list(params), placeholderData: keepPreviousData });
 
 export const useProduct = (id: number) =>
   useQuery({ queryKey: productKeys.detail(id), queryFn: () => productsApi.get(id), enabled: !!id });

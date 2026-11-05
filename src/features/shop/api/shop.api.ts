@@ -10,6 +10,7 @@ import type {
   ShopProductDetailParams,
   ShopProductListParams,
   ShopProductSummary,
+  StorefrontListParams,
   StorefrontProductListParams,
 } from "./shop.types";
 
@@ -21,7 +22,7 @@ export const shopApi = {
   listCategories: () =>
     apiClient.get<ShopCategory[]>(API_ENDPOINTS.public.shop.categories, PUBLIC),
 
-  /** GET /api/public/shop/products — ACTIVE only, newest first. Out-of-stock items are included. */
+  /** GET /api/public/shop/products — ACTIVE only, `sort` defaults to NEWEST. Out-of-stock items are included. */
   listProducts: (params: ShopProductListParams = {}, signal?: AbortSignal) =>
     apiClient.get<Page<ShopProductSummary>>(
       API_ENDPOINTS.public.shop.products,
@@ -61,6 +62,17 @@ export const shopApi = {
       },
     ),
 
+  /** GET /api/public/shop/storefronts — Gian hàng đang hiển thị (không bị tạm khóa), `sort` mặc định REVENUE. */
+  listStorefronts: (params: StorefrontListParams = {}, signal?: AbortSignal) =>
+    apiClient.get<Page<PublicStorefront>>(
+      API_ENDPOINTS.public.shop.storefronts,
+      {
+        ...PUBLIC,
+        params: { ...params },
+        signal,
+      },
+    ),
+
   /** GET /api/public/shop/storefronts/{id} — 404 khi gian hàng tạm khóa hoặc không tồn tại. */
   getStorefront: (id: PublicId, signal?: AbortSignal) =>
     apiClient.get<PublicStorefront>(
@@ -71,7 +83,7 @@ export const shopApi = {
       },
     ),
 
-  /** GET /api/public/shop/storefronts/{id}/products — Danh sách sản phẩm của gian hàng. */
+  /** GET /api/public/shop/storefronts/{id}/products — Sản phẩm của gian hàng; không truyền `sort` thì theo thứ tự đối tác sắp xếp. */
   listStorefrontProducts: (
     id: PublicId,
     params: StorefrontProductListParams = {},

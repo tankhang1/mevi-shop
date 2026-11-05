@@ -31,6 +31,7 @@ export const API_ENDPOINTS = {
       categories: "/api/public/shop/product-categories",
       products: "/api/public/shop/products",
       productDetail: (id: number | string) => `/api/public/shop/products/${id}`,
+      storefronts: "/api/public/shop/storefronts",
       storefrontDetail: (id: number | string) =>
         `/api/public/shop/storefronts/${id}`,
       storefrontProducts: (id: number | string) =>

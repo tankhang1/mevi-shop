@@ -5,6 +5,7 @@ import type {
   PublicId,
   ShopProductDetailParams,
   ShopProductListParams,
+  StorefrontListParams,
   StorefrontProductListParams,
 } from "./shop.types";
 
@@ -14,6 +15,8 @@ export const shopKeys = {
   products: (params: ShopProductListParams = {}) =>
     [...shopKeys.all, "products", params] as const,
   product: (id: PublicId) => [...shopKeys.all, "product", id] as const,
+  storefronts: (params: StorefrontListParams = {}) =>
+    [...shopKeys.all, "storefronts", params] as const,
   storefront: (id: PublicId) => [...shopKeys.all, "storefront", id] as const,
   storefrontProducts: (
     id: PublicId,
@@ -47,6 +50,13 @@ export const useShopProduct = (
     retry: (count, e) =>
       !(e instanceof BackendError && (e.status === 404 || e.status === 400)) &&
       count < 1,
+  });
+
+export const useStorefronts = (params: StorefrontListParams = {}) =>
+  useQuery({
+    queryKey: shopKeys.storefronts(params),
+    queryFn: ({ signal }) => shopApi.listStorefronts(params, signal),
+    placeholderData: keepPreviousData,
   });
 
 export const useStorefront = (id: PublicId | null | undefined) =>
