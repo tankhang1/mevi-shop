@@ -6,6 +6,14 @@ const statuses: Record<ShopOrderStatus, OrderStatus> = {
   PENDING: 'new', CONFIRMED: 'confirmed', SHIPPING: 'shipped', DELIVERED: 'completed', CANCELLED: 'cancelled',
 };
 
+export const toShopOrderStatus: Record<string, ShopOrderStatus | undefined> = {
+  new: 'PENDING',
+  confirmed: 'CONFIRMED',
+  shipped: 'SHIPPING',
+  completed: 'DELIVERED',
+  cancelled: 'CANCELLED',
+};
+
 /** Cart ids are strings; demo or reordered lines may hold non-numeric ones, which the API must not receive. */
 const numericId = (id?: string | null) => (id && /^\d+$/.test(id) ? Number(id) : undefined);
 
@@ -43,6 +51,8 @@ export function fromShopOrder(o: ShopOrder): Order {
     note: o.note,
     total: o.total,
     status: statuses[o.status],
+    paymentStatus: o.paymentStatus ?? 'UNPAID',
+    paidAt: o.paidAt ?? null,
     agencySlug: null,
     createdAt: o.createdAt,
     shippingCarrier: o.shippingCarrier,

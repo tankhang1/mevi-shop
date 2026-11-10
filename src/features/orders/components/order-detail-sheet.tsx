@@ -35,7 +35,11 @@ import { useCartStore } from "@/features/cart/model/cart.store";
 import { useLocation } from "wouter";
 import { useState } from "react";
 import { useProducts } from "@/features/products/api/products.queries";
-import { BasicLine, OrderItemTrace, OrderItemZone } from "@/features/orders/components/order-item-trace";
+import {
+  BasicLine,
+  OrderItemTrace,
+  OrderItemZone,
+} from "@/features/orders/components/order-item-trace";
 import { USE_REAL_SHOP } from "@/features/products/api/products.api";
 
 interface OrderDetailSheetProps {
@@ -116,11 +120,18 @@ export function OrderDetailSheet({
                 {order.code}
               </DrawerTitle>
             </div>
-            <span
-              className={`px-3 py-1 rounded-full text-xs font-bold ${statusStyle.bg} ${statusStyle.text}`}
-            >
-              {statusLabel(order.status)}
-            </span>
+            <div className="flex items-center gap-1.5">
+              {order.paymentStatus === "PAID" && (
+                <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-[#dcfce7] text-[#166534]">
+                  Đã thanh toán
+                </span>
+              )}
+              <span
+                className={`px-3 py-1 rounded-full text-xs font-bold ${statusStyle.bg} ${statusStyle.text}`}
+              >
+                {statusLabel(order.status)}
+              </span>
+            </div>
           </div>
           <DrawerDescription className="text-xs text-muted-foreground mt-1">
             Đặt ngày {dateFmt(order.createdAt)}
@@ -135,7 +146,12 @@ export function OrderDetailSheet({
             </p>
             <div className="grid grid-cols-4 gap-1 text-center relative">
               {[
-                { label: "Chờ xác nhận", active: true, icon: Clock, at: order.createdAt },
+                {
+                  label: "Chờ xác nhận",
+                  active: true,
+                  icon: Clock,
+                  at: order.createdAt,
+                },
                 {
                   label: "Đã lên đơn",
                   active: order.status !== "new",
@@ -160,11 +176,23 @@ export function OrderDetailSheet({
                 const Icon = step.icon;
                 const next = steps[idx + 1];
                 // Done segments are solid; the one leading to the current step marches; the rest stay idle.
-                const line = !next ? null : next.active ? "bg-[#285e45]" : step.active ? "track-dash" : "track-dash-idle";
+                const line = !next
+                  ? null
+                  : next.active
+                    ? "bg-[#285e45]"
+                    : step.active
+                      ? "track-dash"
+                      : "track-dash-idle";
                 return (
-                  <div key={idx} className="relative flex flex-col items-center">
+                  <div
+                    key={idx}
+                    className="relative flex flex-col items-center"
+                  >
                     {line && order.status !== "cancelled" && (
-                      <span aria-hidden className={`absolute top-[15px] left-[calc(50%+20px)] right-[calc(-50%+20px)] h-0.5 rounded-full ${line}`} />
+                      <span
+                        aria-hidden
+                        className={`absolute top-[15px] left-[calc(50%+20px)] right-[calc(-50%+20px)] h-0.5 rounded-full ${line}`}
+                      />
                     )}
                     <div
                       className={`relative z-10 h-8 w-8 rounded-full grid place-items-center text-xs transition ${
@@ -196,19 +224,46 @@ export function OrderDetailSheet({
           </div>
 
           {order.status === "cancelled" && (
-            <div className="rounded-2xl bg-[#fee2e2] p-4 text-xs text-[#991b1b]" data-testid="panel-order-cancelled">
+            <div
+              className="rounded-2xl bg-[#fee2e2] p-4 text-xs text-[#991b1b]"
+              data-testid="panel-order-cancelled"
+            >
               <p className="font-bold">
-                Đơn đã hủy{order.cancelledAt ? ` lúc ${dateTimeFmt(order.cancelledAt)}` : ""}
+                Đơn đã hủy
+                {order.cancelledAt
+                  ? ` lúc ${dateTimeFmt(order.cancelledAt)}`
+                  : ""}
               </p>
-              {order.cancelReason && <p className="mt-1">Lý do: {order.cancelReason}</p>}
+              {order.cancelReason && (
+                <p className="mt-1">Lý do: {order.cancelReason}</p>
+              )}
             </div>
           )}
 
           {(order.shippingCarrier || order.trackingCode) && (
-            <div className="rounded-2xl border border-[#ece8de] bg-white p-4 space-y-1.5 text-xs text-[#3d5045]" data-testid="panel-order-shipping">
-              <p className="text-xs font-bold uppercase tracking-wider text-[#758179]">Vận chuyển</p>
-              {order.shippingCarrier && <p>Đơn vị: <span className="font-semibold">{carrierLabel(order.shippingCarrier)}</span></p>}
-              {order.trackingCode && <p>Mã vận đơn: <span className="font-mono font-bold">{order.trackingCode}</span></p>}
+            <div
+              className="rounded-2xl border border-[#ece8de] bg-white p-4 space-y-1.5 text-xs text-[#3d5045]"
+              data-testid="panel-order-shipping"
+            >
+              <p className="text-xs font-bold uppercase tracking-wider text-[#758179]">
+                Vận chuyển
+              </p>
+              {order.shippingCarrier && (
+                <p>
+                  Đơn vị:{" "}
+                  <span className="font-semibold">
+                    {carrierLabel(order.shippingCarrier)}
+                  </span>
+                </p>
+              )}
+              {order.trackingCode && (
+                <p>
+                  Mã vận đơn:{" "}
+                  <span className="font-mono font-bold">
+                    {order.trackingCode}
+                  </span>
+                </p>
+              )}
             </div>
           )}
 
@@ -247,12 +302,29 @@ export function OrderDetailSheet({
               {order.items.map((item) => {
                 const product = products.find((p) => p.id === item.productId);
                 // A chosen garden is known from the moment of ordering, so it shows at every status.
-                if (item.farmCode) return <OrderItemZone key={item.id} item={item} imageUrl={product?.imageUrls?.[0]} />;
+                if (item.farmCode)
+                  return (
+                    <OrderItemZone
+                      key={item.id}
+                      item={item}
+                      imageUrl={product?.imageUrls?.[0]}
+                    />
+                  );
                 // Demo batch data: never shown for real orders.
                 return !USE_REAL_SHOP && order.status === "completed" ? (
                   <OrderItemTrace key={item.id} item={item} product={product} />
                 ) : (
-                  <BasicLine key={item.id} item={item} imageUrl={product?.imageUrls?.[0]} packageSize={[item.variantLabel ?? product?.packageSize, item.farmName].filter(Boolean).join(" · ")} />
+                  <BasicLine
+                    key={item.id}
+                    item={item}
+                    imageUrl={product?.imageUrls?.[0]}
+                    packageSize={[
+                      item.variantLabel ?? product?.packageSize,
+                      item.farmName,
+                    ]
+                      .filter(Boolean)
+                      .join(" · ")}
+                  />
                 );
               })}
             </div>
@@ -276,6 +348,24 @@ export function OrderDetailSheet({
                 {fmt(order.total)}
               </span>
             </div>
+            <div className="flex justify-between items-center text-xs text-[#52645a] pt-1 border-t border-[#d8e0d4]/60">
+              <span>Trạng thái thanh toán:</span>
+              <span
+                className={`px-2 py-0.5 rounded-full font-bold text-[10px] ${order.paymentStatus === "PAID" ? "bg-[#dcfce7] text-[#166534]" : "bg-[#fef3c7] text-[#92400e]"}`}
+              >
+                {order.paymentStatus === "PAID"
+                  ? "Đã thanh toán"
+                  : "Chưa thanh toán"}
+              </span>
+            </div>
+            {order.paymentStatus === "PAID" && order.paidAt && (
+              <div className="flex justify-between text-xs text-[#52645a]">
+                <span>Thời gian thanh toán:</span>
+                <span className="text-muted-foreground">
+                  {dateTimeFmt(order.paidAt)}
+                </span>
+              </div>
+            )}
             <p className="text-[11px] text-muted-foreground pt-1">
               Hình thức: Thanh toán COD hoặc chuyển khoản khi nhận hàng.
             </p>
@@ -286,7 +376,10 @@ export function OrderDetailSheet({
           {USE_REAL_SHOP && order.status === "new" && (
             <button
               type="button"
-              onClick={() => { setCancelError(""); setCancelOpen(true); }}
+              onClick={() => {
+                setCancelError("");
+                setCancelOpen(true);
+              }}
               className="w-full h-11 rounded-xl border border-[#e3b9b3] text-[#a7473d] font-bold text-xs hover:bg-[#fbecea] transition"
               data-testid="btn-cancel-order"
             >
@@ -315,7 +408,9 @@ export function OrderDetailSheet({
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Hủy đơn {order.code}?</AlertDialogTitle>
-            <AlertDialogDescription>Đơn đã hủy không thể khôi phục. Bạn có thể đặt lại sau.</AlertDialogDescription>
+            <AlertDialogDescription>
+              Đơn đã hủy không thể khôi phục. Bạn có thể đặt lại sau.
+            </AlertDialogDescription>
           </AlertDialogHeader>
           <textarea
             className="field min-h-20 py-2"
@@ -325,10 +420,20 @@ export function OrderDetailSheet({
             onChange={(e) => setCancelReason(e.target.value)}
             data-testid="input-cancel-reason"
           />
-          {cancelError && <p className="text-xs font-semibold text-[#a7473d]" role="alert">{cancelError}</p>}
+          {cancelError && (
+            <p className="text-xs font-semibold text-[#a7473d]" role="alert">
+              {cancelError}
+            </p>
+          )}
           <AlertDialogFooter>
             <AlertDialogCancel>Giữ đơn</AlertDialogCancel>
-            <button type="button" className="btn-primary" disabled={cancelOrder.isPending} onClick={confirmCancel} data-testid="btn-confirm-cancel">
+            <button
+              type="button"
+              className="btn-primary"
+              disabled={cancelOrder.isPending}
+              onClick={confirmCancel}
+              data-testid="btn-confirm-cancel"
+            >
               {cancelOrder.isPending ? "Đang hủy..." : "Xác nhận hủy"}
             </button>
           </AlertDialogFooter>

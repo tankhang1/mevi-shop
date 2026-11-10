@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { ShoppingBag, ArrowRight, PhoneCall, RefreshCw } from "lucide-react";
 import type { Order } from "@/shared/types";
@@ -9,6 +9,7 @@ import { OrderCard } from "@/features/orders/components/order-card";
 import { OrderLookup } from "@/features/orders/components/order-lookup";
 import { RegisterLink } from "@/features/auth/components/register-link";
 import { useMyOrders } from "@/features/orders/api/my-orders.queries";
+import { toShopOrderStatus } from "@/features/orders/model/shop-order-adapter";
 import { USE_REAL_SHOP } from "@/features/products/api/products.api";
 import { login, useAuthStore } from "@/features/auth/model/auth.store";
 import { ErrorState, Loading } from "@/shared/ui/feedback";
@@ -21,8 +22,24 @@ const STATUS_TABS: Order["status"][] = ["new", "confirmed", "shipped", "complete
 export function CustomerOrdersPage() {
   const [activeTab, setActiveTab] = useState<StatusFilter>("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedQuery, setDebouncedQuery] = useState("");
 
-  const { orders, isLoading, isError, refetch } = useMyOrders();
+  // Debounce search input 350ms before calling API
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedQuery(searchQuery.trim());
+    }, 350);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  const backendStatus = activeTab !== "all" ? toShopOrderStatus[activeTab] : undefined;
+
+  // Gọi trực tiếp API với status và keyword đã debounce
+  const { orders, isLoading, isError, refetch } = useMyOrders({
+    status: backendStatus,
+    keyword: debouncedQuery,
+  });
+
   const user = useAuthStore((s) => s.user);
   const initDemoOrders = useCustomerOrdersStore((s) => s.initDemoOrders);
 
@@ -30,32 +47,6 @@ export function CustomerOrdersPage() {
     { key: "all", label: "Tất cả" },
     ...STATUS_TABS.map((key) => ({ key, label: statusLabel(key) })),
   ];
-
-  // Filtering logic
-  const filteredOrders = useMemo(() => {
-    let list = orders;
-
-    if (activeTab !== "all") list = list.filter((o) => o.status === activeTab);
-
-
-    // Filter by search query
-    if (searchQuery.trim()) {
-      const q = searchQuery.trim().toLowerCase();
-      list = list.filter(
-        (o) =>
-          o.code.toLowerCase().includes(q) ||
-          o.phone.toLowerCase().includes(q) ||
-          o.customerName.toLowerCase().includes(q) ||
-          o.items.some((it) => it.productName.toLowerCase().includes(q)),
-      );
-    }
-
-    return list;
-  }, [orders, activeTab, searchQuery]);
-
-  // Tab counts
-  const countFor = (tab: StatusFilter) =>
-    tab === "all" ? orders.length : orders.filter((o) => o.status === tab).length;
 
   return (
     <PageFrame>
@@ -79,7 +70,6 @@ export function CustomerOrdersPage() {
         {/* Status Horizontal Tabs */}
         <div className="-mx-1 mb-5 flex gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none]">
           {tabs.map((tab) => {
-            const count = countFor(tab.key);
             const isActive = activeTab === tab.key;
             return (
               <button
@@ -94,15 +84,11 @@ export function CustomerOrdersPage() {
                 data-testid={`tab-order-status-${tab.key}`}
               >
                 <span>{tab.label}</span>
-                {count > 0 && (
+                {isActive && orders.length > 0 && (
                   <span
-                    className={`grid h-4 min-w-4 px-1 place-items-center rounded-full text-[10px] font-extrabold ${
-                      isActive
-                        ? "bg-white/25 text-white"
-                        : "bg-[#eef1e9] text-[#285e45]"
-                    }`}
+                    className="grid h-4 min-w-4 px-1 place-items-center rounded-full text-[10px] font-extrabold bg-white/25 text-white"
                   >
-                    {count}
+                    {orders.length}
                   </span>
                 )}
               </button>
@@ -121,9 +107,9 @@ export function CustomerOrdersPage() {
           <Loading />
         ) : isError ? (
           <ErrorState retry={() => refetch()} />
-        ) : filteredOrders.length > 0 ? (
+        ) : orders.length > 0 ? (
           <div className="space-y-3.5">
-            {filteredOrders.map((order) => (
+            {orders.map((order) => (
               <OrderCard key={order.id} order={order} />
             ))}
           </div>

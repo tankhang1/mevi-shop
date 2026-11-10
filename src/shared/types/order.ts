@@ -1,4 +1,11 @@
-export type OrderStatus = 'new' | 'confirmed' | 'processing' | 'shipped' | 'completed' | 'cancelled';
+export type OrderStatus =
+  | "new"
+  | "confirmed"
+  | "processing"
+  | "shipped"
+  | "completed"
+  | "cancelled";
+export type OrderPaymentStatus = "UNPAID" | "PAID";
 
 export interface OrderItem {
   id: number;
@@ -27,6 +34,8 @@ export interface Order {
   note: string | null;
   total: number;
   status: OrderStatus;
+  paymentStatus?: OrderPaymentStatus | null;
+  paidAt?: string | null;
   agencySlug: string | null;
   items: OrderItem[];
   createdAt: string;
@@ -47,5 +56,10 @@ export interface OrderInput {
   district: string;
   note?: string | null;
   agencySlug?: string | null;
-  items: { productId: number; quantity: number; variantId?: string; farmId?: string | null }[];
+  items: {
+    productId: number;
+    quantity: number;
+    variantId?: string;
+    farmId?: string | null;
+  }[];
 }

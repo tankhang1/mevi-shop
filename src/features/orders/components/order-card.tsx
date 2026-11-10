@@ -91,12 +91,19 @@ export function OrderCard({ order }: OrderCardProps) {
             </div>
           </div>
 
-          <span
-            className={`inline-flex shrink-0 items-center gap-1 whitespace-nowrap px-2 py-0.5 rounded-full text-[10px] font-bold ${statusStyle.bg} ${statusStyle.text}`}
-          >
-            <span className={`w-1.5 h-1.5 rounded-full ${statusStyle.dot}`} />
-            {statusLabel(order.status)}
-          </span>
+          <div className="flex items-center gap-1.5 shrink-0">
+            {order.paymentStatus === "PAID" && (
+              <span className="inline-flex items-center whitespace-nowrap px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#dcfce7] text-[#166534]">
+                Đã thanh toán
+              </span>
+            )}
+            <span
+              className={`inline-flex items-center gap-1 whitespace-nowrap px-2 py-0.5 rounded-full text-[10px] font-bold ${statusStyle.bg} ${statusStyle.text}`}
+            >
+              <span className={`w-1.5 h-1.5 rounded-full ${statusStyle.dot}`} />
+              {statusLabel(order.status)}
+            </span>
+          </div>
         </div>
 
         {/* Content list preview */}

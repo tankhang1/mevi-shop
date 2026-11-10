@@ -1,5 +1,11 @@
 /** Mirrors `ShopOrderRequest` / `ShopOrderResponse` of `/api/shop/customer/orders`. */
-export type ShopOrderStatus = 'PENDING' | 'CONFIRMED' | 'SHIPPING' | 'DELIVERED' | 'CANCELLED';
+export type ShopOrderStatus =
+  | "PENDING"
+  | "CONFIRMED"
+  | "SHIPPING"
+  | "DELIVERED"
+  | "CANCELLED";
+export type ShopOrderPaymentStatus = "UNPAID" | "PAID";
 
 export interface ShopOrderItemRequest {
   productId: number;
@@ -39,7 +45,15 @@ export interface ShopOrder {
   id: number;
   code: string;
   status: ShopOrderStatus;
-  recipient: { name: string; phone: string; province: string; district: string; addressLine: string };
+  paymentStatus?: ShopOrderPaymentStatus | null;
+  paidAt?: string | null;
+  recipient: {
+    name: string;
+    phone: string;
+    province: string;
+    district: string;
+    addressLine: string;
+  };
   note: string | null;
   items: ShopOrderItem[];
   total: number;
@@ -56,6 +70,7 @@ export interface ShopOrder {
 
 export interface ShopOrderListParams {
   status?: ShopOrderStatus;
+  keyword?: string;
   page?: number;
   size?: number;
 }
