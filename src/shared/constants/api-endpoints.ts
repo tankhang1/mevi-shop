@@ -38,6 +38,8 @@ export const API_ENDPOINTS = {
         `/api/public/shop/storefronts/${id}/products`,
       /** POST — Gửi biểu mẫu liên hệ hợp tác (CTV / Đại lý) */
       partnerContactRequests: "/api/public/shop/partner-contact-requests",
+      /** GET — Lấy 3 khối nội dung trang chủ (banner, highlights, faq) */
+      contentBlocks: "/api/public/shop/content-blocks",
     },
   },
 } as const;
