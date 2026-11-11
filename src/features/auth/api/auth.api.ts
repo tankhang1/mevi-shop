@@ -2,7 +2,7 @@ import { apiClient, AUTH_PATHS, buildApiUrl } from '@/shared/api/api-client';
 import { AUTH_CALLBACK_PATH, AUTH_POST_LOGOUT_REDIRECT_URI, AUTH_PROVIDER } from '@/shared/api/api.env';
 import { basePath } from '@/shared/config';
 import { authStorage } from './auth.storage';
-import { ADMIN_ROLE_CODES, type AuthMeResponse, type AuthProvider, type WorkspaceRole } from './auth.types';
+import { ADMIN_ROLE_CODES, AGENCY_ROLE_CODES, type AuthMeResponse, type AuthProvider, type WorkspaceRole } from './auth.types';
 
 const currentPath = () => window.location.pathname.slice(basePath.length) + window.location.search;
 
@@ -38,3 +38,10 @@ export function resolvePostLoginPath(callbackRedirect: string | null) {
   const target = callbackRedirect || stored || '/';
   return target.startsWith('/') && !target.startsWith('//') ? target : '/';
 }
+
+const BLOCKED_ROLE_CODES: readonly string[] = [...ADMIN_ROLE_CODES, ...AGENCY_ROLE_CODES];
+
+/** Admin (MEVI_SUPER_ADMIN / MEVI_ADMIN / MEVI_SHOP_ADMIN) and đại lý (MEVI_SHOP_AGENT) cannot sign in to the shop. */
+export const isBlockedFromShop = (user: Pick<AuthMeResponse, 'roleCodes' | 'workspaceRoles'>) =>
+  [...(user.roleCodes ?? []), ...(user.workspaceRoles ?? []).flatMap(w => w.roleCodes ?? [])]
+    .some(r => BLOCKED_ROLE_CODES.includes(r));

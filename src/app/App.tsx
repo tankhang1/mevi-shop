@@ -5,9 +5,10 @@ import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { AgencyBrandProvider } from '@/app/providers/agency-brand-provider';
 import { AppRoutes } from '@/app/providers/auth-provider';
+import { ShopAccessGuard } from '@/features/auth/components/shop-access-guard';
 import { basePath } from '@/shared/config';
 
 export function App() {
-  return <QueryClientProvider client={queryClient}><TooltipProvider><WouterRouter base={basePath}><AgencyBrandProvider><AppRoutes /></AgencyBrandProvider></WouterRouter><Toaster /></TooltipProvider></QueryClientProvider>;
+  return <QueryClientProvider client={queryClient}><TooltipProvider><WouterRouter base={basePath}><AgencyBrandProvider><ShopAccessGuard><AppRoutes /></ShopAccessGuard></AgencyBrandProvider></WouterRouter><Toaster /></TooltipProvider></QueryClientProvider>;
 }
 export default App;

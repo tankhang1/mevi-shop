@@ -22,3 +22,6 @@ export interface AuthMeResponse {
 }
 
 export const ADMIN_ROLE_CODES = ['MEVI_ADMIN', 'MEVI_SUPER_ADMIN', 'MEVI_SHOP_ADMIN'] as const;
+
+/** Đại lý role code. */
+export const AGENCY_ROLE_CODES = ['MEVI_SHOP_AGENT'] as const;
