@@ -20,7 +20,10 @@ import { ROUTES } from "@/shared/constants/routes";
 // import { ProductReviews } from "@/features/reviews/product-reviews";
 // import { ReviewForm } from "@/features/reviews/review-form";
 // import { ReviewsBlock } from "@/features/reviews/reviews-block";
-import { PurchaseOptions, usePurchaseSelection } from "@/features/products/components/purchase-options";
+import {
+  PurchaseOptions,
+  usePurchaseSelection,
+} from "@/features/products/components/purchase-options";
 import { farmsOf, kindOf, variantsOf } from "@/shared/lib/product-options";
 import { RichText } from "@/shared/ui/rich-text";
 import type { Product } from "@/shared/types";
@@ -36,10 +39,12 @@ export function ProductPage() {
   // `/products/<handle>-i.<id>` (real shop) or legacy `/product/:id`.
   const [, legacy] = useRoute(ROUTES.product);
   const [, seo] = useRoute(ROUTES.shopProduct);
-  const slug = seo?.slug ? parseProductSlug(decodeURIComponent(seo.slug)) : null;
+  const slug = seo?.slug
+    ? parseProductSlug(decodeURIComponent(seo.slug))
+    : null;
   const id = slug?.id ?? Number(legacy?.id || 0);
   const { data: product, isLoading, isError, refetch } = useProduct(id);
-//   const [reviewVersion, setReviewVersion] = useState(0);
+  //   const [reviewVersion, setReviewVersion] = useState(0);
   const [location, setLocation] = useLocation();
 
   // Product renamed / opened by id → move to the canonical slug URL.
@@ -66,7 +71,7 @@ export function ProductPage() {
       </PageFrame>
     );
 
-//   const reviews = reviewsOf(product.id);
+  //   const reviews = reviewsOf(product.id);
   const farms = farmsOf(product);
   return (
     <PageFrame hideBottomNav>
@@ -102,11 +107,19 @@ export function ProductPage() {
                 {soldOf(product)}
               </span>
             </a> */}
-            <p className="mt-3 text-sm text-muted-foreground">Đã bán {soldOf(product)}</p>
+            <p className="mt-3 text-sm text-muted-foreground">
+              Đã bán {soldOf(product)}
+            </p>
             {!!product.certifications?.length && (
-              <div className="mt-3 flex flex-wrap gap-1.5" data-testid="list-certifications">
+              <div
+                className="mt-3 flex flex-wrap gap-1.5"
+                data-testid="list-certifications"
+              >
                 {product.certifications.map((c) => (
-                  <span key={c} className="inline-flex items-center gap-1 rounded-full bg-[#eef1e9] px-2.5 py-1 text-[11px] font-bold text-[#285e45]">
+                  <span
+                    key={c}
+                    className="inline-flex items-center gap-1 rounded-full bg-[#eef1e9] px-2.5 py-1 text-[11px] font-bold text-[#285e45]"
+                  >
                     <ShieldCheck size={12} /> {c}
                   </span>
                 ))}
@@ -119,32 +132,48 @@ export function ProductPage() {
               <span className="text-3xl font-bold text-[#285e45]">
                 {priceRange(product)}
               </span>
-              {variantsOf(product).length === 1 && product.salePrice != null && (
-                <span className="pb-1 text-sm text-muted-foreground line-through">
-                  {fmt(product.price)}
-                </span>
-              )}
+              {variantsOf(product).length === 1 &&
+                product.salePrice != null && (
+                  <span className="pb-1 text-sm text-muted-foreground line-through">
+                    {fmt(product.price)}
+                  </span>
+                )}
             </div>
             {/* Desktop: choose options inline. Mobile uses the bottom action bar + sheet. */}
             <DesktopPurchase key={product.id} product={product} />
             <p className="mt-6 text-sm text-muted-foreground md:hidden">
               {variantsOf(product).length} quy cách
-              {farms.length > 0 && ` · ${farms.length} vườn`} — chọn khi bấm “Mua ngay”.
+              {farms.length > 0 && ` · ${farms.length} vườn`} — chọn khi bấm
+              “Mua ngay”.
             </p>
 
             {farms.length > 0 && (
-              <div className="mt-6 rounded-2xl border border-[#e6e2d7] bg-[#fffefa] p-5 md:hidden" data-testid="section-farms">
+              <div
+                className="mt-6 rounded-2xl border border-[#e6e2d7] bg-[#fffefa] p-5 md:hidden"
+                data-testid="section-farms"
+              >
                 <div className="flex items-center gap-2 font-bold">
                   <Sprout size={19} className="text-[#285e45]" /> Thông tin vườn
                 </div>
                 <div className="mt-4 grid gap-3">
                   {farms.map((f) => (
-                    <div key={f.id} className="rounded-xl bg-[#faf9f4] p-3.5 text-sm">
+                    <div
+                      key={f.id}
+                      className="rounded-xl bg-[#faf9f4] p-3.5 text-sm"
+                    >
                       <p className="flex flex-wrap items-center gap-2 font-bold text-[#214c3a]">
                         {f.name}
-                        {f.certification && <span className="rounded-full bg-[#eef1e9] px-2 py-0.5 text-[10px] text-[#285e45]">{f.certification}</span>}
+                        {f.certification && (
+                          <span className="rounded-full bg-[#eef1e9] px-2 py-0.5 text-[10px] text-[#285e45]">
+                            {f.certification}
+                          </span>
+                        )}
                       </p>
-                      <p className="mt-1 text-xs text-muted-foreground">{[f.owner && `Chủ vườn: ${f.owner}`, f.location, f.code && `Mã vùng: ${f.code}`].filter(Boolean).join(" · ")}</p>
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        {[f.owner && `Chủ vườn: ${f.owner}`, f.location]
+                          .filter(Boolean)
+                          .join(" · ")}
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -165,11 +194,17 @@ export function ProductPage() {
                 </Link>
               </div>
               <dl className="mt-4 grid gap-4 text-sm sm:grid-cols-2">
-                {product.origin && <Detail label="Vùng trồng" value={product.origin} />}
-                <Detail label="Quy cách đóng gói" value={variantsOf(product).map((v) => v.label).join(", ")} />
+                {product.origin && (
+                  <Detail label="Vùng trồng" value={product.origin} />
+                )}
+                <Detail
+                  label="Quy cách đóng gói"
+                  value={variantsOf(product)
+                    .map((v) => v.label)
+                    .join(", ")}
+                />
                 <Detail label="Hạn sử dụng" value={product.shelfLife} />
                 <Detail label="Bảo quản" value={product.storageInstructions} />
-                <Detail label="Mã sản phẩm" value={product.sku} />
               </dl>
             </div>
             <p className="mt-4 flex items-start gap-2 rounded-xl bg-[#eef1e9] p-4 text-xs leading-5 text-[#506557]">
@@ -181,7 +216,9 @@ export function ProductPage() {
         </div>
         {product.descriptionHtml && (
           <section className="mt-14 max-w-3xl">
-            <h2 className="text-2xl font-extrabold text-[#214c3a]">Thông tin sản phẩm</h2>
+            <h2 className="text-2xl font-extrabold text-[#214c3a]">
+              Thông tin sản phẩm
+            </h2>
             <RichText html={product.descriptionHtml} className="mt-4" />
           </section>
         )}
@@ -211,7 +248,8 @@ export function ProductPage() {
 
 function priceRange(product: Product) {
   const prices = variantsOf(product).map((v) => v.salePrice ?? v.price);
-  const lo = Math.min(...prices), hi = Math.max(...prices);
+  const lo = Math.min(...prices),
+    hi = Math.max(...prices);
   return lo === hi ? fmt(lo) : `${fmt(lo)} – ${fmt(hi)}`;
 }
 
@@ -230,12 +268,25 @@ function DesktopPurchase({ product }: { product: Product }) {
       <PurchaseOptions product={product} state={state} />
       <div className="mt-5 flex items-center justify-between gap-3 border-t border-[#ece8de] pt-4">
         <div>
-          <p className="text-xs text-muted-foreground">Tạm tính · {kindOf(product) === "farm" ? "nông sản" : "sản phẩm"}</p>
-          <p className="text-xl font-black text-[#285e45]">{fmt(state.unitPrice * state.selection.quantity)}</p>
+          <p className="text-xs text-muted-foreground">
+            Tạm tính · {kindOf(product) === "farm" ? "nông sản" : "sản phẩm"}
+          </p>
+          <p className="text-xl font-black text-[#285e45]">
+            {fmt(state.unitPrice * state.selection.quantity)}
+          </p>
         </div>
-        <button className="btn-primary" onClick={add} disabled={!state.canBuy} data-testid="button-add-cart">
+        <button
+          className="btn-primary"
+          onClick={add}
+          disabled={!state.canBuy}
+          data-testid="button-add-cart"
+        >
           {added ? <Check size={18} /> : <ShoppingBag size={18} />}
-          {!state.canBuy ? "Hết hàng" : added ? "Đã thêm vào giỏ" : "Thêm vào giỏ hàng"}
+          {!state.canBuy
+            ? "Hết hàng"
+            : added
+              ? "Đã thêm vào giỏ"
+              : "Thêm vào giỏ hàng"}
         </button>
       </div>
     </div>

@@ -12,6 +12,7 @@ import {
   ChevronRight,
   Clock,
   Truck,
+  RotateCcw,
   Sparkles,
   UserCheck,
 } from "lucide-react";
@@ -34,54 +35,59 @@ export function AccountMenu() {
     ["processing", "shipped"].includes(o.status),
   ).length;
   const completedCount = orders.filter((o) => o.status === "completed").length;
+  const returnedCount = orders.filter((o) =>
+    ["returned", "refunded"].includes(String(o.status)),
+  ).length;
 
   return (
     <div className="space-y-5">
       {/* Quick Status Tiles */}
-      <div className="grid grid-cols-3 gap-2 text-center">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
         <Link
-          href="/orders"
+          href="/orders?status=pending"
           className="rounded-2xl border border-[#e7e4d9] bg-[#fffefa] p-3 shadow-sm hover:border-[#285e45] transition"
         >
           <div className="relative mx-auto grid h-9 w-9 place-items-center rounded-xl bg-[#fef3c7] text-[#92400e]">
             <Clock size={18} />
-            {pendingCount > 0 && (
-              <span className="absolute -top-1 -right-1 grid h-4 min-w-4 px-1 place-items-center rounded-full bg-[#bd6e46] text-[9px] font-black text-white ring-1 ring-white">
-                {pendingCount}
-              </span>
-            )}
           </div>
           <span className="text-[11px] font-bold text-[#214c3a] block mt-1.5">
-            Chờ xử lý
+            Chờ xử lý ({pendingCount})
           </span>
         </Link>
 
         <Link
-          href="/orders"
+          href="/orders?status=shipping"
           className="rounded-2xl border border-[#e7e4d9] bg-[#fffefa] p-3 shadow-sm hover:border-[#285e45] transition"
         >
           <div className="relative mx-auto grid h-9 w-9 place-items-center rounded-xl bg-[#ede9fe] text-[#5b21b6]">
             <Truck size={18} />
-            {shippingCount > 0 && (
-              <span className="absolute -top-1 -right-1 grid h-4 min-w-4 px-1 place-items-center rounded-full bg-[#bd6e46] text-[9px] font-black text-white ring-1 ring-white">
-                {shippingCount}
-              </span>
-            )}
           </div>
           <span className="text-[11px] font-bold text-[#214c3a] block mt-1.5">
-            Đang giao
+            Đang giao ({shippingCount})
           </span>
         </Link>
 
         <Link
-          href="/orders"
+          href="/orders?status=completed"
           className="rounded-2xl border border-[#e7e4d9] bg-[#fffefa] p-3 shadow-sm hover:border-[#285e45] transition"
         >
           <div className="mx-auto grid h-9 w-9 place-items-center rounded-xl bg-[#dcfce7] text-[#166534]">
             <PackageCheck size={18} />
           </div>
           <span className="text-[11px] font-bold text-[#214c3a] block mt-1.5">
-            Đã mua ({completedCount})
+            Đã nhận ({completedCount})
+          </span>
+        </Link>
+
+        <Link
+          href="/orders?status=returned"
+          className="rounded-2xl border border-[#e7e4d9] bg-[#fffefa] p-3 shadow-sm hover:border-[#285e45] transition"
+        >
+          <div className="mx-auto grid h-9 w-9 place-items-center rounded-xl bg-[#fee2e2] text-[#991b1b]">
+            <RotateCcw size={18} />
+          </div>
+          <span className="text-[11px] font-bold text-[#214c3a] block mt-1.5">
+            Hoàn hàng ({returnedCount})
           </span>
         </Link>
 
@@ -181,10 +187,10 @@ export function AccountMenu() {
               </span>
               <div>
                 <span className="text-xs font-bold text-[#285e45]">
-                  Cổng quản trị đại lý
+                  Cửa hàng của tôi
                 </span>
                 <p className="text-[11px] text-muted-foreground">
-                  Theo dõi đơn hàng qua link giới thiệu
+                  Đi tới quản lý và gian hàng đại lý của bạn
                 </p>
               </div>
             </div>

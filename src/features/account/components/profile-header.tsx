@@ -1,5 +1,5 @@
 import { Link } from 'wouter';
-import { UserRound, Sparkles, LogIn, ShieldCheck, Store } from 'lucide-react';
+import { UserRound, LogIn, ShieldCheck, Store } from 'lucide-react';
 import { RegisterLink } from '@/features/auth/components/register-link';
 import { login, useAuthStore } from '@/features/auth/model/auth.store';
 
@@ -44,7 +44,7 @@ export function ProfileHeader() {
       ? 'Quản trị viên'
       : user.role === 'agency'
       ? 'Đại lý Mevi'
-      : 'Khách hàng thân thiết';
+      : null;
 
   return (
     <div className="rounded-3xl bg-gradient-to-br from-[#214c3a] to-[#2a5e48] text-white p-5 md:p-6 shadow-[0_8px_24px_rgba(33,76,58,0.15)]">
@@ -58,17 +58,16 @@ export function ProfileHeader() {
               {user.fullName}
             </h2>
           </div>
-          <p className="text-xs text-white/75 mt-0.5">Mã thành viên: #{user.id}</p>
-          <div className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-white/15 px-2.5 py-0.5 text-[11px] font-bold backdrop-blur">
-            {user.role === 'admin' ? (
-              <ShieldCheck size={13} className="text-[#e0a57c]" />
-            ) : user.role === 'agency' ? (
-              <Store size={13} className="text-[#e0a57c]" />
-            ) : (
-              <Sparkles size={13} className="text-[#e0a57c]" />
-            )}
-            <span>{roleLabel}</span>
-          </div>
+          {roleLabel && (
+            <div className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-white/15 px-2.5 py-0.5 text-[11px] font-bold backdrop-blur">
+              {user.role === 'admin' ? (
+                <ShieldCheck size={13} className="text-[#e0a57c]" />
+              ) : (
+                <Store size={13} className="text-[#e0a57c]" />
+              )}
+              <span>{roleLabel}</span>
+            </div>
+          )}
         </div>
       </div>
     </div>

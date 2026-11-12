@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "wouter";
+import { Link, useSearch } from "wouter";
 import { ShoppingBag, ArrowRight, PhoneCall, RefreshCw } from "lucide-react";
 import type { Order } from "@/shared/types";
 import { statusLabel } from "@/shared/lib/format";
@@ -14,15 +14,38 @@ import { USE_REAL_SHOP } from "@/features/products/api/products.api";
 import { login, useAuthStore } from "@/features/auth/model/auth.store";
 import { ErrorState, Loading } from "@/shared/ui/feedback";
 
-type StatusFilter = "all" | Order["status"];
+type StatusFilter = "all" | Order["status"] | "returned";
 
 // One tab per backend status, labelled exactly like the order badge.
-const STATUS_TABS: Order["status"][] = ["new", "confirmed", "shipped", "completed", "cancelled"];
+const STATUS_TABS: Exclude<StatusFilter, "all">[] = ["new", "confirmed", "shipped", "completed", "returned", "cancelled"];
+
+const STATUS_PARAM_MAP: Record<string, StatusFilter> = {
+  all: "all",
+  pending: "new",
+  new: "new",
+  confirmed: "confirmed",
+  shipping: "shipped",
+  shipped: "shipped",
+  completed: "completed",
+  delivered: "completed",
+  returned: "returned",
+  cancelled: "cancelled",
+};
+
+function parseStatusFromSearch(search: string): StatusFilter {
+  const param = new URLSearchParams(search).get("status")?.toLowerCase() ?? "";
+  return STATUS_PARAM_MAP[param] ?? "all";
+}
 
 export function CustomerOrdersPage() {
-  const [activeTab, setActiveTab] = useState<StatusFilter>("all");
+  const search = useSearch();
+  const [activeTab, setActiveTab] = useState<StatusFilter>(() => parseStatusFromSearch(search));
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
+
+  useEffect(() => {
+    setActiveTab(parseStatusFromSearch(search));
+  }, [search]);
 
   // Debounce search input 350ms before calling API
   useEffect(() => {
@@ -35,17 +58,24 @@ export function CustomerOrdersPage() {
   const backendStatus = activeTab !== "all" ? toShopOrderStatus[activeTab] : undefined;
 
   // Gọi trực tiếp API với status và keyword đã debounce
-  const { orders, isLoading, isError, refetch } = useMyOrders({
+  const { orders: rawOrders, isLoading, isError, refetch } = useMyOrders({
     status: backendStatus,
     keyword: debouncedQuery,
   });
+
+  const orders = activeTab === "returned"
+    ? rawOrders.filter((o) => ["returned", "refunded"].includes(String(o.status)))
+    : rawOrders;
 
   const user = useAuthStore((s) => s.user);
   const initDemoOrders = useCustomerOrdersStore((s) => s.initDemoOrders);
 
   const tabs: { key: StatusFilter; label: string }[] = [
     { key: "all", label: "Tất cả" },
-    ...STATUS_TABS.map((key) => ({ key, label: statusLabel(key) })),
+    ...STATUS_TABS.map((key) => ({
+      key,
+      label: key === "returned" ? "Hoàn hàng" : statusLabel(key),
+    })),
   ];
 
   return (

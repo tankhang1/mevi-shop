@@ -7,6 +7,7 @@ import {
   Menu,
   ShieldCheck,
   ShoppingCart,
+  Store,
   UserRound,
   X,
 } from "lucide-react";
@@ -45,33 +46,55 @@ export function Header() {
         <div className="flex items-center gap-2">
           {user ? (
             <div className="hidden items-center gap-1 sm:flex">
-              <a
-                href={ADMIN_URL}
-                target="_blank"
-                rel="noreferrer"
-                className="mr-1 inline-flex items-center gap-1.5 rounded-full border border-[#d7e1d3] px-3 py-1.5 text-xs font-bold text-[#285e45] hover:bg-[#eef1e9]"
-                data-testid="link-admin"
-              >
-                <ShieldCheck size={15} /> Trang quản trị
-              </a>
-              {user.role === "admin" ? (<a href={ADMIN_URL} target="_blank" rel="noreferrer"
-                className="flex items-center gap-2 rounded-full py-1 pl-1 pr-3 text-sm font-semibold text-[#214c3a] hover:bg-[#eef1e9]"
-                data-testid="link-account"
-              >
-                <span className="grid h-8 w-8 place-items-center rounded-full bg-[#285e45] text-xs font-bold text-white">
-                  {user.fullName.split(" ").slice(-1)[0][0]?.toUpperCase()}
-                </span>
-                <span className="max-w-[120px] truncate">{user.fullName}</span>
-              </a>) : (<Link
-                href={homeFor(user.role)}
-                className="flex items-center gap-2 rounded-full py-1 pl-1 pr-3 text-sm font-semibold text-[#214c3a] hover:bg-[#eef1e9]"
-                data-testid="link-account"
-              >
-                <span className="grid h-8 w-8 place-items-center rounded-full bg-[#285e45] text-xs font-bold text-white">
-                  {user.fullName.split(" ").slice(-1)[0][0]?.toUpperCase()}
-                </span>
-                <span className="max-w-[120px] truncate">{user.fullName}</span>
-              </Link>)}
+              {(user.role === "admin" || user.role === "agency") &&
+                (user.role === "admin" ? (
+                  <a
+                    href={ADMIN_URL}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mr-1 inline-flex items-center gap-1.5 rounded-full border border-[#d7e1d3] px-3 py-1.5 text-xs font-bold text-[#285e45] hover:bg-[#eef1e9]"
+                    data-testid="link-admin"
+                  >
+                    <ShieldCheck size={15} /> Trang quản trị
+                  </a>
+                ) : (
+                  <Link
+                    href="/agency/dashboard"
+                    className="mr-1 inline-flex items-center gap-1.5 rounded-full border border-[#d7e1d3] px-3 py-1.5 text-xs font-bold text-[#285e45] hover:bg-[#eef1e9]"
+                    data-testid="link-agency-store"
+                  >
+                    <Store size={15} /> Cửa hàng của tôi
+                  </Link>
+                ))}
+              {user.role === "admin" ? (
+                <a
+                  href={ADMIN_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-2 rounded-full py-1 pl-1 pr-3 text-sm font-semibold text-[#214c3a] hover:bg-[#eef1e9]"
+                  data-testid="link-account"
+                >
+                  <span className="grid h-8 w-8 place-items-center rounded-full bg-[#285e45] text-xs font-bold text-white">
+                    {user.fullName.split(" ").slice(-1)[0][0]?.toUpperCase()}
+                  </span>
+                  <span className="max-w-[120px] truncate">
+                    {user.fullName}
+                  </span>
+                </a>
+              ) : (
+                <Link
+                  href={homeFor(user.role)}
+                  className="flex items-center gap-2 rounded-full py-1 pl-1 pr-3 text-sm font-semibold text-[#214c3a] hover:bg-[#eef1e9]"
+                  data-testid="link-account"
+                >
+                  <span className="grid h-8 w-8 place-items-center rounded-full bg-[#285e45] text-xs font-bold text-white">
+                    {user.fullName.split(" ").slice(-1)[0][0]?.toUpperCase()}
+                  </span>
+                  <span className="max-w-[120px] truncate">
+                    {user.fullName}
+                  </span>
+                </Link>
+              )}
               <button
                 onClick={() => signOut()}
                 className="grid h-9 w-9 place-items-center rounded-full text-[#718077] hover:bg-[#eef1e9] hover:text-[#214c3a]"
@@ -91,7 +114,9 @@ export function Header() {
               <UserRound size={17} /> Đăng nhập
             </button>
           )}
-          {!user && <RegisterLink className="hidden rounded-full border border-[#d7e1d3] px-3 py-1.5 text-xs font-bold text-[#285e45] hover:bg-[#eef1e9] sm:inline-flex" />}
+          {!user && (
+            <RegisterLink className="hidden rounded-full border border-[#d7e1d3] px-3 py-1.5 text-xs font-bold text-[#285e45] hover:bg-[#eef1e9] sm:inline-flex" />
+          )}
 
           {/* Cart Icon on Header (Quick access) */}
           <Link
@@ -140,14 +165,25 @@ export function Header() {
           </Link>
           {user ? (
             <>
-              <a
-                href={ADMIN_URL}
-                target="_blank"
-                rel="noreferrer"
-                className="font-semibold text-[#285e45]"
-              >
-                Trang quản trị Mevi
-              </a>
+              {user.role === "admin" && (
+                <a
+                  href={ADMIN_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="font-semibold text-[#285e45]"
+                >
+                  Trang quản trị Mevi
+                </a>
+              )}
+              {user.role === "agency" && (
+                <Link
+                  href="/agency/dashboard"
+                  onClick={() => setMenu(false)}
+                  className="font-semibold text-[#285e45]"
+                >
+                  Cửa hàng của tôi
+                </Link>
+              )}
               <button
                 className="text-left text-red-600"
                 onClick={() => {
@@ -162,12 +198,18 @@ export function Header() {
             <>
               <button
                 type="button"
-                onClick={() => { setMenu(false); login(); }}
+                onClick={() => {
+                  setMenu(false);
+                  login();
+                }}
                 className="text-left font-bold text-[#285e45]"
               >
                 Đăng nhập tài khoản
               </button>
-              <RegisterLink className="font-bold text-[#285e45]" onClick={() => setMenu(false)}>
+              <RegisterLink
+                className="font-bold text-[#285e45]"
+                onClick={() => setMenu(false)}
+              >
                 Đăng ký tài khoản
               </RegisterLink>
             </>
@@ -220,7 +262,9 @@ export function Footer() {
 export function CustomerShell({ children }: { children: ReactNode }) {
   const [location] = useLocation();
   const hideBottomNav =
-    (location.startsWith("/product/") || location.startsWith("/products/")) || location === "/checkout/confirm";
+    location.startsWith("/product/") ||
+    location.startsWith("/products/") ||
+    location === "/checkout/confirm";
 
   return (
     // Pad the whole page (not just content) so the fixed mobile bar never covers the footer.
@@ -228,7 +272,8 @@ export function CustomerShell({ children }: { children: ReactNode }) {
       className={`min-h-screen flex flex-col bg-[#faf9f4] md:pb-0 ${
         !hideBottomNav
           ? "pb-[calc(4rem+env(safe-area-inset-bottom))]"
-          : (location.startsWith("/product/") || location.startsWith("/products/"))
+          : location.startsWith("/product/") ||
+              location.startsWith("/products/")
             ? "pb-[calc(54px+env(safe-area-inset-bottom))]"
             : ""
       }`}
